@@ -36,7 +36,7 @@ quest1_host = map_resp.json()['objects'][2]['host']
 print(map_resp.json()['objects'][2]['name'])
 
 
-visit_resp = requests.post(quest1_host +  visit_url, headers=headers)
+visit_resp = requests.post('http://' + quest1_host +  visit_url, headers=headers)
 print(visit_resp.json()['message'] + ' with token: ' + visit_resp.json()['token_name'])
 
 throneroom_token = visit_resp.json()['token']
