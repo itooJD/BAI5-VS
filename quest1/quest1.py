@@ -12,12 +12,12 @@ quest_url = 'quests'
 last_url = '/deliveries'
 
 headers = {'content-type': 'application/json'}
-user_json=json.dumps({"user":"heroyjenkins", "password":"pass"})
+user_json=json.dumps({"user":"HeroyJenkins", "password":"pass"})
 register_resp = requests.post(blackboard_server_url + user_url, headers=headers,  data=user_json)
 print('User registered')
 print(register_resp)
 
-login_resp = requests.get(blackboard_server_url + login_url, auth=('heroyjenkins', 'pass'))
+login_resp = requests.get(blackboard_server_url + login_url, auth=('HeroyJenkins', 'pass'))
 print('Logged in')
 print(login_resp)
 auth_token = login_resp.json()['token']
