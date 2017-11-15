@@ -8,7 +8,7 @@ whoami_url = '/whoami'
 blackboard_url = '/blackboard'
 map_url = '/map'
 visit_url = '/visits'
-quest_url = 'quests'
+quest_url = '/quests'
 last_url = '/deliveries'
 
 user_json='{"user":"HeroyJenkins", "password":"pass"}'
