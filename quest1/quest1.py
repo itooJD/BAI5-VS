@@ -2,7 +2,7 @@ import requests
 from requests.auth import HTTPBasicAuth
 
 
-blackboard_server_url = '172.19.0.3'
+blackboard_server_url = '172.19.0.3:5000'
 user_url = '/users'
 login_url = '/login'
 whoami_url = '/whoami'
