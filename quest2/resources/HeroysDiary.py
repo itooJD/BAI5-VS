@@ -1,3 +1,4 @@
+from flask import request
 from flask_restful import Resource,  reqparse
 
 
@@ -5,12 +6,9 @@ class HeroysDiary(Resource):
     diary = []
 
     def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('message', required=True, location='args',
-                            help='Please provide a message')
-        args = parser.parse_args()
-        print(args['message'])
-        self.diary.append(args['message'])
+        json_data = request.get_json(force=True)
+        self.diary.append(json_data['message'])
+        return "Send a message in a boooottle yeaah", 200
 
     def get(self):
-        return 200, str(self.diary)
+        return "All messages: \n" + str(self.diary), 200
