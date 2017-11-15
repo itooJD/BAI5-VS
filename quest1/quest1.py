@@ -24,9 +24,13 @@ print('Token is: ' +  auth_token)
 
 whoami_resp = requests.get(blackboard_server_url +  whoami_url, headers={'Authorization': 'Token ' +  str(auth_token)})
 print(whoami_resp.json()['message'])
+
 quest_resp = requests.get(blackboard_server_url + blackboard_url + quest_url)
-print(quest_resp.json()['objects'])
+print(quest_resp)
+
 map_resp = requests.get(blackboard_server_url + map_url)
+print(map_resp)
+
 quest1_host = map_resp.json()['objects'][2]['host']
 print(map_resp.json()['objects'][2]['name'])
 visit_resp = requests.post(quest1_host +  visit_url)
