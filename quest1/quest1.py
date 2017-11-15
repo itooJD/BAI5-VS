@@ -1,4 +1,4 @@
-import requests
+import requests, json
 from requests.auth import HTTPBasicAuth
 
 
@@ -12,7 +12,8 @@ visit_url = '/visits'
 quest_url = 'quests'
 last_url = '/deliveries'
 
-register_resp = requests.post(url=blackboard_server_url + user_url, json='{"user":"heroyjenkins, "password":"pass"}')
+user_json= json.dump({"user":"heroyjenkins", "password":"pass"})
+register_resp = requests.post(url=blackboard_server_url + user_url, json=user_json)
 print('User registered')
 print(register_resp)
 login_resp = requests.get(url=blackboard_server_url + login_url, auth=HTTPBasicAuth('heroyjenkins', 'pass'))
