@@ -34,9 +34,12 @@ print(map_resp)
 
 quest1_host = map_resp.json()['objects'][2]['host']
 print(map_resp.json()['objects'][2]['name'])
-visit_resp = requests.post(quest1_host +  visit_url)
+
+
+visit_resp = requests.post(quest1_host +  visit_url, headers=headers)
 print(visit_resp.json()['message'] + ' with token: ' + visit_resp.json()['token_name'])
+
 throneroom_token = visit_resp.json()['token']
-last_resp = requests.post(blackboard_server_url +  blackboard_url + quest_url + '1' + last_url, json='{"tokens": {{0}: {1} } }'.format(blackboard_url + quest_url + '1', throneroom_token))
+last_resp = requests.post(blackboard_server_url +  blackboard_url + quest_url + '1' + last_url, headers=headers, data='{"tokens": {{0}: {1} } }'.format(blackboard_url + quest_url + '1', throneroom_token))
 # print(last_resp.json()[''])
 print("Quest successfully closed")
