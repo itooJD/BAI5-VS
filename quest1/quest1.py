@@ -1,5 +1,4 @@
 import requests, json
-from requests.auth import HTTPBasicAuth
 
 
 blackboard_server_url = 'http://172.19.0.3:5000'
@@ -12,15 +11,17 @@ visit_url = '/visits'
 quest_url = 'quests'
 last_url = '/deliveries'
 
-headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
+headers = {'content-type': 'application/json'}
 user_json=json.dumps({"user":"heroyjenkins", "password":"pass"})
-register_resp = requests.post(url=blackboard_server_url + user_url, headers=headers,  data=user_json)
+register_resp = requests.post(blackboard_server_url + user_url, headers=headers,  data=user_json)
 print('User registered')
 print(register_resp)
-login_resp = requests.get(url=blackboard_server_url + login_url, auth=HTTPBasicAuth('heroyjenkins', 'pass'))
+
+login_resp = requests.get(blackboard_server_url + login_url, auth=('heroyjenkins', 'pass'))
 print('Logged in')
 print(login_resp)
 auth_token = login_resp.json()['token']
+
 whoami_resp = requests.get(blackboard_server_url +  whoami_url, headers=('Authorization:Token ' +  auth_token))
 print(whoami_resp.json()['message'])
 quest_resp = requests.get(blackboard_server_url + blackboard_url + quest_url)
