@@ -14,10 +14,10 @@ last_url = '/deliveries'
 
 register_resp = requests.post(url=blackboard_server_url + user_url, json='{"user":"heroyjenkins, "password":"pass"}')
 print('User registered')
+print(register_resp)
 login_resp = requests.get(url=blackboard_server_url + login_url, auth=HTTPBasicAuth('heroyjenkins', 'pass'))
 print('Logged in')
-print('Login successfull')
-print(login_resp.json()['message'])
+print(login_resp)
 auth_token = login_resp.json()['token']
 whoami_resp = requests.get(blackboard_server_url +  whoami_url, headers=('Authorization:Token ' +  auth_token))
 print(whoami_resp.json()['message'])
