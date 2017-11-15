@@ -11,9 +11,8 @@ visit_url = '/visits'
 quest_url = 'quests'
 last_url = '/deliveries'
 
-headers = {'content-type': 'application/json'}
-user_json=json.dumps({"user":"HeroyJenkins", "password":"pass"})
-register_resp = requests.post(blackboard_server_url + user_url, headers=headers,  data=user_json)
+user_json='{"user":"HeroyJenkins", "password":"pass"}'
+register_resp = requests.post(blackboard_server_url + user_url,  data=user_json)
 print('User registered')
 print(register_resp)
 
