@@ -20,8 +20,9 @@ login_resp = requests.get(blackboard_server_url + login_url, auth=('HeroyJenkins
 print('Logged in')
 print(login_resp)
 auth_token = login_resp.json()['token']
+print('Token is: ' +  auth_token)
 
-whoami_resp = requests.get(blackboard_server_url +  whoami_url, headers=('Authorization:Token ' +  auth_token))
+whoami_resp = requests.get(blackboard_server_url +  whoami_url, headers={'Authorization': 'Token ' +  str(auth_token)})
 print(whoami_resp.json()['message'])
 quest_resp = requests.get(blackboard_server_url + blackboard_url + quest_url)
 print(quest_resp.json()['objects'])
