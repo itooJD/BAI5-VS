@@ -9,12 +9,12 @@ def register(paths):
 
 def login(paths):
     login_resp = requests.get(paths['server'] + paths['login_url'], auth=('HeroyJenkins', 'pass'))
-    print('Quest1: Login: ' + login_resp)
+    print('Quest1: Login: ' + str(login_resp))
     return login_resp.json()['token']
 
 def whoami(paths, headers):
     whoami_resp = requests.get(paths['server'] + paths['whoami_url'], headers=headers)
-    print('Quest1: WhoAmI: ' + whoami_resp.json())
+    print('Quest1: WhoAmI: ' + str(whoami_resp.json()))
     print(whoami_resp.json()['message'])
 
 def quest(paths, headers):
