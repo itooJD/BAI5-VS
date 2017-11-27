@@ -1,4 +1,4 @@
-import yaml
+import yaml, ast
 from socket import *
 from pathlib import Path
 __location__ = Path().cwd()
@@ -28,7 +28,7 @@ def get_server_url():
     udp_received = s.recvfrom(1024 )
     port_pre = udp_received[0]
     address_pre  = udp_received[1]
-    port = dict(port_pre.decode('utf-8'))['blackboard_port']
+    port = ast.literal_eval(port_pre.decode('utf-8'))['blackboard_port']
     address = address_pre[0]
     print('Config: Received {0} as address and {1} as port'.format(address, port))
     return address
