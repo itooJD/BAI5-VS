@@ -25,11 +25,17 @@ def quest(paths, headers):
         print('Quest with index: ' + str(idx))
         print(quest['name'])
         print(quest['description'])
-        if quest['requirements'] not in paths['requirements']:
-            print('The requirements for this quest are not fullfilled by our hero :C')
-        else:
+        requirements_fullfilled = True
+        if quest['requirements']:
+            for req in quest['requirements']:
+                if req not in paths['requirements']:
+                    requirements_fullfilled = False
+                    print('The requirements for this quest are not fullfilled by our hero :C')
+                    break
+        if requirements_fullfilled:
             available_quests.append(idx)
             quests.append(quest)
+        print()
     quest_no = -1
     while quest_no not in available_quests:
         quest_no = input('Which quest do you want to tackle mighty Heroy? [Index starting from 0]')
