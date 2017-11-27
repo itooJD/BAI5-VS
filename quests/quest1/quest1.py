@@ -40,18 +40,21 @@ def quest(paths, headers):
     quest_no = -1
     print('Available index values: ' + str(available_quests))
     while int(quest_no) not in available_quests:
-        quest_no = input('Which quest do you want to tackle mighty Heroy? [Index starting from 0] ')
+        quest_no = input('Which quest do you want to tackle mighty Heroy? [Index starting from 0] \n >')
     quest = quests[int(quest_no)]
     print('Quest1: Accepted quest ' + quest['name'])
     print('Quest1: This quest requires the tokens: ' + str(quest['requires_tokens']))
     print('and requires of you to open the task: ' + str(quest['tasks']))
 
 def task(paths, headers):
-    task_no = input('Quest1: Which task are we looking for again?')
+    print()
+    task_no = input('Quest1: Which task are we looking for again? \n >')
     task_resp = requests.get(paths['server'] + paths['blackboard_url'] + '/tasks/' + task_no, headers=headers)
     if task_resp.status_code == 200:
         print('This task exists! You are making me proud Heroy!')
-        print(task_resp.json())
+        print(task_resp.json()['object']['description'])
+        print('It seems we have to go to: ' + str(task_resp.json()['object']['location']) + str(task_resp.json()['object']['resource']))
+    return str(task_resp.json()['object']['location']) + str(task_resp.json()['object']['resource'])
 
 def map(paths, headers):
     map_resp = requests.get(paths['server'] + paths['map_url'], headers=headers)
@@ -77,7 +80,7 @@ if __name__ == '__main__':
     headers = {'Authorization': 'Token ' + str(auth_token)}
     whoami(paths, headers)
     quest(paths, headers)
-    task(paths, headers)
-    quest_host = map(paths, headers)
-    deliver_token = visit(paths, headers, quest_host)
+    location_url = task(paths, headers)
+    # quest_host = map(paths, headers)
+    deliver_token = visit(paths, headers, location_url)
     deliver(paths, headers, deliver_token)
