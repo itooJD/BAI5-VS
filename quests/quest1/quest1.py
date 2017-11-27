@@ -5,17 +5,16 @@ from quests.utils.config_manager import set_server_url_via_udp
 def register(paths):
     user_json = '{"name":"HeroyJenkins", "password":"pass"}'
     register_resp = requests.post(paths['server'] + paths['user_url'], data=user_json)
-    print('User registered')
-    print(register_resp.json()['message'])
+    print('Quest1: User registration: ' + register_resp.json()['message'])
 
 def login(paths):
     login_resp = requests.get(paths['server'] + paths['login_url'], auth=('HeroyJenkins', 'pass'))
-    print('Logged in')
-    print(login_resp)
+    print('Quest1: Login: ' + login_resp)
     return login_resp.json()['token']
 
 def whoami(paths, headers):
     whoami_resp = requests.get(paths['server'] + paths['whoami_url'], headers=headers)
+    print('Quest1: WhoAmI: ' + whoami_resp.json())
     print(whoami_resp.json()['message'])
 
 def quest(paths, headers):
