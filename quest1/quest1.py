@@ -1,4 +1,5 @@
 import requests
+from ..utils.config_manager import set_server_url_via_udp
 
 
 def register(paths):
@@ -40,7 +41,6 @@ def deliver(paths, headers, deliver_token):
     print("Quest successfully closed")
 
 if __name__ == '__main__':
-    from utils.config_manager import set_server_url_via_udp
     paths = set_server_url_via_udp()
     register(paths)
     auth_token = login(paths)
