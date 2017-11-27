@@ -22,6 +22,7 @@ def quest(paths, headers):
     available_quests = []
     print('Quest1: Available quests: \n')
     for idx, quest in enumerate(quest_resp.json()['objects']):
+        print('#################################')
         print('Quest with index: ' + str(idx))
         print(quest['name'])
         print(quest['description'])
@@ -30,15 +31,16 @@ def quest(paths, headers):
             for req in quest['requirements']:
                 if req not in paths['requirements']:
                     requirements_fullfilled = False
-                    print('The requirements for this quest are not fullfilled by our hero :C')
+                    print('\n!!! The requirements for this quest are not fullfilled by our hero :C !!!')
                     break
         if requirements_fullfilled:
             available_quests.append(idx)
             quests.append(quest)
         print()
     quest_no = -1
+    print(available_quests)
     while quest_no not in available_quests:
-        quest_no = input('Which quest do you want to tackle mighty Heroy? [Index starting from 0]')
+        quest_no = input('Which quest do you want to tackle mighty Heroy? [Index starting from 0] ')
     quest = quests[available_quests.index(quest_no)]
     print('Quest1: Accepted quest ' + quest['name'])
     print('Quest1: This quest requires the tokens: ' + quest['requires_tokens'])
