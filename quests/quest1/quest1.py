@@ -43,7 +43,7 @@ def quest(paths, headers):
         quest_no = input('Which quest do you want to tackle mighty Heroy? [Index starting from 0] ')
     quest = quests[int(quest_no)]
     print('Quest1: Accepted quest ' + quest['name'])
-    print('Quest1: This quest requires the tokens: ' + quest['requires_tokens'])
+    print('Quest1: This quest requires the tokens: ' + str(quest['requires_tokens']))
 
 def map(paths, headers):
     map_resp = requests.get(paths['server'] + paths['map_url'], headers=headers)
