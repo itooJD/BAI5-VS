@@ -40,7 +40,7 @@ def quest(paths, headers):
     quest_no = -1
     print('Available index values: ' + str(available_quests))
     while int(quest_no) not in available_quests:
-        quest_no = input('Which quest do you want to tackle mighty Heroy? [Index starting from 0] \n >')
+        quest_no = input('Which quest do you want to tackle mighty Heroy? [Index starting from 0] \n > ')
     quest = quests[int(quest_no)]
     print('Quest1: Accepted quest ' + quest['name'])
     print('Quest1: This quest requires the tokens: ' + str(quest['requires_tokens']))
@@ -48,21 +48,25 @@ def quest(paths, headers):
 
 def task(paths, headers):
     print()
-    task_no = input('Quest1: Which task are we looking for again? \n >')
+    task_no = input('Quest1: Which task are we looking for again? \n > ')
     task_resp = requests.get(paths['server'] + paths['blackboard_url'] + '/tasks/' + task_no, headers=headers)
     if task_resp.status_code == 200:
         print('This task exists! You are making me proud Heroy!')
         print(task_resp.json()['object']['description'])
         print('It seems we have to go to: ' + str(task_resp.json()['object']['location']) + str(task_resp.json()['object']['resource']))
-    return str(task_resp.json()['object']['location']) + str(task_resp.json()['object']['resource'])
+    return str(task_resp.json()['object']['location']) + str(task_resp.json()['object']['resource']), task_no
 
-def map(paths, headers):
+def map(paths, headers, task):
+    print()
+    print('Lets look this up on the map')
     map_resp = requests.get(paths['server'] + paths['map_url'], headers=headers)
-    print('Quest1: Map: ' + str(map_resp.json()))
-    return  map_resp.json()['objects'][2]['host']
+    for map_item in map_resp.json()['objects']:
+        if int(task) in map_item['tasks']:
+            print('Quest1: What do we have here...! The place we have to go: ' + str(map_item['host']))
+    return map_item['host']
 
-def visit(paths, headers, quest_host):
-    visit_resp = requests.post('http://' + quest_host + paths['visit_url'], headers=headers)
+def visit(paths, headers, quest_host, location_url):
+    visit_resp = requests.post('http://' + quest_host +  location_url, headers=headers)
     print(visit_resp.json()['message'] + ' with token: ' + visit_resp.json()['token_name'])
     throneroom_token =  visit_resp.json()['token']
     return {'tokens': {'/blackboard/tasks/2': throneroom_token}}
@@ -80,7 +84,7 @@ if __name__ == '__main__':
     headers = {'Authorization': 'Token ' + str(auth_token)}
     whoami(paths, headers)
     quest(paths, headers)
-    location_url = task(paths, headers)
-    # quest_host = map(paths, headers)
-    deliver_token = visit(paths, headers, location_url)
+    location_url, task = task(paths, headers)
+    quest_host = map(paths, headers, task)
+    deliver_token = visit(paths, headers, quest_host, location_url)
     deliver(paths, headers, deliver_token)
