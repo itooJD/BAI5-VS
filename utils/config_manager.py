@@ -31,7 +31,7 @@ def get_server_url():
     port = ast.literal_eval(port_pre.decode('utf-8'))['blackboard_port']
     address = address_pre[0]
     print('Config: Received {0} as address and {1} as port'.format(address, port))
-    return address
+    return address, port
 
 
 def set_server_url_via_udp():
