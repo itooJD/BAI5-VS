@@ -41,7 +41,7 @@ def quest(paths, headers):
     print('Available index values: ' + str(available_quests))
     while int(quest_no) not in available_quests:
         quest_no = input('Which quest do you want to tackle mighty Heroy? [Index starting from 0] ')
-    quest = quests[quest_no]
+    quest = quests[int(quest_no)]
     print('Quest1: Accepted quest ' + quest['name'])
     print('Quest1: This quest requires the tokens: ' + quest['requires_tokens'])
 
