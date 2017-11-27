@@ -61,10 +61,13 @@ def map(paths, headers, task):
     print()
     print('Quest1: Lets look this up on the map')
     map_resp = requests.get(paths['server'] + paths['map_url'], headers=headers)
+    map = ''
     for map_item in map_resp.json()['objects']:
         if int(task) in map_item['tasks']:
             print('What do we have here...! The place we have to go: ' + str(map_item['host']))
-    return map_item['host']
+            map = map_item['host']
+            break
+    return map
 
 def visit(paths, headers, quest_host, location_url):
     print()
