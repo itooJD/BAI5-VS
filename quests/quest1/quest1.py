@@ -51,22 +51,25 @@ def task(paths, headers):
     task_no = input('Quest1: Which task are we looking for again? \n > ')
     task_resp = requests.get(paths['server'] + paths['blackboard_url'] + '/tasks/' + task_no, headers=headers)
     if task_resp.status_code == 200:
-        print('This task exists! You are making me proud Heroy!')
+        print('### This task exists! You are making me proud Heroy! ###')
         print(task_resp.json()['object']['description'])
         print('It seems we have to go to: ' + str(task_resp.json()['object']['location']) + str(task_resp.json()['object']['resource']))
     return str(task_resp.json()['object']['location']) + str(task_resp.json()['object']['resource']), task_no
 
 def map(paths, headers, task):
     print()
-    print('Lets look this up on the map')
+    print('Quest1: Lets look this up on the map')
     map_resp = requests.get(paths['server'] + paths['map_url'], headers=headers)
     for map_item in map_resp.json()['objects']:
         if int(task) in map_item['tasks']:
-            print('Quest1: What do we have here...! The place we have to go: ' + str(map_item['host']))
+            print('What do we have here...! The place we have to go: ' + str(map_item['host']))
     return map_item['host']
 
 def visit(paths, headers, quest_host, location_url):
+    print()
+    print('Quest1: Finally, we arrived. Lets see what we can find at this place!')
     visit_resp = requests.post('http://' + quest_host +  location_url, headers=headers)
+    print(visit_resp.json())
     print(visit_resp.json()['message'] + ' with token: ' + visit_resp.json()['token_name'])
     throneroom_token =  visit_resp.json()['token']
     return {'tokens': {'/blackboard/tasks/2': throneroom_token}}
