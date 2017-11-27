@@ -46,6 +46,13 @@ def quest(paths, headers):
     print('Quest1: This quest requires the tokens: ' + str(quest['requires_tokens']))
     print('and requires of you to open the task: ' + str(quest['tasks']))
 
+def task(paths, headers):
+    task_no = input('Quest1: Which task are we looking for again?')
+    task_resp = requests.get(paths['server'] + paths['blackboard_url'] + '/tasks/' + task_no, headers=headers)
+    if task_resp.status_code == 200:
+        print('This task exists! You are making me proud Heroy!')
+        print(task_resp.json())
+
 def map(paths, headers):
     map_resp = requests.get(paths['server'] + paths['map_url'], headers=headers)
     print('Quest1: Map: ' + str(map_resp.json()))
@@ -70,6 +77,7 @@ if __name__ == '__main__':
     headers = {'Authorization': 'Token ' + str(auth_token)}
     whoami(paths, headers)
     quest(paths, headers)
+    task(paths, headers)
     quest_host = map(paths, headers)
     deliver_token = visit(paths, headers, quest_host)
     deliver(paths, headers, deliver_token)
