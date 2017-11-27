@@ -53,8 +53,9 @@ def task(paths, headers):
     if task_resp.status_code == 200:
         print('### This task exists! You are making me proud Heroy! ###')
         print(task_resp.json()['object']['description'])
-        print('It seems we have to go to: ' + str(task_resp.json()['object']['location']) + str(task_resp.json()['object']['resource']))
-    return str(task_resp.json()['object']['location']) + str(task_resp.json()['object']['resource']), task_no
+        print('It seems we have to go to: ' + str(task_resp.json()['object']['location']))
+        print('And there to: ' + str(task_resp.json()['object']['resource']))
+    return str(task_resp.json()['object']['resource']), task_no
 
 def map(paths, headers, task):
     print()
