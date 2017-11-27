@@ -9,22 +9,20 @@ def register(paths):
 
 def login(paths):
     login_resp = requests.get(paths['server'] + paths['login_url'], auth=('HeroyJenkins', 'pass'))
-    print('Quest1: Login: ' + str(login_resp))
+    print('Quest1: Login: ' + str(login_resp.json()))
     return login_resp.json()['token']
 
 def whoami(paths, headers):
     whoami_resp = requests.get(paths['server'] + paths['whoami_url'], headers=headers)
     print('Quest1: WhoAmI: ' + str(whoami_resp.json()))
-    print(whoami_resp.json()['message'])
 
 def quest(paths, headers):
     quest_resp = requests.get(paths['server'] + paths['blackboard_url'] + paths['quest_url'], headers=headers)
-    print(quest_resp)
+    print('Quest1: Quest: ' + str(quest_resp.json()))
 
 def map(paths, headers):
     map_resp = requests.get(paths['server'] + paths['map_url'], headers=headers)
-    print(map_resp)
-    print(map_resp.json()['objects'][2]['name'])
+    print('Quest1: Map: ' + str(map_resp.json()))
     return  map_resp.json()['objects'][2]['host']
 
 def visit(paths, headers, quest_host):
