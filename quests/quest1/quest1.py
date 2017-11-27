@@ -24,7 +24,7 @@ def quest(paths, headers):
     for idx, quest in enumerate(quest_resp.json()['objects']):
         print('Quest with index: ' + str(idx))
         print(quest['name'])
-        print(quest['descriptions'])
+        print(quest['description'])
         if quest['requirements'] not in paths['requirements']:
             print('The requirements for this quest are not fullfilled by our hero :C')
         else:
