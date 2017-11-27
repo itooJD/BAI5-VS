@@ -5,7 +5,7 @@ __location__ = Path().cwd()
 
 
 def get_config():
-    with (__location__ / 'utils' / 'paths.yaml').open('r') as stream:
+    with (__location__ / 'quests' / 'utils' / 'paths.yaml').open('r') as stream:
         try:
             print('Config: Getting config data')
             return yaml.load(stream)
@@ -14,7 +14,7 @@ def get_config():
 
 
 def write_config(paths):
-    with (__location__ / 'utils' / 'paths.yaml').open('w') as stream:
+    with (__location__ / 'quests' / 'utils' / 'paths.yaml').open('w') as stream:
         try:
             print('Config: Writing config data')
             yaml.dump(paths, stream, default_flow_style=False)
