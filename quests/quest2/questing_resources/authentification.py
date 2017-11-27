@@ -1,5 +1,7 @@
-import os, requests
-from utils import paths, serializer as ser, outputs
+import os
+
+import requests
+from quests.utils import paths, outputs, serializer as ser
 
 
 def authentification(auth_header):

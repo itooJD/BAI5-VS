@@ -1,6 +1,6 @@
-from flask_restful import Resource, reqparse
-from utils.config_manager import get_config
 import requests
+from flask_restful import Resource, reqparse
+from quests.utils import get_config
 
 
 # Post assignments

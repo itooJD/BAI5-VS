@@ -1,7 +1,7 @@
-import requests
+from utils import paths
 
-from utils import paths, serializer as ser
 from .taverna import *
+
 
 def group(auth_header, group_uri, user_name, quest):
     in_group = True

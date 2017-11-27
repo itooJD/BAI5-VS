@@ -1,5 +1,6 @@
 import requests
-from ..utils.config_manager import set_server_url_via_udp
+
+from quests.utils import set_server_url_via_udp
 
 
 def register(paths):

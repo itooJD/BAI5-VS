@@ -1,5 +1,7 @@
 import requests
-from utils import paths, serializer as ser
+from utils import paths
+
+from quests.utils import serializer as ser
 
 
 def quests(auth_header, actual_quest):

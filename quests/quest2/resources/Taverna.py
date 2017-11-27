@@ -1,5 +1,5 @@
 import requests
-from utils import get_config
+from quests.utils import get_config
 
 
 class Taverna():

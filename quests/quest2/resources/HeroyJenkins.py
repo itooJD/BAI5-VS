@@ -1,6 +1,8 @@
 from flask import jsonify, request
 from flask_restful import Resource, abort
-from utils import serializer as ser, paths, get_config
+from utils import paths, get_config
+
+from quests.utils import serializer as ser
 
 
 class HeroyJenkins(Resource):

@@ -1,10 +1,10 @@
 import requests
 
-from questing_resources import blackboard as bb
-from questing_resources import users, game_map, taverna, group
-from questing_resources.authentification import authentification as auth, logout
-from questing_resources.quest import my_quest
-from .utils import paths, serializer as ser, outputs
+from .questing_resources import blackboard as bb
+from .questing_resources import users, game_map, taverna, group
+from .questing_resources.authentification import authentification as auth, logout
+from .questing_resources.quest import my_quest
+from ..utils import paths, serializer as ser, outputs
 
 
 try:

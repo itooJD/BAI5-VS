@@ -1,5 +1,6 @@
 import requests
-from utils import paths, outputs
+
+from quests.utils import paths, outputs
 
 
 def users(auth_header):
