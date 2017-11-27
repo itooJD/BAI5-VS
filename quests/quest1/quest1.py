@@ -68,6 +68,8 @@ def map(paths, headers, task):
 def visit(paths, headers, quest_host, location_url):
     print()
     print('Quest1: Finally, we arrived. Lets see what we can find at this place!')
+    print(quest_host)
+    print(location_url)
     visit_resp = requests.post('http://' + quest_host +  location_url, headers=headers)
     print(visit_resp.json())
     print(visit_resp.json()['message'] + ' with token: ' + visit_resp.json()['token_name'])
