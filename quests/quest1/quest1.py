@@ -73,13 +73,13 @@ def visit(paths, headers, quest_host, location_url):
     print()
     print('Quest1: Finally, we arrived at {0}{1}. Lets see what we can find at this place!'.format(quest_host, location_url))
     visit_resp = requests.post('http://' + quest_host +  location_url, headers=headers)
-    print(visit_resp.status_code)
     print(visit_resp.json()['message'] + ' with token: ' + visit_resp.json()['token_name'])
     throneroom_token =  visit_resp.json()['token']
+    print('You acquired the token! ' + str(throneroom_token))
     return {'tokens': {'/blackboard/tasks/2': throneroom_token}}
 
-def deliver(paths, headers, deliver_token):
-    last_resp = requests.post(paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/1' + paths['last_url'], headers=headers, data=deliver_token)
+def deliver(paths, headers, deliver_token, task):
+    last_resp = requests.post(paths['server'] + paths['blackboard_url'] + paths['task_url'] + '/' + task + paths['deliver_url'], headers=headers, data=deliver_token)
     print(last_resp.json()['message'])
     # print(last_resp.json()[''])
     print("Quest successfully closed")
@@ -94,4 +94,5 @@ if __name__ == '__main__':
     location_url, task = task(paths, headers)
     quest_host = map(paths, headers, task)
     deliver_token = visit(paths, headers, quest_host, location_url)
-    deliver(paths, headers, deliver_token)
+    deliver(paths, headers, deliver_token, task)
+    # curl -H <Auth> -X POST 172.19.0.3:5000/blackboard/tasks/<number>/deliveries -d {"tokens":{"task_uri":<token>}}

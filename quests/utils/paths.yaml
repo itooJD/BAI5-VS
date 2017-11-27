@@ -7,7 +7,8 @@ blackboard_url : '/blackboard'
 map_url : '/map'
 visit_url : '/visits'
 quest_url : '/quests'
-last_url : '/deliveries'
+deliver_url: '/deliveries'
+task_url : '/tasks'
 
 hero_url : '/heroyjenkins'
 diary_url : "/diary"
