@@ -1,5 +1,4 @@
 import requests
-
 from utils import paths, outputs
 
 

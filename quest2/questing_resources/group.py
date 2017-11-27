@@ -1,8 +1,7 @@
 import requests
 
-from questing_resources import taverna
-from .utils import paths, serializer as ser
-
+from utils import paths, serializer as ser
+from .taverna import *
 
 def group(auth_header, group_uri, user_name, quest):
     in_group = True
@@ -34,14 +33,14 @@ def group(auth_header, group_uri, user_name, quest):
             elif choice_group == '2':
                 choice_member = input('whom do you want to send the message to: ')
                 if choice_member in members:
-                    taverna.send_message_to_adventurer(auth_header, members[choice_member])
+                    send_message_to_adventurer(auth_header, members[choice_member])
             elif choice_group == '3':
                 choice_member = input('whom do you want to send the assignment to: ')
                 for keys, values in quest['tasks'].items():
                     print(keys, ': ', values['name'])
                 choice_task = input('which task to assign: ')
                 if choice_member in members and choice_task in quest['tasks']:
-                    taverna.send_assignment_to_adventurer(auth_header, members[choice_member],
+                    send_assignment_to_adventurer(auth_header, members[choice_member],
                                                           quest['tasks'][choice_task])
             else:
                 in_group = False
