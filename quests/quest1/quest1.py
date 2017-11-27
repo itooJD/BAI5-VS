@@ -9,16 +9,33 @@ def register(paths):
 
 def login(paths):
     login_resp = requests.get(paths['server'] + paths['login_url'], auth=('HeroyJenkins', 'pass'))
-    print('Quest1: Login: ' + str(login_resp.json()))
+    print('Quest1: Login: ' + str(login_resp.json()['message']))
     return login_resp.json()['token']
 
 def whoami(paths, headers):
     whoami_resp = requests.get(paths['server'] + paths['whoami_url'], headers=headers)
-    print('Quest1: WhoAmI: ' + str(whoami_resp.json()))
+    print('Quest1: WhoAmI: ' + str(whoami_resp.json()['message']))
 
 def quest(paths, headers):
     quest_resp = requests.get(paths['server'] + paths['blackboard_url'] + paths['quest_url'], headers=headers)
-    print('Quest1: Quest: ' + str(quest_resp.json()))
+    quests = []
+    available_quests = []
+    print('Quest1: Available quests: \n')
+    for idx, quest in enumerate(quest_resp.json()['objects']):
+        print('Quest with index: ' + str(idx))
+        print(quest['name'])
+        print(quest['descriptions'])
+        if quest['requirements'] not in paths['requirements']:
+            print('The requirements for this quest are not fullfilled by our hero :C')
+        else:
+            available_quests.append(idx)
+            quests.append(quest)
+    quest_no = -1
+    while quest_no not in available_quests:
+        quest_no = input('Which quest do you want to tackle mighty Heroy? [Index starting from 0]')
+    quest = quests[available_quests.index(quest_no)]
+    print('Quest1: Accepted quest ' + quest['name'])
+    print('Quest1: This quest requires the tokens: ' + quest['requires_tokens'])
 
 def map(paths, headers):
     map_resp = requests.get(paths['server'] + paths['map_url'], headers=headers)

@@ -16,5 +16,6 @@ assignment_url : '/noTimeToSleep'
 election_url : '/election'
 group_uri :
 
+requirements: []
 quests : []
 ...
