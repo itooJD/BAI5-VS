@@ -1,7 +1,7 @@
 import requests
 
 from questing_resources import taverna
-from utils import paths, serializer as ser
+from .utils import paths, serializer as ser
 
 
 def group(auth_header, group_uri, user_name, quest):

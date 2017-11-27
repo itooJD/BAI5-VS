@@ -1,6 +1,6 @@
 import requests
 
-from utils import paths, serializer as ser
+from .utils import paths, serializer as ser
 
 
 def game_map(auth_header, quest, tokens_id, tokens):

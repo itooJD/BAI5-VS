@@ -1,5 +1,5 @@
 import os, requests
-from utils import paths, serializer as ser, outputs
+from .utils import paths, serializer as ser, outputs
 
 
 def authentification(auth_header):

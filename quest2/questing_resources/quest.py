@@ -1,7 +1,7 @@
 import requests
 
 from questing_resources import blackboard as bb
-from utils import paths
+from .utils import paths
 
 
 def my_quest(auth_header, tokens_id, tokens, quest):
