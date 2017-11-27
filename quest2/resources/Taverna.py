@@ -1,5 +1,5 @@
-from quest2.util import hero_url, taverna_url
 import requests
+from utils import get_config
 
 
 class Taverna():
@@ -7,6 +7,6 @@ class Taverna():
         payload = {
             'heroclass': 'Treasure Goblin',
             'capabilities': [],
-            'url': hero_url
+            'url': get_config()['hero_url']
         }
-        response = requests.post(taverna_url, data=payload)
+        response = requests.post(get_config()['taverna_url'], data=payload)

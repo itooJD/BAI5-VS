@@ -1,0 +1,20 @@
+---
+server : ''
+user_url : '/users'
+login_url : '/login'
+whoami_url : '/whoami'
+blackboard_url : '/blackboard'
+map_url : '/map'
+visit_url : '/visits'
+quest_url : '/quests'
+last_url : '/deliveries'
+
+hero_url : '/heroyjenkins'
+diary_url : "/diary"
+taverna_url : "/taverna"
+assignment_url : '/noTimeToSleep'
+election_url : '/election'
+group_uri :
+
+quests : []
+...

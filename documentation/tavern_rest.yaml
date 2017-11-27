@@ -1,0 +1,126 @@
+swagger: "2.0"
+info:
+  description: "This is a simple REST-API for students"
+  version: "1.0.0"
+  title: "bai-vs-a1"
+host: "localhost"
+basePath: "/v1"
+tags:
+- name: "hero"
+  description: "A hero"
+- name: ""
+schemes:
+- "http"
+paths:
+  /tavern:
+    get:
+      tags:
+      - "hero"
+      summary: "Get all heroes in the tavern"
+      description: ""
+      operationId: "getAllHeroesInTavern"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Hero list"
+        required: true
+        schema:
+          $ref: "#/definitions/Hero"
+      responses:
+        202:
+          description: "Got all the heroes"
+        400:
+          description: "Illegal argument"
+
+  /tavern/offers:
+    post:
+      tags:
+      - "hero"
+      - "offer"
+      summary: "Add offer to do something"
+      operationId: "postOffer"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Offer object"
+        required: true
+        schema:
+          $ref: "#/definitions/Offer"
+      responses:
+        202:
+          description: "Posted offer successfully"
+        400:
+          description: "Illegal Argument"
+    delete:
+      tags:
+      - "hero"
+      - "offer"
+      summary: "Delete offer"
+      operationId: "deleteOffer"
+      responses:
+        202:
+          description: "Deleted offer successfully"
+        400:
+          description: "Illegal Argument"
+        404:
+          description: "Offer not found"
+    get:
+      tags:
+      - "offer"
+      summary: "Get all offers in the tavern"
+      operationId: "getAllTheOffers"
+      responses:
+        202:
+          description: "Got all the offers"
+
+  /tavern/offers/{class}:
+    get:
+      tags:
+      - "offer"
+      summary: "Get all offers, offered by given class"
+      operationId: "getOffersByClass"
+      parameters:
+      - name: "class"
+        type: "string"
+        in: "path"
+        description: "Unique name of Battleclass"
+        required: true
+      responses:
+        202:
+          description: "Got all offers by class"
+        400:
+          description: "Illegal Argument"
+
+definitions:
+  Hero:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int32"
+      name:
+        type: "string"
+      class:
+        $ref: "#/definitions/BattleClass"
+  Offer:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int32"
+      offer-data:
+        type: "string"
+      hero:
+        $ref: "#/definitions/Hero"
+  BattleClass:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int32"
+      name:
+        type: "string"

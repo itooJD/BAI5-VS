@@ -1,5 +1,5 @@
-from flask_restful import Resource,  reqparse
-from quest2.util import hero_url
+from flask_restful import Resource, reqparse
+from utils.config_manager import get_config
 import requests
 
 
@@ -26,11 +26,11 @@ class HeroysMightyTasks(Resource):
         )
 
         task = {
-            "id":"<some identity chosen by the initiator to identify this request>",
-            "task":"<uri to the task to accomplish>",
-            "resource":"<uri or url to resource where actions are required>",
-            "method":"<method to take – if already known>",
-            "data":"<data to use/post for the task>",
+            "id": "<some identity chosen by the initiator to identify this request>",
+            "task": "<uri to the task to accomplish>",
+            "resource": "<uri or url to resource where actions are required>",
+            "method": "<method to take – if already known>",
+            "data": "<data to use/post for the task>",
             "callback": "<an url where the initiator can be reached with the results/token>",
             "message": "<something you want to tell the other one>"
         }
@@ -42,7 +42,7 @@ class HeroysMightyTasks(Resource):
                 'resource': args['resource'],
                 'method': '<method used to get this result>',
                 'data': response.text,
-                'user': hero_url,
+                'user': get_config()['hero_url'],
                 'message': 'Swifty swooty as ever has heroy done his job'
             }
             requests.post(args['callback'], data=answer)

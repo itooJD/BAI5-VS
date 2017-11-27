@@ -1,5 +1,5 @@
 from flask import request
-from flask_restful import Resource,  reqparse
+from flask_restful import Resource
 
 
 class HeroysDiary(Resource):

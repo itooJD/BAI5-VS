@@ -5,3 +5,5 @@ from .HeroysDiary import HeroysDiary
 from .HeroysMightyTasks import HeroysMightyTasks
 from .HeroyPresident import HeroyPresident
 from .Taverna import Taverna
+
+quests = []
