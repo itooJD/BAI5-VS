@@ -44,6 +44,7 @@ def quest(paths, headers):
     quest = quests[int(quest_no)]
     print('Quest1: Accepted quest ' + quest['name'])
     print('Quest1: This quest requires the tokens: ' + str(quest['requires_tokens']))
+    print('and requires of you to open the task: ' + str(quest['tasks']))
 
 def map(paths, headers):
     map_resp = requests.get(paths['server'] + paths['map_url'], headers=headers)
