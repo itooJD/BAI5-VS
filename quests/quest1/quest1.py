@@ -103,11 +103,18 @@ def visit_1(headers, quest_host, location_url):
         visit_1(headers, quest_host, visit_resp.json()['next'])
     if visit_resp.json().get('steps_todo'):
         for step in visit_resp.json().get('steps_todo'):
-            visit_1(headers, quest_host, step)
+            visit_2(headers, quest_host, step)
     throneroom_token = visit_resp.json()['token']
     print()
     print('You acquired the token! \n' + str(throneroom_token))
     return throneroom_token
+
+
+def visit_2(headers, quest_host, step):
+    visit_resp = requests.get('http://' + quest_host + location_url, headers=headers)
+    print(visit_resp.json())
+    visit_resp = requests.post('http://' + quest_host + location_url, headers=headers)
+    print(visit_resp.json())
 
 
 def deliver(paths, headers, deliver_token, quest_no, task_uris):
