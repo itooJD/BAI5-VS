@@ -4,10 +4,7 @@ from quests.utils.config_manager import set_server_url_via_udp
 
 def register(paths):
     from quests.quest2.questing_resources.authentification import authentification
-    authentification('')
-    user_json = '{"name":"HeroyJenkins", "password":"pass"}'
-    register_resp = requests.post(paths['server'] + paths['user_url'], data=user_json)
-    print('Quest1: User registration: ' + register_resp.json()['message'])
+    return authentification('')
 
 
 def login(paths):
@@ -77,7 +74,7 @@ def map(paths, headers, task):
     return map
 
 
-def visit(paths, headers, quest_host, location_url):
+def visit(headers, quest_host, location_url):
     print()
     print('Quest1: Finally, we arrived at {0}{1}. Lets see what we can find at this place!'.format(quest_host,
                                                                                                    location_url))
@@ -107,13 +104,11 @@ def deliver(paths, headers, deliver_token, task):
 
 if __name__ == '__main__':
     paths = set_server_url_via_udp()
-    register(paths)
-    auth_token = login(paths)
-    headers = {'Authorization': 'Token ' + str(auth_token)}
+    _, headers = register(paths)
     whoami(paths, headers)
     quest(paths, headers)
     location_url, task = task(paths, headers)
     quest_host = map(paths, headers, task)
-    deliver_token = visit(paths, headers, quest_host, location_url)
+    deliver_token = visit(headers, quest_host, location_url)
     deliver(paths, headers, deliver_token, task)
     # curl -H <Auth> -X POST 172.19.0.3:5000/blackboard/tasks/<number>/deliveries -d {"tokens":{"task_uri":<token>}}
