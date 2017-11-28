@@ -102,12 +102,12 @@ def visit_1(headers, quest_host, location_url):
     if visit_resp.json().get('next'):
         print('Seems there is another way: ' + visit_resp.json()['next'])
         tokens = visit_1(headers, quest_host, visit_resp.json()['next'])
-        data = {}
-        requests.post('http://' + quest_host + location_url, headers=headers, data=data)
+        data = {"tokens": tokens}
+        rat_resp = requests.post('http://' + quest_host + location_url, headers=headers, data=data)
     elif visit_resp.json().get('steps_todo'):
         print('Argh, there are other things to do here... : ' + str(visit_resp.json().get('steps_todo')))
         for step in visit_resp.json().get('steps_todo'):
-            tokens.append(visit_1(headers, quest_host, step))
+            tokens.append(visit_1(headers, quest_host, step)[0])
         return tokens
     else:
         print('So... We actually have to do something :O?')
@@ -123,6 +123,7 @@ def visit_1(headers, quest_host, location_url):
 def visit_2(headers, quest_host, step):
     visit_resp = requests.post('http://' + quest_host + step, headers=headers)
     print(visit_resp.json()['message'])
+    print('We got something... ew: ' + visit_resp.json()['token_name'])
     return visit_resp.json()['token'], visit_resp.json()['token_name']
 
 
