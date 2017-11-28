@@ -98,17 +98,21 @@ def visit_1(headers, quest_host, location_url):
     visit_resp = requests.get('http://' + quest_host + location_url, headers=headers)
     # print(visit_resp.json()['message'])
     print(visit_resp.json()['message'])
+    tokens = []
     if visit_resp.json().get('next'):
         print('Seems there is another way: ' + visit_resp.json()['next'])
-        visit_1(headers, quest_host, visit_resp.json()['next'])
+        tokens = visit_1(headers, quest_host, visit_resp.json()['next'])
+        data = {}
+        requests.post('http://' + quest_host + location_url, headers=headers, data=data)
     elif visit_resp.json().get('steps_todo'):
         print('Argh, there are other things to do here... : ' + str(visit_resp.json().get('steps_todo')))
         for step in visit_resp.json().get('steps_todo'):
-            visit_1(headers, quest_host, step)
+            tokens.append(visit_1(headers, quest_host, step))
+        return tokens
     else:
         print('So... We actually have to do something :O?')
         print(location_url)
-        token = visit_2(headers, quest_host, location_url)
+        return visit_2(headers, quest_host, location_url)
         # print(token)
     throneroom_token = visit_resp.json()['token']
     print()
@@ -118,8 +122,8 @@ def visit_1(headers, quest_host, location_url):
 
 def visit_2(headers, quest_host, step):
     visit_resp = requests.post('http://' + quest_host + step, headers=headers)
-    print(visit_resp.status_code)
-    print(visit_resp.json())
+    print(visit_resp.json()['message'])
+    return visit_resp.json()['token'], visit_resp.json()['token_name']
 
 
 def deliver(paths, headers, deliver_token, quest_no, task_uris):
