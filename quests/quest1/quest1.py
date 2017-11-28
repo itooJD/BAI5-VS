@@ -93,7 +93,7 @@ def deliver(paths, headers, deliver_token, quest_no, task_uris):
     print('Quest1: Now let us deliver our token. Back to the blackboard!')
     print(deliver_token)
     for task_uri in task_uris:
-        token = '{"' + task_uri + '":' + deliver_token + '}'
+        token = '{"' + task_uri + '":"' + deliver_token + '"}'
         data = '{"tokens":' + token + '}'
         print('Lets give our quest back to: ' + paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/' + quest_no + paths['deliver_url'] + '\n with token: ' + data)
         last_resp = requests.post(paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/' + quest_no + paths['deliver_url'],
