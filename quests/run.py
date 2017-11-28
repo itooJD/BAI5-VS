@@ -1,4 +1,4 @@
-from quests.quest2.server_setup import setup_flask, add_api
+from .quest2.server_setup import setup_flask, add_api
 from quests.utils import set_server_url_via_udp
 
 if __name__ == '__main__':
