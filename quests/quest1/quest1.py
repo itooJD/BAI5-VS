@@ -88,7 +88,7 @@ def visit(paths, headers, quest_host, location_url):
 
 def deliver(paths, headers, deliver_token, task):
     last_resp = requests.post(
-        paths['server'] + paths['blackboard_url'] + paths['task_url'] + '/' + task + paths['deliver_url'],
+        paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/' + task + paths['deliver_url'],
         headers=headers, data=deliver_token)
     print(last_resp.json()['message'])
     # print(last_resp.json()[''])
