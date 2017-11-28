@@ -102,7 +102,7 @@ def visit_1(headers, quest_host, location_url):
         print('Seems there is another way: ' + visit_resp.json()['next'])
         visit_1(headers, quest_host, visit_resp.json()['next'])
     elif visit_resp.json().get('steps_todo'):
-        print('Argh, there are other things to do here... : ' + visit_resp.json().get('steps_todo'))
+        print('Argh, there are other things to do here... : ' + str(visit_resp.json().get('steps_todo')))
         for step in visit_resp.json().get('steps_todo'):
             visit_1(headers, quest_host, step)
     else:
