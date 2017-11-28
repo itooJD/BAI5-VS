@@ -97,14 +97,16 @@ def visit_1(headers, quest_host, location_url):
                                                                                                   location_url))
     visit_resp = requests.get('http://' + quest_host + location_url, headers=headers)
     # print(visit_resp.json()['message'])
-    print(visit_resp.json())
+    print(visit_resp.json()['message'])
     if visit_resp.json().get('next'):
         print('Seems there is another way: ' + visit_resp.json()['next'])
         visit_1(headers, quest_host, visit_resp.json()['next'])
     elif visit_resp.json().get('steps_todo'):
+        print('Argh, there are other things to do here... : ' + visit_resp.json().get('steps_todo'))
         for step in visit_resp.json().get('steps_todo'):
             visit_1(headers, quest_host, step)
     else:
+        print('So... We actually have to do something :O?')
         token = visit_2(headers, quest_host, location_url)
         # print(token)
     throneroom_token = visit_resp.json()['token']
