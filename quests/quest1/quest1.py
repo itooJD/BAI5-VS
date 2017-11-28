@@ -135,8 +135,8 @@ if __name__ == '__main__':
     quest_host = map(paths, headers, task)
     int_quest_no = int(quest_no)
     print(int_quest_no)
-    if int_quest_no == 0:
+    if int_quest_no == 1:
         deliver_token = visit(headers, quest_host, location_url)
         deliver(paths, headers, deliver_token, quest_no, task_uris)
-    elif int_quest_no == 1:
+    elif int_quest_no == 2:
         visit_1(headers, quest_host, location_url)
