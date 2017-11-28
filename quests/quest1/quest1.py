@@ -3,6 +3,8 @@ from quests.utils.config_manager import set_server_url_via_udp
 
 
 def register(paths):
+    from quests.quest2.questing_resources.authentification import authentification
+    authentification('')
     user_json = '{"name":"HeroyJenkins", "password":"pass"}'
     register_resp = requests.post(paths['server'] + paths['user_url'], data=user_json)
     print('Quest1: User registration: ' + register_resp.json()['message'])
@@ -87,21 +89,20 @@ def visit(paths, headers, quest_host, location_url):
 
 
 def deliver(paths, headers, deliver_token, task):
+    print()
+    print('Quest1: Now let us deliver our token. Back to the blackboard!')
     last_resp = requests.post(
         paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/' + task + paths['deliver_url'],
         headers=headers, data=deliver_token)
     try:
         print(last_resp.json()['message'])
-        print(last_resp.json()['error'])
+        if not last_resp.json()['error']:
+            print("Quest successfully closed! Herrrrroooooooooy Jeeeeenkiiiiiins!!")
+        else:
+            print(last_resp.json()['error'])
     except Exception:
         print('', end='')
-    # print(last_resp.json()[''])
-    print("Quest successfully closed")
-    print()
-    print('Quest1: Now let us deliver our token. Back to the blackboard!')
-    last_resp = requests.post(paths['server'] + paths['blackboard_url'] + paths['task_url'] + '/' + task + paths['deliver_url'], headers=headers, data=deliver_token)
-    print(last_resp.json()['message'])
-    print("Quest successfully closed! Herrrrroooooooooy Jeeeeenkiiiiiins!!")
+        print('Quest1: Could not be completed, caught exception')
 
 
 if __name__ == '__main__':
