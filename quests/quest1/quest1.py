@@ -95,9 +95,10 @@ def deliver(paths, headers, deliver_token, quest_no, task_uris):
     for task_uri in task_uris:
         token = '{"' + task_uri + '":' + deliver_token + '}'
         data = '{"tokens":' + token + '}'
-        print('Lets give our quest back to: ' + paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/' + quest_no + paths['deliver_url'])
+        print('Lets give our quest back to: ' + paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/' + quest_no + paths['deliver_url'] + '\n with token: ' + data)
         last_resp = requests.post(paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/' + quest_no + paths['deliver_url'],
                               headers=headers, data=data)
+        print(last_resp.json())
     try:
         print(last_resp.json()['message'])
         if not last_resp.json()['error']:
