@@ -41,7 +41,7 @@ def quest(paths, headers):
         print()
     quest_no = -1
     print('#################################')
-    print('Available index values: ' + str(available_quests))
+    print('Available quests: ' + str(available_quests))
     while int(quest_no) not in available_quests:
         quest_no = input('Which quest do you want to tackle mighty Heroy? [Index starting from 0] \n > ')
     quest = quests[int(quest_no)]
@@ -133,11 +133,10 @@ def fight_rats(headers, quest_host, step):
 def deliver(paths, headers, deliver_token, quest_no, task_uris):
     print()
     print('Quest: Now let us deliver our token. Back to the blackboard!')
-    print(deliver_token)
     for task_uri in task_uris:
         token = '{"' + task_uri + '":"' + deliver_token + '"}'
         data = '{"tokens":' + token + '}'
-        print('Lets give our quest back to: ' + paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/' + quest_no + paths['deliver_url'] + '\n with token: ' + data)
+        print('Lets give our quest back to: ' + paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/' + quest_no + paths['deliver_url'])
         last_resp = requests.post(paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/' + quest_no + paths['deliver_url'],
                               headers=headers, data=data)
         print(last_resp.json())
