@@ -90,7 +90,11 @@ def deliver(paths, headers, deliver_token, task):
     last_resp = requests.post(
         paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/' + task + paths['deliver_url'],
         headers=headers, data=deliver_token)
-    print(last_resp.json()['message'])
+    try:
+        print(last_resp.json()['message'])
+        print(last_resp.json()['error'])
+    except Exception:
+        print('', end='')
     # print(last_resp.json()[''])
     print("Quest successfully closed")
 
