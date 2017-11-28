@@ -5,7 +5,7 @@ from utils import paths, get_config
 from quests.utils import serializer as ser
 
 
-class HeroyJenkins(Resource):
+class Heroy(Resource):
     def __init__(self):
         self.idle = False
 
