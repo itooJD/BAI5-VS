@@ -102,7 +102,7 @@ def visit_1(headers, quest_host, location_url):
     if visit_resp.json().get('next'):
         print('Seems there is another way: ' + visit_resp.json()['next'])
         tokens = visit_1(headers, quest_host, visit_resp.json()['next'])
-        tokens_string = '["'
+        tokens_string = '['
         for idx, token in enumerate(tokens):
             if idx == len(tokens)-1:
                 tokens_string += '"' + token + '"]'
