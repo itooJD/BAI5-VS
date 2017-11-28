@@ -48,7 +48,7 @@ def quest(paths, headers):
     print('Quest1: Accepted quest ' + quest['name'])
     print('Quest1: This quest requires the tokens: ' + str(quest['requires_tokens']))
     print('and requires of you to open the task: ' + str(quest['tasks']))
-    return str(int(quest_no) + 1)
+    return str(int(quest_no) + 1), str(quest['tasks'])
 
 
 def task(paths, headers):
@@ -85,16 +85,19 @@ def visit(headers, quest_host, location_url):
     throneroom_token = visit_resp.json()['token']
     print()
     print('You acquired the token! \n' + str(throneroom_token))
-    return '{"tokens": {"/blackboard/tasks/2":' + throneroom_token + '}}'
+    return throneroom_token
 
 
-def deliver(paths, headers, deliver_token, quest_no):
+def deliver(paths, headers, deliver_token, quest_no, task_uris):
     print()
     print('Quest1: Now let us deliver our token. Back to the blackboard!')
     print(deliver_token)
-    print('Lets give our quest back to: ' + paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/' + quest_no + paths['deliver_url'])
-    last_resp = requests.post(paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/' + quest_no + paths['deliver_url'],
-                              headers=headers, data=deliver_token)
+    for task_uri in task_uris:
+        token = '{"' + task_uri + '":' + deliver_token + '}'
+        data = '{"tokens":' + token + '}'
+        print('Lets give our quest back to: ' + paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/' + quest_no + paths['deliver_url'])
+        last_resp = requests.post(paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/' + quest_no + paths['deliver_url'],
+                              headers=headers, data=data)
     try:
         print(last_resp.json()['message'])
         if not last_resp.json()['error']:
@@ -112,9 +115,9 @@ if __name__ == '__main__':
     _, headers = register(paths)
     print('Quest1: Authentication Token: ' + str(headers))
     whoami(paths, headers)
-    quest_no = quest(paths, headers)
+    quest_no, task_uris = quest(paths, headers)
     location_url, task = task(paths, headers)
     quest_host = map(paths, headers, task)
     deliver_token = visit(headers, quest_host, location_url)
-    deliver(paths, headers, deliver_token, quest_no)
+    deliver(paths, headers, deliver_token, quest_no, task_uris)
     # curl -H {'Authorization': 'Token eyJ1c2VybmFtZSI6ICJQZWFjb2NrIiwgImF1dGgiOiAiWjBGQlFVRkJRbUZJWkdZM2IzVkZZV3c1T1RaV1pXNVlhRGxuYUhOcWIzUnNRVmgzUlU1MFdsUkZSR2hWYkhWWlR6bDNaMUJJYVMxS2NIQnJkWE41WVZKRlZXZG5NMVYzVVVadWFsaFVlazF3UTFOTlpIYzRNM052YjNnMFJYQmxZbWxEUXpsVGVqRmxXbkZUZDFjMlJYcGpWVVJHVnpBelQydFhVVWg2T1hsNFdXbEVNVVpmU2pCUk4xSlhSelJaZW1wdldVTk1hMkZZZEdjemFsbFBPVUpCUFQwPSJ9'}  -X POST 172.19.0.7:5000/blackboard/tasks/2/deliveries -d {"tokens":{"task_uri":"Z0FBQUFBQmFIZGdBcFctNmlsajNneXF6d3pYeXdEdGxpZXhEZ0Fhc1dhNV9iUjE2TXNJbFpXd05NOG1JMmhNSmg5YmZwZS1GX3lwSkt4QWhMTEdnMUY5dlN3VlBiQUxzWGV4MFhVRjRPeEFOblNGd1prOEdnM0hiaHZWU1RVRmlHZFpBU3EtbXFRVGZzaWg0S3pCc2V1VlF6RC1PSlVQdms3TGtEMVR2b0Y4N2xlSTU5WkM0cTdpbnR4TVRSbjBuTWlSaWpJSF9QNVpNdmg0N19mTlRKNFkxdnlRM0dpRkh2alJzWkt1ZVBKcDZZOVNXRTc2cjRFX0NIdWVrNWJnQjdoaXVSTnhIaDVMNkpIWTVSY05fNThxLUFLblhoM0s2aUk0V2hIX1UtQzhWVFVEdDE3cVZ0QWhyRzY1UG9Ccm5EZHBhNDUyTHZiQ1M2RTdCVmxQamYwTHpadnFUQ1ByZ3VEQ0VibHdvYkY3eTJmdGtYWWxFbU5uZEZWWnVOUVdJRFd5dWt2VEtUaWNFMlppQzZDWFVIZUVsM1JWV2RCR0RkTnJ4aXFqWHAxSmhuX0w4dUg4N3Q1SWhyb19udEtHT1lIWGZiVVBXbVlQS19zSk1QdDUtOWt3a1kwczgtNHNVZC1Gd3BQaFlXbVpUajF6ZGU1c0I4bHZaR05GejFXZUQyeS1QWkRDUlBxT29wZ3drTldKeUZaelRkWlZIaUd3cFhIMng3SXpqdHZaeWhiWTBqSnhDMU1lUWV2Sms2MUFnaURpUS1KQmdtRzRZNi11NjdWMU1Ib09wVXY4eUxrZ255eTB2cy13MTdTZ1hFWjd6NW1pbGpQM2EzeEo2U3A4MzNkLXljQXdSbXJ2dg=="}}
