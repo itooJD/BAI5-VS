@@ -1,6 +1,4 @@
-import os
-
-import requests
+import os, requests
 from quests.utils import paths, outputs, serializer as ser
 
 

@@ -1,6 +1,5 @@
-from utils import paths
-
 from .taverna import *
+from quests.utils import paths
 
 
 def group(auth_header, group_uri, user_name, quest):

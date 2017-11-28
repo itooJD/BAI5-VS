@@ -1,9 +1,5 @@
-import json
-
-import requests
-from utils import paths, outputs
-
-from quests.utils import serializer as ser
+import json, requests
+from quests.utils import serializer as ser, paths, outputs
 
 
 def adventurers(auth_header, group_uri):
