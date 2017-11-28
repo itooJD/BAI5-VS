@@ -101,7 +101,7 @@ def deliver(paths, headers, deliver_token, quest_no, task_uris):
         print(last_resp.json())
     try:
         print(last_resp.json()['message'])
-        if not last_resp.json()['error']:
+        if not last_resp.json()['status'] == 'success':
             print("Quest successfully closed! Herrrrroooooooooy Jeeeeenkiiiiiins!!")
         else:
             print(last_resp.json()['error'])
