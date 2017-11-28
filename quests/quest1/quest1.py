@@ -96,7 +96,7 @@ def visit_1(headers, quest_host, location_url):
     print('Quest: Finally, we arrived at {0}{1}. Lets see what we can find at this place!'.format(quest_host,
                                                                                                   location_url))
     visit_resp = requests.get('http://' + quest_host + location_url, headers=headers)
-    print(visit_resp.json()['message'] + ' with token: ' + visit_resp.json()['token_name'])
+    print(visit_resp.json())
     throneroom_token = visit_resp.json()['token']
     print()
     print('You acquired the token! \n' + str(throneroom_token))
@@ -134,7 +134,6 @@ if __name__ == '__main__':
     location_url, task = task(paths, headers)
     quest_host = map(paths, headers, task)
     int_quest_no = int(quest_no)
-    print(int_quest_no)
     if int_quest_no == 1:
         deliver_token = visit(headers, quest_host, location_url)
         deliver(paths, headers, deliver_token, quest_no, task_uris)
