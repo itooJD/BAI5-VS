@@ -106,6 +106,7 @@ def deliver(paths, headers, deliver_token, task):
 if __name__ == '__main__':
     paths = set_server_url_via_udp()
     _, headers = register(paths)
+    print('Quest1: Authentication Token: ' + str(headers))
     whoami(paths, headers)
     quest(paths, headers)
     location_url, task = task(paths, headers)
