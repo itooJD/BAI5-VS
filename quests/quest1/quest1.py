@@ -104,6 +104,7 @@ def visit_1(headers, quest_host, location_url):
         tokens = visit_1(headers, quest_host, visit_resp.json()['next'])
         data = {"tokens": tokens}
         rat_resp = requests.post('http://' + quest_host + location_url, headers=headers, data=data)
+        print(rat_resp.json())
     elif visit_resp.json().get('steps_todo'):
         print('Argh, there are other things to do here... : ' + str(visit_resp.json().get('steps_todo')))
         for step in visit_resp.json().get('steps_todo'):
@@ -111,9 +112,7 @@ def visit_1(headers, quest_host, location_url):
         return tokens
     else:
         print('So... We actually have to do something :O?')
-        print(location_url)
         return visit_2(headers, quest_host, location_url)
-        # print(token)
     throneroom_token = visit_resp.json()['token']
     print()
     print('You acquired the token! \n' + str(throneroom_token))
