@@ -103,8 +103,9 @@ def visit_1(headers, quest_host, location_url):
         print('Seems there is another way: ' + visit_resp.json()['next'])
         tokens = visit_1(headers, quest_host, visit_resp.json()['next'])
         data = {"tokens": tokens}
-        print()
+        print(tokens)
         rat_resp = requests.post('http://' + quest_host + visit_resp.json()['next'], headers=headers, data=data)
+        print()
         print(rat_resp.status_code)
         print(rat_resp.json())
     elif visit_resp.json().get('steps_todo'):
