@@ -79,10 +79,11 @@ def visit(paths, headers, quest_host, location_url):
     return {'tokens': {'/blackboard/tasks/2': throneroom_token}}
 
 def deliver(paths, headers, deliver_token, task):
+    print()
+    print('Quest1: Now let us deliver our token. Back to the blackboard!')
     last_resp = requests.post(paths['server'] + paths['blackboard_url'] + paths['task_url'] + '/' + task + paths['deliver_url'], headers=headers, data=deliver_token)
     print(last_resp.json()['message'])
-    # print(last_resp.json()[''])
-    print("Quest successfully closed")
+    print("Quest successfully closed! Herrrrroooooooooy Jeeeeenkiiiiiins!!")
 
 if __name__ == '__main__':
     paths = set_server_url_via_udp()
