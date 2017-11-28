@@ -7,14 +7,17 @@ def register(paths):
     register_resp = requests.post(paths['server'] + paths['user_url'], data=user_json)
     print('Quest1: User registration: ' + register_resp.json()['message'])
 
+
 def login(paths):
     login_resp = requests.get(paths['server'] + paths['login_url'], auth=('HeroyJenkins', 'pass'))
     print('Quest1: Login: ' + str(login_resp.json()['message']))
     return login_resp.json()['token']
 
+
 def whoami(paths, headers):
     whoami_resp = requests.get(paths['server'] + paths['whoami_url'], headers=headers)
     print('Quest1: WhoAmI: ' + str(whoami_resp.json()['message']))
+
 
 def quest(paths, headers):
     quest_resp = requests.get(paths['server'] + paths['blackboard_url'] + paths['quest_url'], headers=headers)
@@ -46,6 +49,7 @@ def quest(paths, headers):
     print('Quest1: This quest requires the tokens: ' + str(quest['requires_tokens']))
     print('and requires of you to open the task: ' + str(quest['tasks']))
 
+
 def task(paths, headers):
     print()
     task_no = input('Quest1: Which task are we looking for again? \n > ')
@@ -56,6 +60,7 @@ def task(paths, headers):
         print('It seems we have to go to: ' + str(task_resp.json()['object']['location']))
         print('And there to: ' + str(task_resp.json()['object']['resource']))
     return str(task_resp.json()['object']['resource']), task_no
+
 
 def map(paths, headers, task):
     print()
@@ -69,21 +74,35 @@ def map(paths, headers, task):
             break
     return map
 
+
 def visit(paths, headers, quest_host, location_url):
     print()
-    print('Quest1: Finally, we arrived at {0}{1}. Lets see what we can find at this place!'.format(quest_host, location_url))
-    visit_resp = requests.post('http://' + quest_host +  location_url, headers=headers)
+    print('Quest1: Finally, we arrived at {0}{1}. Lets see what we can find at this place!'.format(quest_host,
+                                                                                                   location_url))
+    visit_resp = requests.post('http://' + quest_host + location_url, headers=headers)
     print(visit_resp.json()['message'] + ' with token: ' + visit_resp.json()['token_name'])
-    throneroom_token =  visit_resp.json()['token']
+    throneroom_token = visit_resp.json()['token']
     print('You acquired the token! ' + str(throneroom_token))
-    return {'tokens': {'/blackboard/tasks/2': throneroom_token}}
+    return '{"tokens": {"/blackboard/tasks/2":' + throneroom_token + '}}'
+
 
 def deliver(paths, headers, deliver_token, task):
+    last_resp = requests.post(
+        paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/' + task + paths['deliver_url'],
+        headers=headers, data=deliver_token)
+    try:
+        print(last_resp.json()['message'])
+        print(last_resp.json()['error'])
+    except Exception:
+        print('', end='')
+    # print(last_resp.json()[''])
+    print("Quest successfully closed")
     print()
     print('Quest1: Now let us deliver our token. Back to the blackboard!')
     last_resp = requests.post(paths['server'] + paths['blackboard_url'] + paths['task_url'] + '/' + task + paths['deliver_url'], headers=headers, data=deliver_token)
     print(last_resp.json()['message'])
     print("Quest successfully closed! Herrrrroooooooooy Jeeeeenkiiiiiins!!")
+
 
 if __name__ == '__main__':
     paths = set_server_url_via_udp()

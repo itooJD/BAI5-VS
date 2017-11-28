@@ -1,7 +1,6 @@
-__all__ = ["HelloToHeroysWorld", "HeroyJenkins", "HeroysDiary", "HeroysMightyTasks", "HeroyPresident", "Taverna"]
+__all__ = ["HelloToHeroysWorld", "Heroy", "HeroysDiary", "HeroysMightyTasks", "HeroyPresident"]
 from .HelloToHeroysWorld import HelloToHeroysWorld
-from .HeroyJenkins import HeroyJenkins
+from .Heroy import Heroy
 from .HeroysDiary import HeroysDiary
 from .HeroysMightyTasks import HeroysMightyTasks
 from .HeroyPresident import HeroyPresident
-from .Taverna import Taverna
