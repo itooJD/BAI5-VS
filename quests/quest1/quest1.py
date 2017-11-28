@@ -117,9 +117,8 @@ def visit_1(headers, quest_host, location_url):
 
 
 def visit_2(headers, quest_host, step):
-    visit_resp = requests.get('http://' + quest_host + location_url, headers=headers)
-    print(visit_resp.json())
     visit_resp = requests.post('http://' + quest_host + location_url, headers=headers)
+    print(visit_resp.status_code)
     print(visit_resp.json())
 
 
