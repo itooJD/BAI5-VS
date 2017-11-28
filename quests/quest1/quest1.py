@@ -91,9 +91,10 @@ def visit(headers, quest_host, location_url):
 def deliver(paths, headers, deliver_token, quest_no):
     print()
     print('Quest1: Now let us deliver our token. Back to the blackboard!')
+    print(deliver_token)
     print('Lets give our quest back to: ' + paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/' + quest_no + paths['deliver_url'])
     last_resp = requests.post(paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/' + quest_no + paths['deliver_url'],
-                              headers=headers, params=deliver_token)
+                              headers=headers, data=deliver_token)
     try:
         print(last_resp.json()['message'])
         if not last_resp.json()['error']:
