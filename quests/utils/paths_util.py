@@ -8,6 +8,10 @@ def server_uri(uri):
     return get_config()['server'] + uri
 
 
+def http_server_uri(uri):
+    return 'http://' + get_config()['server'] + uri
+
+
 def group(id):
     return get_config()['group_url'] + '/' + id
 
