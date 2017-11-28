@@ -48,7 +48,7 @@ def quest(paths, headers):
     print('Quest1: Accepted quest ' + quest['name'])
     print('Quest1: This quest requires the tokens: ' + str(quest['requires_tokens']))
     print('and requires of you to open the task: ' + str(quest['tasks']))
-    return quest_no
+    return str(int(quest_no) + 1)
 
 
 def task(paths, headers):
