@@ -81,16 +81,16 @@ def visit(headers, quest_host, location_url):
     visit_resp = requests.post('http://' + quest_host + location_url, headers=headers)
     print(visit_resp.json()['message'] + ' with token: ' + visit_resp.json()['token_name'])
     throneroom_token = visit_resp.json()['token']
-    print('You acquired the token! ' + str(throneroom_token))
+    print()
+    print('You acquired the token! \n' + str(throneroom_token))
     return '{"tokens": {"/blackboard/tasks/2":' + throneroom_token + '}}'
 
 
 def deliver(paths, headers, deliver_token, task):
     print()
     print('Quest1: Now let us deliver our token. Back to the blackboard!')
-    last_resp = requests.post(
-        paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/' + task + paths['deliver_url'],
-        headers=headers, data=deliver_token)
+    last_resp = requests.post(paths['server'] + paths['blackboard_url'] + paths['task_url'] + '/' + task + paths['deliver_url'],
+                              headers = headers, data = deliver_token)
     try:
         print(last_resp.json()['message'])
         if not last_resp.json()['error']:
