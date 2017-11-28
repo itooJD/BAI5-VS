@@ -98,6 +98,7 @@ def deliver(paths, headers, deliver_token, task):
         else:
             print(last_resp.json()['error'])
     except Exception as ex:
+        print(last_resp.status_code)
         print('', end='')
         print('Quest1: Could not be completed, caught exception - ' + str(ex))
 
