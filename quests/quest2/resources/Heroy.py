@@ -1,8 +1,6 @@
 from flask import jsonify, request
 from flask_restful import Resource, abort
-from utils import paths, get_config
-
-from quests.utils import serializer as ser
+from quests.utils import get_config
 
 
 class Heroy(Resource):
@@ -10,19 +8,14 @@ class Heroy(Resource):
         self.idle = False
 
     def get(self):
-        try:
-            group_uri = ser.de_serialize(paths.group_link_file)
-        except AttributeError:
-            group_uri = ''
-
-
+        paths = get_config()
         return jsonify({
-            "user": get_config()['hero_url'],
+            "user": paths['hero_url'],
             "idle": self.idle,
-            "group": get_config()['group_uri'],
-            "hirings": get_config()['hero_url'],
-            "assignments": get_config()['hero_url'] + get_config()['assignment_url'],
-            "messages": get_config()['hero_url'] + get_config()['diary_url']
+            "group": paths['group_uri'],
+            "hirings": paths['hero_url'],
+            "assignments": paths['hero_url'] + paths['assignment_url'],
+            "messages": paths['hero_url'] + paths['diary_url']
         })
 
     def post(self):
