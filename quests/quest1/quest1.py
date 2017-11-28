@@ -102,8 +102,14 @@ def visit_1(headers, quest_host, location_url):
     if visit_resp.json().get('next'):
         print('Seems there is another way: ' + visit_resp.json()['next'])
         tokens = visit_1(headers, quest_host, visit_resp.json()['next'])
-        data = {"tokens": tokens}
-        print(tokens)
+        tokens_string = '["'
+        for idx, token in enumerate(tokens):
+            if idx == len(tokens)-1:
+                tokens_string + '"' + token + '"]'
+            else:
+                tokens_string + '"' + token + '",'
+        data = '{"tokens":' + tokens + '}'
+        print(data)
         rat_resp = requests.post('http://' + quest_host + visit_resp.json()['next'], headers=headers, data=data)
         print()
         print(rat_resp.status_code)
