@@ -105,9 +105,9 @@ def visit_1(headers, quest_host, location_url):
         tokens_string = '["'
         for idx, token in enumerate(tokens):
             if idx == len(tokens)-1:
-                tokens_string + '"' + token + '"]'
+                tokens_string += '"' + token + '"]'
             else:
-                tokens_string + '"' + token + '",'
+                tokens_string += '"' + token + '",'
         data = '{"tokens":' + tokens_string + '}'
         print(data)
         rat_resp = requests.post('http://' + quest_host + visit_resp.json()['next'], headers=headers, data=data)
