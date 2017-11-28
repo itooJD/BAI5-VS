@@ -40,6 +40,7 @@ def quest(paths, headers):
             quests.append(quest)
         print()
     quest_no = -1
+    print('#################################')
     print('Available index values: ' + str(available_quests))
     while int(quest_no) not in available_quests:
         quest_no = input('Which quest do you want to tackle mighty Heroy? [Index starting from 0] \n > ')
@@ -87,11 +88,12 @@ def visit(headers, quest_host, location_url):
     return '{"tokens": {"/blackboard/tasks/2":' + throneroom_token + '}}'
 
 
-def deliver(paths, headers, deliver_token, quest):
+def deliver(paths, headers, deliver_token, quest_no):
     print()
     print('Quest1: Now let us deliver our token. Back to the blackboard!')
-    last_resp = requests.post(paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/' + quest + paths['deliver_url'],
-                              headers = headers, data = deliver_token)
+    print('Lets give our quest back to: ' + paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/' + quest_no + paths['deliver_url'])
+    last_resp = requests.post(paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/' + quest_no + paths['deliver_url'],
+                              headers=headers, data=deliver_token)
     try:
         print(last_resp.json()['message'])
         if not last_resp.json()['error']:
