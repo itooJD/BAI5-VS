@@ -9,6 +9,7 @@ def setup_flask():
     api = Api(app)
     return app, api
 
+from quests.quest2.resources import HelloToHeroysWorld, HeroyJenkins, HeroysDiary, HeroysMightyTasks, HeroyPresident
 
 def add_api(paths, api):
     api.add_resource(HelloToHeroysWorld, '/')
