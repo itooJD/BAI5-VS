@@ -22,6 +22,12 @@ def write_config(paths):
             print(exc)
 
 
+def change_config(path, data):
+    config = get_config()
+    config[path] = data
+    write_config(config)
+
+
 def get_server_url():
     s=socket(AF_INET, SOCK_DGRAM)
     s.bind(('',24000))

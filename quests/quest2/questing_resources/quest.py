@@ -1,13 +1,13 @@
 import requests
 
 from quests.quest2.questing_resources import blackboard as bb
-from quests.utils import paths
+from quests.utils import paths_util
 
 
 def my_quest(auth_header, tokens_id, tokens, quest):
-    bb.quest_infos(requests.get(paths.server_uri(quest['uri']), headers=auth_header))
+    bb.quest_infos(requests.get(paths_util.server_uri(quest['uri']), headers=auth_header))
     for key, task in quest['tasks'].items():
-        bb.task_infos(requests.get(paths.server_uri(task['uri']), headers=auth_header))
+        bb.task_infos(requests.get(paths_util.server_uri(task['uri']), headers=auth_header))
         print('1: deliver')
         print('2: abandon')
         choice_quest = input('what do you want to do: ')
@@ -26,7 +26,7 @@ def my_quest(auth_header, tokens_id, tokens, quest):
                 if choice_token in tokens_id:
                     token = '{"' + task_uri + '":' + tokens[tokens_id[choice_token]] + '}'
                     data = '{"tokens":' + token + '}'
-                    response = requests.post(paths.server_uri(deliveries_uri), headers=auth_header, data=data)
+                    response = requests.post(paths_util.server_uri(deliveries_uri), headers=auth_header, data=data)
                     print(response.json())
             return quest
         elif choice_quest == '2':

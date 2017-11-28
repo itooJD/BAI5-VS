@@ -1,9 +1,10 @@
 import requests
-from quests.utils import serializer as ser, paths
+from quests.utils import paths_util, get_config,change_config
+from quests.utils.paths_util import util_tokens
 
 
 def game_map(auth_header, quest, tokens_id, tokens):
-    choice_map, locations = map(requests.get(paths.map, headers=auth_header))
+    choice_map, locations = map(requests.get(get_config()['map_url'], headers=auth_header))
     if choice_map in locations:
         questing = True
         while questing:
@@ -41,9 +42,9 @@ def game_map(auth_header, quest, tokens_id, tokens):
                             tokens_temp = tokens_temp + ']'
                     data = '{"tokens":' + tokens_temp + '}'
                 if choice_action == 'GET':
-                    response = requests.get(paths.http(destination), headers=auth_header, data=data)
+                    response = requests.get(paths_util.http(destination), headers=auth_header, data=data)
                 elif choice_action == 'POST':
-                    response = requests.post(paths.http(destination), headers=auth_header, data=data)
+                    response = requests.post(paths_util.http(destination), headers=auth_header, data=data)
                 print()
                 if response.status_code in [200, 400]:
                     obj = response.json()
@@ -54,7 +55,7 @@ def game_map(auth_header, quest, tokens_id, tokens):
                         if token_name not in tokens:
                             tokens.update({token_name: obj['token']})
                             tokens_id.update({str(len(tokens)): token_name})
-                            ser.serialize([tokens_id, tokens], paths.tokens_file)
+                            change_config(util_tokens, [tokens_id, tokens])
                     except Exception:
                         print('', end='')
                     for key, value in obj.items():
