@@ -79,7 +79,7 @@ def map(paths, headers, task):
     return map
 
 
-def visit(headers, quest_host, location_url):
+def visit_throneroom(headers, quest_host, location_url):
     print()
     print('Quest: Finally, we arrived at {0}{1}. Lets see what we can find at this place!'.format(quest_host,
                                                                                                    location_url))
@@ -91,7 +91,7 @@ def visit(headers, quest_host, location_url):
     return throneroom_token
 
 
-def visit_1(headers, quest_host, location_url):
+def visit_rats(headers, quest_host, location_url):
     print()
     print('Quest: Finally, we arrived at {0}{1}. Lets see what we can find at this place!'.format(quest_host,
                                                                                                   location_url))
@@ -101,7 +101,7 @@ def visit_1(headers, quest_host, location_url):
     tokens = []
     if visit_resp.json().get('next'):
         print('Seems there is another way: ' + visit_resp.json()['next'])
-        tokens = visit_1(headers, quest_host, visit_resp.json()['next'])
+        tokens = visit_rats(headers, quest_host, visit_resp.json()['next'])
         tokens_string = '['
         for idx, token in enumerate(tokens):
             if idx == len(tokens)-1:
@@ -109,26 +109,21 @@ def visit_1(headers, quest_host, location_url):
             else:
                 tokens_string += '"' + token + '",'
         data = '{"tokens":' + tokens_string + '}'
-        print(data)
+        print('Uff... we finished fighting.')
         rat_resp = requests.post('http://' + quest_host + visit_resp.json()['next'], headers=headers, data=data)
-        print()
-        print(rat_resp.status_code)
-        print(rat_resp.json())
+        print(rat_resp.json()['message'])
+        return rat_resp.json()['token']
     elif visit_resp.json().get('steps_todo'):
         print('Argh, there are other things to do here... : ' + str(visit_resp.json().get('steps_todo')))
         for step in visit_resp.json().get('steps_todo'):
-            tokens.append(visit_1(headers, quest_host, step)[0])
+            tokens.append(visit_rats(headers, quest_host, step)[0])
         return tokens
     else:
         print('So... We actually have to do something :O?')
-        return visit_2(headers, quest_host, location_url)
-    throneroom_token = visit_resp.json()['token']
-    print()
-    print('You acquired the token! \n' + str(throneroom_token))
-    return throneroom_token
+        return fight_rats(headers, quest_host, location_url)
 
 
-def visit_2(headers, quest_host, step):
+def fight_rats(headers, quest_host, step):
     visit_resp = requests.post('http://' + quest_host + step, headers=headers)
     print(visit_resp.json()['message'])
     print('We got something... ew: ' + visit_resp.json()['token_name'])
@@ -167,7 +162,7 @@ if __name__ == '__main__':
     quest_host = map(paths, headers, task)
     int_quest_no = int(quest_no)
     if int_quest_no == 1:
-        deliver_token = visit(headers, quest_host, location_url)
+        deliver_token = visit_throneroom(headers, quest_host, location_url)
         deliver(paths, headers, deliver_token, quest_no, task_uris)
     elif int_quest_no == 2:
-        visit_1(headers, quest_host, location_url)
+        visit_rats(headers, quest_host, location_url)
