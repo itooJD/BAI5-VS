@@ -107,6 +107,7 @@ def visit_1(headers, quest_host, location_url):
             visit_1(headers, quest_host, step)
     else:
         print('So... We actually have to do something :O?')
+        print(location_url)
         token = visit_2(headers, quest_host, location_url)
         # print(token)
     throneroom_token = visit_resp.json()['token']
