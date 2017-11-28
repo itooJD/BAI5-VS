@@ -119,7 +119,7 @@ def visit_rats(headers, quest_host, location_url):
             tokens.append(visit_rats(headers, quest_host, step)[0])
         return tokens
     else:
-        print('So... We actually have to do something :O?')
+        print('So... We actually have to do something :O? Attack!!!')
         return fight_rats(headers, quest_host, location_url)
 
 
@@ -165,4 +165,5 @@ if __name__ == '__main__':
         deliver_token = visit_throneroom(headers, quest_host, location_url)
         deliver(paths, headers, deliver_token, quest_no, task_uris)
     elif int_quest_no == 2:
-        visit_rats(headers, quest_host, location_url)
+        deliver_token = visit_rats(headers, quest_host, location_url)
+        deliver(paths, headers, deliver_token, quest_no, task_uris)
