@@ -12,7 +12,7 @@ def authentification(auth_header):
         password = input('Password: ')
         if choice == '1':
             user_data = '{"name":"' + username + '","password":"' + password + '"}'
-            response = requests.post(get_config()['users'], data=user_data)
+            response = requests.post(get_config()['user_url'], data=user_data)
             print(response.json()['message'])
         response = requests.get(get_config()['login_url'], auth=(username, password))
         if response.status_code == 200:
