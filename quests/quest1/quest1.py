@@ -101,6 +101,9 @@ def visit_1(headers, quest_host, location_url):
     if visit_resp.json().get('next'):
         print('Seems there is another way: ' + visit_resp.json()['next'])
         visit_1(headers, quest_host, visit_resp.json()['next'])
+    if visit_resp.json().get['steps_todo']:
+        for step in visit_resp.json().get['steps_todo']:
+            visit_1(headers, quest_host, step)
     throneroom_token = visit_resp.json()['token']
     print()
     print('You acquired the token! \n' + str(throneroom_token))
