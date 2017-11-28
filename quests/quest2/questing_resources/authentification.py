@@ -12,9 +12,9 @@ def authentification(auth_header):
         password = input('Password: ')
         if choice == '1':
             user_data = '{"name":"' + username + '","password":"' + password + '"}'
-            response = requests.post(paths_util.http_server_uri(get_config()['user_url']), data=user_data)
+            response = requests.post(paths_util.server_uri(get_config()['user_url']), data=user_data)
             print(response.json()['message'])
-        response = requests.get(paths_util.http_server_uri(get_config()['login_url']), auth=(username, password))
+        response = requests.get(paths_util.server_uri(get_config()['login_url']), auth=(username, password))
         if response.status_code == 200:
             print(response.json()['message'])
             auth_token = response.json()['token']
