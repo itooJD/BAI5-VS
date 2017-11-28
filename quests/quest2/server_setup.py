@@ -1,15 +1,13 @@
 from flask import Flask
 from flask_restful import Api
 
-from quests.quest2.resources import *
-
 
 def setup_flask():
     app = Flask(__name__)
     api = Api(app)
     return app, api
 
-from quests.quest2.resources import HelloToHeroysWorld, HeroyJenkins, HeroysDiary, HeroysMightyTasks, HeroyPresident
+from quests.quest2.resources import HelloToHeroysWorld, Heroy, HeroysDiary, HeroysMightyTasks, HeroyPresident
 
 def add_api(paths, api):
     api.add_resource(HelloToHeroysWorld, '/')
