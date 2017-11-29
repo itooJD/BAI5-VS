@@ -16,15 +16,20 @@ def main():
         set_server_url_via_udp()
 
     # Authentication
+    do_it_yourself, already_logged = False, False
     divide_line()
     print('Authentication')
     if get_config()[token] != '':
         print('- You are already logged in!')
-        auth_header = get_config()[token]
-        auth_header = "Authentication Token:" + '{"' + 'Authorization : Token ' + auth_header + '"}'
-        whoami(auth_header)
-        divide_line()
-    else:
+        hand_login = input('Still... Do you want to login yourself? [y]')
+        if hand_login == 'y':
+            already_logged = True
+            auth_header = get_config()[token]
+            whoami(auth_header)
+            divide_line()
+        else:
+            do_it_yourself = True
+    if do_it_yourself or not already_logged:
         user_authenticated = False
         while not user_authenticated:
             exit, auth_header = authentication()

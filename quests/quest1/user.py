@@ -29,7 +29,7 @@ def authentication():
             print(response.json()['message'])
             auth_token = response.json()['token']
             auth_header = {'Authorization': 'Token ' + auth_token}
-            change_config(token, auth_token)
+            change_config(token, auth_header)
     else:
         exit = True
     return exit, auth_header
