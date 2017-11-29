@@ -24,7 +24,8 @@ def choose_quest(auth_header):
     divide_line()
     quest_no, quest = quest_ui(auth_header)
     if not quest_no:
-        return ''
+        return
+    print(paths_util.quest_uri() + '/' + quest_no)
     response = requests.get(paths_util.quest_uri() + '/' + quest_no, headers=auth_header)
     print(response.status_code)
     quest_infos(response)
@@ -63,7 +64,7 @@ def show_available_quests(auth_header):
     divide_line()
     print('Available quests: ' + str(available_quests))
     while int(quest_no) not in available_quests:
-        quest_no = input('Which quest do you want to tackle mighty Heroy? \n You can also go back to the main menu with [n] \n> ')
+        quest_no = input('\nWhich quest do you want to tackle mighty Heroy? \n You can also go back to the main menu with [n] \n> ')
         if quest_no == 'n':
             quest_no = False
             break
