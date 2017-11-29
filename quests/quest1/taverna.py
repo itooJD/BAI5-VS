@@ -191,7 +191,7 @@ def show_groups(auth_header):
     return group_ui(auth_header, groups)
 
 
-def show_all_groups(auth_header, groups)
+def show_all_groups(auth_header, groups):
     response = requests.get(paths_util.group_url(), headers=auth_header)
     for group in response.json()['objects']:
         groups[str(group['id'])]=group
