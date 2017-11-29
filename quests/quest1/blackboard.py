@@ -23,7 +23,8 @@ def quest_filter(choice, auth_header):
 def choose_quest(auth_header):
     divide_line()
     quest_no, quest = quest_ui(auth_header)
-    print(quest)
+    if not quest_no:
+        return ''
     response = requests.get(paths_util.quest_uri() + '/' + quest_no, headers=auth_header)
     print(response.status_code)
     quest_infos(response)
@@ -77,6 +78,7 @@ def show_all_quests(auth_header):
     available_quests = []
     for idx, quest in enumerate(response.json()['objects']):
         divide_line()
+        available_quests.append(quest)
         print_quest(quest)
     print('Available quests: ' + str(available_quests))
     quest_no = -1
