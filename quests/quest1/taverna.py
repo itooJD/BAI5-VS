@@ -253,7 +253,7 @@ def create_group(auth_header, _):
     if create_new:
         response = requests.post(paths_util.group_url(), headers=auth_header)
         print(response.json())
-        change_config(util_group,response.json()['_links']['self'])
+        change_config(util_group,response.json()['object'][0]['_links']['self'])
         print(response.json()['message'])
 
 
