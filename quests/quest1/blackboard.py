@@ -1,5 +1,6 @@
 import requests
-from quests.quest1.ui import divide_line, quest_ui
+from quests.quest1.utilities import divide_line
+from quests.quest1.ui import quest_ui
 from quests.utils import paths_util, get_config, change_config
 from quests.utils.paths_util import current_quest
 from quests.quest1.questing import solve_quests

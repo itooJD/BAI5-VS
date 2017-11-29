@@ -125,8 +125,3 @@ def users(response):
 def adventurers(response):
     print('\nAdventurers')
     return response.json()['objects']
-
-
-def divide_line():
-    print()
-    print('#################################')
