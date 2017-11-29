@@ -1,43 +1,8 @@
 import requests, json
-from quests.quest1.utilities import divide_line, logout
+from quests.quest1.utilities import divide_line
 from quests.utils import paths_util, get_config, change_config
 from quests.utils.paths_util import util_group, util_user
 
-'''
-"/taverna/adventurers": {"get": {
-    "description": "<br/>Subscribe yourself with<br/>{<br/>  \"heroclass\":\"<class>\",<br/>  \"capabilities\":\"<your earned capabilities>\",<br/>  \"url\":\"<the full url where one might reach you>\"<br/>}",
-    "responses": {}, "summary": "The list of adventurerer known to the local taverna", "tags": ["adventurer"]},
-                         "post": {
-                             "description": "<br/>Subscribe yourself with<br/>{<br/>  \"heroclass\":\"<class>\",<br/>  \"capabilities\":\"<your earned capabilities>\",<br/>  \"url\":\"<the full url where one might reach you>\"<br/>}",
-                             "responses": {}, "summary": "The list of adventurerer known to the local taverna",
-                             "tags": ["adventurer"]}}, 
-"/taverna/adventurers/{name}": {
-    "delete": {"description": "", "responses": {}, "summary": "Details about a single adventurer",
-               "tags": ["adventurer"]},
-    "get": {"description": "", "responses": {}, "summary": "Details about a single adventurer", "tags": ["adventurer"]},
-    "put": {"description": "", "responses": {}, "summary": "Details about a single adventurer",
-            "tags": ["adventurer"]}}, 
-"/taverna/groups": {
-    "get": {
-    "description": "<br/>The guy creating a group is the owner of the group.<br/>He does NOT automatically join it!<br/>Only the owner can disband a group, but the member may leave individualy<br/><br/>Just do a post with empty data to create a new group (watch the Location header)",
-    "responses": {}, "summary": "Groups formed out of adventurer which want to solve something together.",
-    "tags": ["Group"]}, 
-    "post": {
-    "description": "<br/>The guy creating a group is the owner of the group.<br/>He does NOT automatically join it!<br/>Only the owner can disband a group, but the member may leave individualy<br/><br/>Just do a post with empty data to create a new group (watch the Location header)",
-    "responses": {}, "summary": "Groups formed out of adventurer which want to solve something together.",
-    "tags": ["Group"]}}, 
-"/taverna/groups/{id}": {"delete": {
-    "description": "<br/>The guy creating a group is the owner of the group.<br/>He does NOT automatically join it!<br/>Only the owner can disband a group, but the member may leave individualy<br/>",
-    "responses": {}, "summary": "Information about a single group", "tags": ["Group"]}, "get": {
-    "description": "<br/>The guy creating a group is the owner of the group.<br/>He does NOT automatically join it!<br/>Only the owner can disband a group, but the member may leave individualy<br/>",
-    "responses": {}, "summary": "Information about a single group",
-    "tags": ["Group"]}}, 
-"/taverna/groups/{id}/members": {
-    "get": {"description": "<br/>To join just post to join the group", "responses": {},
-            "summary": "The members of a group", "tags": ["Group"]},
-    "post": {"description": "<br/>To join just post to join the group", "responses": {},
-             "summary": "The members of a group", "tags": ["Group"]}},
-'''
 
 def taverna_ui(auth_header):
     print('\nTaverna')
@@ -95,6 +60,7 @@ def taverna(auth_header):
 
 
 def search_ui(auth_header, name):
+    divide_line()
     print('And what do you want to do with ' + name + '?')
     print()
     print('1: Look real close! Get all the details.')
@@ -144,9 +110,8 @@ def show_adventurers(auth_header):
 
 def get_adventurer(auth_header, name):
     response = requests.get(paths_util.adventurer_uri_name(name), headers=auth_header)
-    print(response)
-    divide_line()
-
+    if response.status_code == 200 or response.status_code == 201:
+        print(response.json())
 
 def change_adventurer(auth_header, name):
     response = requests.put(paths_util.adventurer_uri_name(name), headers=auth_header)
@@ -193,7 +158,7 @@ def group_ui(auth_header, groups):
     print('You can find a group to adventure with here... Want to?')
     print()
     print('1: Join a group')
-    print('2: Delete one of your groups')
+    print('2: Delete your groups')
     print('3: Create your own group')
     print('4: Check the members of a group')
     print('5: Leave a group')
@@ -243,7 +208,9 @@ def join_group(auth_header, groups):
 
 def delete_your_group(auth_header, groups):
     response = requests.delete(paths_util.server_uri(get_config()['group_uri']), headers=auth_header)
-    print(response)
+    if response.status_code == 200:
+        change_config(util_group, '')
+        print('Deleted your group!')
 
 
 def create_group(auth_header, _):
