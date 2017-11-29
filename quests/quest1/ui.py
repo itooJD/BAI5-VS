@@ -11,7 +11,7 @@ def main_ui(auth_header):
     print('4: Map')
     print('5: Logout')
     print('else to exit')
-    return main_filter(input('Where do you want to go: '), auth_header)
+    return main_filter(input('\nWhere do you want to go \n> '), auth_header)
 
 
 def authentication_ui():

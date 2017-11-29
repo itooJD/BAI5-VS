@@ -100,7 +100,10 @@ def show_users(auth_header):
     print('\nAll Users')
     for user in response.json()['objects']:
         if user.get('name'):
-            print(user['name'], end=', ')
+            try:
+                print(user['name'], end=', ')
+            except UnicodeEncodeError:
+                pass
     return ''
 
 
@@ -109,7 +112,7 @@ def look_at_map(auth_header):
     print('Quest: Lets look this up on the map')
     map_resp = requests.get(get_config()['server'] + get_config()['map_url'], headers=auth_header)
     print()
-    if map_resp['status'] == 'success':
+    if map_resp.json()['status'] == 'success':
         print('Map: \n')
         for location in map_resp.json().get('objects'):
             divide_line()
