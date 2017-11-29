@@ -83,7 +83,7 @@ def taverna(auth_header):
     print('\nYou enter the dusty taverna')
     in_taverna = True
     while in_taverna:
-        in_taverna = taverna_ui(auth_header)
+        in_taverna = adventurer_ui(auth_header)
     print('Leaving the taverna')
 
 
