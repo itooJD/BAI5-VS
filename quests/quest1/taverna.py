@@ -108,10 +108,9 @@ def show_adventurers(auth_header):
             hire_adventurer(auth_header, adventurer=adventurers[id])
 
 
-def user_interaction_ui(auth_header, response_json):
+def user_interaction_ui(auth_header, response_json, user_url):
     divide_line()
-    print(response_json)
-    print('So we found this adventurer here ' + response_json['object']['user'])
+    print('So we found this adventurer here ' + user_url)
     print('But what do we do with him?')
     print()
     print('1: Send a message.')
@@ -119,7 +118,7 @@ def user_interaction_ui(auth_header, response_json):
     print('3: Hire')
     print('4: Inspect group')
     print()
-    return user_interaction_filter(input('Boss? \n> '), auth_header, response_json)
+    return user_interaction_filter(input('Boss? \n> '), auth_header, response_json, user_url)
 
 def user_interaction_filter(choice, auth_header, response_json):
     choice_filter = {
@@ -146,14 +145,13 @@ def get_adventurer(auth_header, name):
         print('Group:          ' + str(response.json()['group']))
         print('Hiring:         ' + str(response.json()['hirings']))
         print('Assignments:    ' + str(response.json()['assignments']))
-        return user_interaction_ui(auth_header, response.json())
+        return user_interaction_ui(auth_header, response.json(), user_url)
     else:
         print('Could not connect to user')
 
 
-def send_message_to_user(auth_header, response_json):
+def send_message_to_user(auth_header, response_json, user_url):
     print()
-    user_url = response_json['object']['url']
     message = input('Your message:\n> ')
     data = '{"' + message + '"}'
     response = requests.post(user_url + response_json['object']['messages'], data=data)
