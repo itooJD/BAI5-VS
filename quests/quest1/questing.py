@@ -1,20 +1,11 @@
 import requests
 from quests.utils.config_manager import set_server_url_via_udp
-
-
-def register(paths):
-    from quests.quest2.questing_resources.authentification import authentification
-    return authentification('')
-
-
-def login(paths):
-    login_resp = requests.get(paths['server'] + paths['login_url'], auth=('HeroyJenkins', 'pass'))
-    print('Quest: Login: ' + str(login_resp.json()['message']))
-    return login_resp.json()['token']
+from quests.quest2.questing_resources.authentification import authentification
 
 
 def whoami(paths, headers):
     whoami_resp = requests.get(paths['server'] + paths['whoami_url'], headers=headers)
+    print(whoami_resp.json())
     print('Quest: WhoAmI: ' + str(whoami_resp.json()['message']))
 
 
@@ -151,10 +142,19 @@ def deliver(paths, headers, deliver_token, quest_no, task_uris):
         print('Quest: Could not be completed, caught exception - ' + str(ex))
 
 
+def exit_check(exit):
+    if exit:
+        raise Exception('Exiting')
+
+def divide_line():
+    print('#################################')
+
 def main():
+    divide_line()
     paths = set_server_url_via_udp()
-    _, headers = register(paths)
-    print('Quest: Authentication Token: ' + str(headers))
+    exit, headers = authentification('')
+    exit_check(exit)
+    print('Authentication Token: ' + str(headers))
     whoami(paths, headers)
     quest_no, task_uris = quest(paths, headers)
     location_url, task = lookup_task(paths, headers)

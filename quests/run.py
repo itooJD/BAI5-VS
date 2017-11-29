@@ -13,7 +13,7 @@ if __name__ == '__main__':
         app.run(host='0.0.0.0', debug=False)
     elif answer == '2':
         print('Setup: Starting UI')
-        from quests.quest1 import quest1
-        quest1.main()
+        from quests.quest1 import questing
+        questing.main()
     else:
         print('Exiting')

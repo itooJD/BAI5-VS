@@ -1,8 +1,8 @@
 def authentication_ui():
     print('1: Register')
     print('2: Login')
-    print('else to exit')
-    return input('Choice: ')
+    print('Else: Exit')
+    return input('> ')
 
 
 def main_ui(quest, group_uri):
