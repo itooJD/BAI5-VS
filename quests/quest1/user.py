@@ -37,7 +37,6 @@ def authentication():
 
 def whoami(auth_header):
     divide_line()
-    print(auth_header)
     whoami_resp = requests.get(get_config()['server'] + get_config()['whoami_url'], headers=auth_header)
     if whoami_resp.json().get('user'):
         show = input('Show user info? [y/n] \n> ')

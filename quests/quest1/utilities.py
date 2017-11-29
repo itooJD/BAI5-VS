@@ -1,4 +1,4 @@
-def logout():
+def logout(_):
     exit_check(True)
 
 
