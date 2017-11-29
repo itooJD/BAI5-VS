@@ -203,8 +203,8 @@ def show_groups(auth_header):
     response = requests.get(paths_util.group_url(), headers=auth_header)
     groups = {}
     for group in enumerate(response.json()['objects']):
-        groups[group['id']]=group
-        print(group['id'] + ': Owner - ' + group['owner'] + ' | ' + group['members'] + ' | ' +  group['_links'])
+        groups[str(group['id'])]=group
+        print(str(group['id']) + ': Owner - ' + group['owner'] + ' | ' + group['members'] + ' | ' +  group['_links'])
     return group_ui(auth_header, groups)
 
 
@@ -213,7 +213,7 @@ def join_group(auth_header, groups):
     group_id = input('Which group do you want to join then? [a valid id]\n> ')
     group_existant = False
     for g in groups:
-        if g['id'] == group_id:
+        if str(g['id']) == group_id:
             group_existant = True
             break
     if group_existant:
@@ -228,6 +228,7 @@ def delete_your_group(auth_header, groups):
     response = requests.delete(paths_util.server_uri(get_config()['group_uri']), headers=auth_header)
     print(response)
 
+
 def post_group(auth_header, groups):
     pass
 
@@ -236,7 +237,7 @@ def check_members(auth_header, groups):
     group_id = input('Which group do you want to join then? [a valid id]\n> ')
     group_existant = False
     for g in groups:
-        if g['id'] == group_id:
+        if str(g['id']) == group_id:
             group_existant = True
             break
     if group_existant:
