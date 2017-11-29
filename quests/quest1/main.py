@@ -16,8 +16,10 @@ def main():
         set_server_url_via_udp()
 
     # Authentication
+    divide_line()
+    print('Authentication')
     if get_config()[token] != '':
-        print('You are already logged in!')
+        print('- You are already logged in!')
         auth_header = get_config()[token]
         whoami(auth_header)
         divide_line()
