@@ -163,6 +163,7 @@ def group_ui(auth_header, groups):
     print('4: Check the members of a group')
     print('5: Leave a group')
     print('6: Check your own group out')
+    print('7: Show me all the groups')
     print()
     return group_filter(input('Sure about that? \n> '), auth_header, groups)
 
@@ -174,7 +175,8 @@ def group_filter(choice, auth_header, groups):
         '3': create_group,
         '4': check_members,
         '5': leave_group,
-        '6': check_own_group
+        '6': check_own_group,
+        '7': show_all_groups
     }
     if not choice_filter.get(choice):
         return False
@@ -186,9 +188,15 @@ def show_groups(auth_header):
     groups = {}
     for group in response.json()['objects']:
         groups[str(group['id'])]=group
+    return group_ui(auth_header, groups)
+
+
+def show_all_groups(auth_header, groups)
+    response = requests.get(paths_util.group_url(), headers=auth_header)
+    for group in response.json()['objects']:
+        groups[str(group['id'])]=group
         print(str(group['id']) + ': Owner - ' + group['owner'] + ' | ' + str(group['members']) + ' | ' + str(group['_links']))
     divide_line()
-    return group_ui(auth_header, groups)
 
 
 def join_group(auth_header, groups):
@@ -233,10 +241,8 @@ def check_members(auth_header, groups):
     divide_line()
     group_id = input('Which group do you want to join then? [a valid id]\n> ')
     group_existant = False
-    for g in groups:
-        if str(g['id']) == group_id:
-            group_existant = True
-            break
+    if group_id in groups.keys():
+        group_existant = True
     if group_existant:
         response = requests.get(paths_util.group_url_id(group_id) + get_config()['member_url'], headers=auth_header)
         print(response.json())
