@@ -120,7 +120,7 @@ def user_interaction_ui(auth_header, response_json, user_url):
     print()
     return user_interaction_filter(input('Boss? \n> '), auth_header, response_json, user_url)
 
-def user_interaction_filter(choice, auth_header, response_json):
+def user_interaction_filter(choice, auth_header, response_json, user_url):
     choice_filter = {
         '1': send_message_to_user,
         '2': join_group_of_user,
@@ -129,7 +129,7 @@ def user_interaction_filter(choice, auth_header, response_json):
     }
     if not choice_filter.get(choice):
         return False
-    return choice_filter.get(choice)(auth_header, response_json), ''
+    return choice_filter.get(choice)(auth_header, response_json, user_url), ''
 
 
 def get_adventurer(auth_header, name):
