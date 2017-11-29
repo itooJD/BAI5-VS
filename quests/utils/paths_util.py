@@ -16,11 +16,11 @@ def server_uri(uri):
 
 
 def quest_uri():
-    return server_uri(get_config()['blackboard'] + get_config()['quest_url'])
+    return server_uri(get_config()['blackboard_url'] + get_config()['quest_url'])
 
 
 def users_uri():
-    return server_uri(get_config()['blackboard'] + get_config()['user_url'])
+    return server_uri(get_config()['blackboard_url'] + get_config()['user_url'])
 
 
 def group(id):
