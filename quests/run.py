@@ -10,4 +10,8 @@ if __name__ == '__main__':
     print('Setup: Adding Rest-API')
     add_api(paths, api)
     print('Setup: Starting flask-server')
-    thread = Thread(app.run(host='0.0.0.0', debug=True))
+    thread = Thread(app.run, args=('0.0.0.0',))
+    thread.start()
+    print('Setup: Starting UI')
+    from quests.quest1 import quest1
+    thread.join()
