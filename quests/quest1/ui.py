@@ -1,4 +1,5 @@
-from quests.quest1.blackboard import show_users, choose_quest, look_at_map
+from quests.quest1.blackboard import show_users, choose_quest
+from quests.quest1.questing import look_at_map
 from quests.quest1.utilities import logout, divide_line
 from quests.quest1.user import whoami
 

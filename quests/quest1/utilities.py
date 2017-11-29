@@ -1,3 +1,7 @@
+import requests
+from quests.utils import get_config
+
+
 def logout(_):
     exit_check(True)
 

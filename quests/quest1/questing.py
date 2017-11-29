@@ -1,6 +1,6 @@
 import requests
 from quests.utils import get_config
-from quests.quest1.blackboard import look_at_map
+from quests.quest1.utilities import divide_line
 
 
 def solve_quests(quest, quest_no, auth_header):
@@ -43,6 +43,23 @@ def search_location(auth_header, task):
             break
     input('Ready to go? \n> So ready!')
     return map
+
+
+def look_at_map(auth_header):
+    print()
+    print('Lets look at our map')
+    map_resp = requests.get(get_config()['server'] + get_config()['map_url'], headers=auth_header)
+    print()
+    if map_resp.json()['status'] == 'success':
+        print('Map: \n')
+        for location in map_resp.json().get('objects'):
+            print('Name:     ' + location['name'])
+            print('Host:     ' + location['host'])
+            print('Tasks:    ' + str(location['tasks']))
+            print('Visitors: ' + str(location['visitors']))
+            divide_line()
+    print()
+    return
 
 
 def deliver(headers, deliver_token, quest_no, task_uris):
