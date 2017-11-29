@@ -206,7 +206,7 @@ def show_groups(auth_header):
     for group in response.json()['objects']:
         print(group)
         groups[str(group['id'])]=group
-        print(str(group['id']) + ': Owner - ' + group['owner'] + ' | ' + group['members'] + ' | ' +  group['_links'])
+        print(str(group['id']) + ': Owner - ' + group['owner'] + ' | ' + str(group['members']) + ' | ' + str(group['_links']))
     return group_ui(auth_header, groups)
 
 
