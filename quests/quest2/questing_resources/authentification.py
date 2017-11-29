@@ -13,6 +13,7 @@ def authentification(auth_header):
         if choice == '1':
             user_data = '{"name":"' + username + '","password":"' + password + '"}'
             response = requests.post(paths_util.server_uri(get_config()['user_url']), data=user_data)
+            print()
             print(response.json()['message'])
         response = requests.get(paths_util.server_uri(get_config()['login_url']), auth=(username, password))
         if response.status_code == 200:

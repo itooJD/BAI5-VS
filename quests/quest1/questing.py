@@ -4,9 +4,23 @@ from quests.quest2.questing_resources.authentification import authentification
 
 
 def whoami(paths, headers):
-    whoami_resp = requests.get(paths['server'] + paths['whoami_url'], headers=headers)
-    print(whoami_resp.json())
-    print('Quest: WhoAmI: ' + str(whoami_resp.json()['message']))
+    show = input('Show user info? [y/n]')
+    if show == 'y' or show == 'yes':
+        whoami_resp = requests.get(paths['server'] + paths['whoami_url'], headers=headers)
+        print(whoami_resp.json())
+        if whoami_resp.json().get('message'):
+            print('## WhoAmI ##\n' +
+              'Name: ' + str(whoami_resp.json()['user']['name']) + '\n' +
+              'Finished deliverables: ' + str(whoami_resp.json()['user']['deliverables_done']) + '\n' +
+              'Delivered: ' + str(whoami_resp.json()['user']['delivered']))
+            print(whoami_resp.json().get('message'))
+            return True
+        else:
+            print('You could not be authenticated')
+            return False
+    else:
+        print('Not showing user info')
+        return True
 
 
 def quest(paths, headers):
@@ -152,10 +166,16 @@ def divide_line():
 def main():
     divide_line()
     paths = set_server_url_via_udp()
-    exit, headers = authentification('')
-    exit_check(exit)
+
+    # Authentication
+    user_authenticated = False
+    while not user_authenticated:
+        exit, headers = authentification('')
+        exit_check(exit)
+        user_authenticated = whoami(paths, headers)
     print('Authentication Token: ' + str(headers))
-    whoami(paths, headers)
+
+    # Questing
     quest_no, task_uris = quest(paths, headers)
     location_url, task = lookup_task(paths, headers)
     quest_host = map(paths, headers, task)
