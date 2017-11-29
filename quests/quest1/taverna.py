@@ -108,10 +108,25 @@ def show_adventurers(auth_header):
             hire_adventurer(auth_header, adventurer=adventurers[id])
 
 
+def user_interaction_ui(auth_header, response_json):
+    divide_line()
+    print('So we found this adventurer here ' + response_json['object']['user'])
+    print('But what do we do with him?')
+    print()
+    print('1: Get all the infos from him')
+    print('2: ')
+    return
+
+
 def get_adventurer(auth_header, name):
     response = requests.get(paths_util.adventurer_uri_name(name), headers=auth_header)
     if response.status_code == 200 or response.status_code == 201:
         print(response.json())
+        user_url = response.json()['object']['url']
+        response = requests.get(user_url)
+        print(response)
+        print(response.json())
+        return user_interaction_ui(auth_header, response.json())
 
 def change_adventurer(auth_header, name):
     response = requests.put(paths_util.adventurer_uri_name(name), headers=auth_header)
@@ -268,6 +283,7 @@ def leave_group(auth_header, groups):
     for k,v in groups.items():
         if v['owner'] == get_config()[util_user]:
             groups_you_are_in.append(v)
+        if v['owner']
     print(groups_you_are_in)
     divide_line()
     group_id = input('Which group do you want to leave then? [a valid id]\n> ')
