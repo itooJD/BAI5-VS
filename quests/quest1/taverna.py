@@ -179,9 +179,9 @@ def hire_adventurer(auth_header, name=None, adventurer=None):
     })
     try:
         response = requests.post(hiring_uri, data=hirings_data, timeout=50)
+        print(response.status_code)
     except Exception:
         pass
-    print(response.status_code)
 
 
 def search_for_adventurer(auth_header):
