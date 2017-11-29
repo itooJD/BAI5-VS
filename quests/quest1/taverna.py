@@ -109,11 +109,8 @@ def search_adv_filter(choice, auth_header, name):
 def show_adventurers(auth_header):
     response = requests.get(paths_util.adventurers_uri(), headers=auth_header)
     for adventurer in response.json()['objects']:
-        if adventurer.get('capabilities'):
-            print(adventurer['heroclass'] + ' | ' + adventurer['user'] + ' | ' + adventurer['capabilities'] + ' | ' + adventurer['url'])
-        else:
-            print(adventurer['heroclass'] + ' | ' + adventurer['user'] + ' | ' +
-                  adventurer['url'])
+        print(adventurer.get('heroclass',default='') + ' | ' + adventurer.get('user',default='') + ' | ' +
+              adventurer.get('capabilities', default='') + ' | ' + adventurer.get('url',default=''))
 
 def get_adventurer(auth_header, name):
     response = requests.get(paths_util.adventurer(name), headers=auth_header)
