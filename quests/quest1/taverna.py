@@ -154,7 +154,7 @@ def send_message_to_user(auth_header, response_json, user_url):
     print()
     message = input('Your message:\n> ')
     data = '{"' + message + '"}'
-    response = requests.post(user_url + response_json['object']['messages'], data=data)
+    response = requests.post(user_url + response_json['messages'], data=data)
     print(response)
     print(response.json())
 
