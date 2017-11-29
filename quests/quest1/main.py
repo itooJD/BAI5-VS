@@ -1,7 +1,7 @@
 from quests.utils.config_manager import set_server_url_via_udp
-from .ui.ui import main_ui, divide_line
-from .user import authentication, whoami
-from .utilities import exit_check
+from quests.quest1.ui.ui import main_ui, divide_line
+from quests.quest1.user import authentication, whoami
+from quests.quest1.utilities import exit_check
 
 
 def main():
