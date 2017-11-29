@@ -48,7 +48,7 @@ def taverna_ui(auth_header):
 
 def taverna_filter(choice, auth_header):
     choice_filter = {
-        '1': taverna,
+        '1': adventurer_ui,
         '2': show_groups
     }
     if not choice_filter.get(choice):
@@ -83,7 +83,7 @@ def taverna(auth_header):
     print('\nYou enter the dusty taverna')
     in_taverna = True
     while in_taverna:
-        in_taverna = adventurer_ui(auth_header)
+        in_taverna = taverna_ui(auth_header)
     print('Leaving the taverna')
 
 
@@ -109,8 +109,11 @@ def search_adv_filter(choice, auth_header, name):
 def show_adventurers(auth_header):
     response = requests.get(paths_util.adventurers_uri(), headers=auth_header)
     for adventurer in response.json()['objects']:
-        print(adventurer['heroclass'] + ' | ' + adventurer['user'] + ' | ' + adventurer['capabilities'] + ' | ' + adventurer['url'])
-
+        if adventurer.get('capabilities'):
+            print(adventurer['heroclass'] + ' | ' + adventurer['user'] + ' | ' + adventurer['capabilities'] + ' | ' + adventurer['url'])
+        else:
+            print(adventurer['heroclass'] + ' | ' + adventurer['user'] + ' | ' +
+                  adventurer['url'])
 
 def get_adventurer(auth_header, name):
     response = requests.get(paths_util.adventurer(name), headers=auth_header)
