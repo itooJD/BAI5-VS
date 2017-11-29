@@ -24,7 +24,7 @@ def choose_quest(auth_header):
     divide_line()
     quest_no, quest = quest_ui(auth_header)
     if not quest_no:
-        return
+        return False
     response = requests.get(paths_util.quest_uri() + '/' + str(quest_no), headers=auth_header)
     quest_infos(response)
     change_config(current_quest, quest)
@@ -36,7 +36,7 @@ def quest_starter(quest, quest_no, auth_header):
     if start == 'y':
         return solve_quests(quest, quest_no, auth_header)
     else:
-        return
+        return False
 
 
 def show_available_quests(auth_header):
