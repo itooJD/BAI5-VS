@@ -4,7 +4,6 @@ from quests.quest1.blackboard import show_users, show_all_quests, show_available
 from quests.quest1.utilities import logout
 
 
-
 def main_ui(auth_header, quest):
     print('\nNext Steps')
     print('1: Quests')
@@ -27,27 +26,12 @@ def authentication_ui():
     return input('> ')
 
 
-def quest_ui(auth_header):
-    print('1: The ones I fulfill the requirements of')
-    print('2: All')
-    print('Else: Exit')
-    return quest_filter(input('> '), auth_header)
-
-
 def main_filter(choice, auth_header):
     choice_filter = {
         '1': choose_quest,
         '3': show_users,
         '4': search_location,
         '5': logout
-    }
-    return choice_filter.get(choice)(auth_header)
-
-
-def quest_filter(choice, auth_header):
-    choice_filter = {
-        '1': show_available_quests,
-        '2': show_all_quests
     }
     return choice_filter.get(choice)(auth_header)
 

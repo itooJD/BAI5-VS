@@ -1,9 +1,23 @@
 import requests
 from quests.quest1.utilities import divide_line
-from quests.quest1.ui import quest_ui
 from quests.utils import paths_util, get_config, change_config
 from quests.utils.paths_util import current_quest
 from quests.quest1.questing import solve_quests
+
+
+def quest_ui(auth_header):
+    print('1: The ones I fulfill the requirements of')
+    print('2: All')
+    print('Else: Exit')
+    return quest_filter(input('> '), auth_header)
+
+
+def quest_filter(choice, auth_header):
+    choice_filter = {
+        '1': show_available_quests,
+        '2': show_all_quests
+    }
+    return choice_filter.get(choice)(auth_header)
 
 
 def choose_quest(auth_header):
