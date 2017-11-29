@@ -283,7 +283,6 @@ def leave_group(auth_header, groups):
     for k,v in groups.items():
         if v['owner'] == get_config()[util_user]:
             groups_you_are_in.append(v)
-        if v['owner']
     print(groups_you_are_in)
     divide_line()
     group_id = input('Which group do you want to leave then? [a valid id]\n> ')
