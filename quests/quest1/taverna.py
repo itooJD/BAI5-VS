@@ -203,7 +203,7 @@ def show_groups(auth_header):
     response = requests.get(paths_util.group_url(), headers=auth_header)
     groups = {}
     print(response.json())
-    for group in enumerate(response.json()['objects']):
+    for group in response.json()['objects']:
         print(group)
         groups[str(group['id'])]=group
         print(str(group['id']) + ': Owner - ' + group['owner'] + ' | ' + group['members'] + ' | ' +  group['_links'])
