@@ -113,9 +113,23 @@ def user_interaction_ui(auth_header, response_json):
     print('So we found this adventurer here ' + response_json['object']['user'])
     print('But what do we do with him?')
     print()
-    print('1: Get all the infos from him')
-    print('2: ')
-    return
+    print('1: Send a message.')
+    print('2: Join group')
+    print('3: Hire')
+    print('4: Inspect group')
+    print()
+    return user_interaction_filter(input('Boss? \n> '), auth_header, response_json)
+
+def user_interaction_filter(choice, auth_header, response_json):
+    choice_filter = {
+        '1': send_message_to_user,
+        '2': join_group_of_user,
+        '3': hire_user,
+        '4': inspect_group
+    }
+    if not choice_filter.get(choice):
+        return False
+    return choice_filter.get(choice)(auth_header, response_json), ''
 
 
 def get_adventurer(auth_header, name):
@@ -125,12 +139,38 @@ def get_adventurer(auth_header, name):
         user_url = response.json()['object']['url']
         try:
             response = requests.get(user_url)
-            print(response)
-            print(response.json())
+            print('User: ' + str(response.json()['user']))
+            print('How to message: ' + str(response.json()['messages']))
+            print('Idle: ' + str(response.json()['idle']))
+            print('Group: ' + str(response.json()['group']))
+            print('Hiring: ' + str(response.json()['hirings']))
+            print('Assignments: '+ str(response.json()['assignments']))
             return user_interaction_ui(auth_header, response.json())
         except Exception:
             pass
         print('Could not connect to user')
+
+
+def send_message_to_user(auth_header, response_json):
+    user_url = response_json['object']['url']
+    message = input('Your message:\n> ')
+    data = '{"' + message + '"}'
+    response = requests.post(user_url + response_json['object']['messages'], data=data)
+    print(response)
+    print(response.json())
+
+
+def join_group_of_user(auth_header, response_json):
+    pass
+
+
+def hire_user(auth_header, response_json):
+    pass
+
+
+def inspect_group(auth_header, response_json):
+    pass
+
 
 def change_adventurer(auth_header, name):
     response = requests.put(paths_util.adventurer_uri_name(name), headers=auth_header)
