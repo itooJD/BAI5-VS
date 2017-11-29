@@ -1,4 +1,4 @@
-import requests, ast
+import requests
 from quests.quest1.utilities import divide_line
 from quests.utils import paths_util, change_config, get_config
 from quests.utils.paths_util import auth_token as token
@@ -38,7 +38,6 @@ def authentication():
 def whoami(auth_header):
     divide_line()
     print(auth_header)
-    auth_header = ast.literal_eval(auth_header)
     whoami_resp = requests.get(get_config()['server'] + get_config()['whoami_url'], headers=auth_header)
     if whoami_resp.json().get('user'):
         show = input('Show user info? [y/n] \n> ')
