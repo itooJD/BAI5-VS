@@ -110,6 +110,7 @@ def show_adventurers(auth_header):
 
 def user_interaction_ui(auth_header, response_json):
     divide_line()
+    print(response_json)
     print('So we found this adventurer here ' + response_json['object']['user'])
     print('But what do we do with him?')
     print()
@@ -151,6 +152,7 @@ def get_adventurer(auth_header, name):
 
 
 def send_message_to_user(auth_header, response_json):
+    print()
     user_url = response_json['object']['url']
     message = input('Your message:\n> ')
     data = '{"' + message + '"}'
