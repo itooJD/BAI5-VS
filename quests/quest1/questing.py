@@ -144,5 +144,6 @@ def visit_wounded(auth_header, quest_host, location_url):
     print()
     print(visit_resp.json()['message'])
     for step in visit_resp.json()['steps_todo']:
-        visit_wounded(auth_header, quest_host, step)    
-    return visit_resp.json()['token']
+        step_result = visit_wounded(auth_header, quest_host, step)
+        print(step_result)
+    return visit_resp.json()
