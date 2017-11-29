@@ -24,7 +24,7 @@ def choose_quest(auth_header):
     divide_line()
     quest_no, quest = quest_ui(auth_header)
     print(quest)
-    quest_infos(requests.get(paths_util.server_uri(quest['uri']), headers=auth_header))
+    quest_infos(requests.get(paths_util.quest_uri() + '/' + quest_no, headers=auth_header))
     change_config(current_quest, quest)
     return quest_starter(quest, quest_no, auth_header)
 
@@ -44,7 +44,6 @@ def show_available_quests(auth_header):
     available_quests = []
     print('Quest: Available quests: \n')
     for idx, quest in enumerate(response.json()['objects']):
-        divide_line()
         requirements_fullfilled = True
         if quest['requirements']:
             for req in quest['requirements']:
@@ -54,6 +53,7 @@ def show_available_quests(auth_header):
         if requirements_fullfilled:
             available_quests.append(idx)
             quests.append(quest)
+            divide_line()
             print('Quest with index: ' + str(idx))
             print_quest(quest)
         print()
@@ -64,6 +64,7 @@ def show_available_quests(auth_header):
         quest_no = input('Which quest do you want to tackle mighty Heroy? \n You can also go back to the main menu with [n] \n> ')
         if quest_no == 'n':
             quest_no = False
+            break
     if quest_no:
         quest = quests[int(quest_no)]
     return quest_no, quest
@@ -82,6 +83,7 @@ def show_all_quests(auth_header):
         quest_no = input('Which quest do you want to tackle mighty Heroy? \n You can also go back to the main menu with [n] \n> ')
         if quest_no == 'n':
             quest_no = False
+            break
     if quest_no:
         quest = available_quests[int(quest_no)]
     return quest_no, quest
