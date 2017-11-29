@@ -25,7 +25,6 @@ def choose_quest(auth_header):
     quest_no, quest = quest_ui(auth_header)
     if not quest_no:
         return
-    print(paths_util.quest_uri() + '/' + quest_no)
     response = requests.get(paths_util.quest_uri() + '/' + str(quest_no), headers=auth_header)
     print(response.status_code)
     quest_infos(response)
@@ -38,7 +37,7 @@ def quest_starter(quest, quest_no, auth_header):
     if start == 'y':
         return solve_quests(quest, quest_no, auth_header)
     else:
-        return ''
+        return
 
 
 def show_available_quests(auth_header):
