@@ -42,7 +42,7 @@ def taverna_ui(auth_header):
     print('\nTaverna')
     print('1: Adventurers')
     print('2: Groups')
-    print('else to go back')
+    print('Else to get out')
     return taverna_filter(input('Which is more interesting do you think? \n> '), auth_header)
 
 
@@ -52,7 +52,7 @@ def taverna_filter(choice, auth_header):
         '2': show_groups
     }
     if not choice_filter.get(choice):
-        logout('')
+        return False
     return choice_filter.get(choice)(auth_header), ''
 
 
@@ -122,42 +122,54 @@ def show_adventurers(auth_header):
         if adventurer.get('capabilities'):
             print(adventurer.get('capabilities') + ' | ', end='')
         if adventurer.get('url'):
-            print(adventurer.get('url', ''))
+            print(adventurer.get('url', end=''))
+        print()
+        divide_line()
 
     if get_config()['group_uri'] != '':
-        recruite = input('Want to recruite one of these guys? [id,id,id]')
-        to_hire = recruite.split(',')
+        recruit = input('Want to recruit one of these guys? [id,id,id]')
+        to_hire = recruit.split(',')
         for id in to_hire:
             hire_adventurer(auth_header, adventurer=adventurers[id])
 
 
 
 def get_adventurer(auth_header, name):
-    response = requests.get(paths_util.adventurer(name), headers=auth_header)
+    response = requests.get(paths_util.adventurer_uri_name(name), headers=auth_header)
     print(response)
+    divide_line()
 
 
 def change_adventurer(auth_header, name):
-    response = requests.put(paths_util.adventurer(name), headers=auth_header)
+    response = requests.put(paths_util.adventurer_uri_name(name), headers=auth_header)
     print(response)
+    divide_line()
 
 
 def kill_adventurer(auth_header, name):
-    response = requests.delete(paths_util.adventurer(name), headers=auth_header)
+    response = requests.delete(paths_util.adventurer_uri_name(name), headers=auth_header)
     print(response)
+    divide_line()
 
 
 def hire_adventurer(auth_header, name=None, adventurer=None):
-    return
-    uri, adventurer_uris = adventurer(auth_header, name)
-    hiring_uri = uri + adventurer_uris['hirings']
+    if get_config()['group_uri'] == '':
+        print('How do you want to hire, if you are in no group? First make one!')
+        return
+    else:
+        group_uri = get_config()['group_uri']
+    if adventurer:
+        if adventurer['url']:
+            hiring_uri = paths_util.http(adventurer['url'])
+    elif name:
+        pass
     message = input('An invite might not be enough. Write something: ')
     hirings_data = json.dumps({
         "group": group_uri,
         "quest": "quest",
         "message": message
     })
-    response = requests.post(paths_util.http(hiring_uri), data=hirings_data, timeout=50)
+    response = requests.post(hiring_uri, data=hirings_data, timeout=50)
     print(response)
 
 
@@ -167,4 +179,5 @@ def search_for_adventurer(auth_header):
 
 
 def show_groups():
-    pass
+    response = requests.get(paths_util.group_url())
+    print(response)

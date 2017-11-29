@@ -23,15 +23,19 @@ def users_uri():
     return server_uri(get_config()['user_url'])
 
 
-def group(id):
-    return get_config()['group_url'] + '/' + id
+def group_url_id(id):
+    return group_url() + '/' + id
+
+
+def group_url():
+    return server_uri(get_config()['group_url'])
 
 
 def adventurers_uri():
     return server_uri(get_config()['taverna_url'] + get_config()['adventurers_url'])
 
 
-def adventurer(name):
+def adventurer_uri_name(name):
     return adventurers_uri() + '/' + name
 
 '''
