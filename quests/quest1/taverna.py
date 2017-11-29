@@ -136,11 +136,10 @@ def show_adventurers(auth_header):
     divide_line()
 
     if get_config()['group_uri'] != '':
-        recruit = input('Want to recruit one of these guys? [id,id,id]')
+        recruit = input('Want to recruit one of these guys? [id,id,id]\n> ')
         to_hire = recruit.split(',')
         for id in to_hire:
             hire_adventurer(auth_header, adventurer=adventurers[id])
-
 
 
 def get_adventurer(auth_header, name):
@@ -178,8 +177,11 @@ def hire_adventurer(auth_header, name=None, adventurer=None):
         "quest": "quest",
         "message": message
     })
-    response = requests.post(hiring_uri, data=hirings_data, timeout=50)
-    print(response)
+    try:
+        response = requests.post(hiring_uri, data=hirings_data, timeout=50)
+    except Exception:
+        pass
+    print(response.status_code)
 
 
 def search_for_adventurer(auth_header):
@@ -194,8 +196,11 @@ def group_ui(auth_header, groups):
     print('2: Delete one of your groups')
     print('3: Create your own group')
     print('4: Check the members of a group')
+    print('5: Leave a group')
+    print('6: Check your own group out')
     print()
     return group_filter(input('Sure about that? \n> '), auth_header, groups)
+
 
 def group_filter(choice, auth_header, groups):
     choice_filter = {
@@ -203,7 +208,8 @@ def group_filter(choice, auth_header, groups):
         '2': delete_your_group,
         '3': create_group,
         '4': check_members,
-        '5': leave_group
+        '5': leave_group,
+        '6': check_own_group
     }
     if not choice_filter.get(choice):
         return False
@@ -252,7 +258,6 @@ def create_group(auth_header, _):
         create_new = True
     if create_new:
         response = requests.post(paths_util.group_url(), headers=auth_header)
-        print(response.json())
         change_config(util_group,response.json()['object'][0]['_links']['self'])
         print(response.json()['message'])
 
@@ -289,3 +294,13 @@ def leave_group(auth_header, groups):
         print('Joined Group')
     else:
         print('The group with this id does not exist')
+
+
+def check_own_group(auth_header, groups):
+    divide_line()
+    if get_config()['group_uri'] != '':
+        print('Our group: ' + str(get_config()['group_uri']))
+        response = requests.get(paths_util.server_uri(get_config()['group_uri']), headers=auth_header)
+        print(response.json())
+    else:
+        print('You are in no group!')
