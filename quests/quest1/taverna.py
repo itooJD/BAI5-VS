@@ -153,7 +153,7 @@ def get_adventurer(auth_header, name):
 def send_message_to_user(auth_header, response_json, user_url):
     print()
     message = input('Your message:\n> ')
-    data = '{"' + message + '"}'
+    data = '{"message": "' + message + '"}'
     response = requests.post(user_url + response_json['messages'], data=data)
     print(response)
     print(response.json())
