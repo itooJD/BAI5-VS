@@ -8,7 +8,7 @@ def whoami(paths, headers):
     if show == 'y' or show == 'yes':
         whoami_resp = requests.get(paths['server'] + paths['whoami_url'], headers=headers)
         print(whoami_resp.json())
-        if whoami_resp.json().get('message'):
+        if whoami_resp.json().get('user'):
             print('## WhoAmI ##\n' +
               'Name: ' + str(whoami_resp.json()['user']['name']) + '\n' +
               'Finished deliverables: ' + str(whoami_resp.json()['user']['deliverables_done']) + '\n' +
