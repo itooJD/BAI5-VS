@@ -137,19 +137,17 @@ def get_adventurer(auth_header, name):
     if response.status_code == 200 or response.status_code == 201:
         print(response.json())
         user_url = response.json()['object']['url']
-        try:
-            response = requests.get(user_url)
-            print(response.json())
-            print('User:           ' + str(response.json()['user']))
-            print('How to message: ' + str(response.json()['messages']))
-            print('Idle:           ' + str(response.json()['idle']))
-            print('Group:          ' + str(response.json()['group']))
-            print('Hiring:         ' + str(response.json()['hirings']))
-            print('Assignments:    ' + str(response.json()['assignments']))
-            return user_interaction_ui(auth_header, response.json())
-        except Exception:
-            print('Could not connect to user')
-            pass
+        response = requests.get(user_url)
+        print(response.json())
+        print('User:           ' + str(response.json()['user']))
+        print('Messages:       ' + str(response.json()['messages']))
+        print('Idle:           ' + str(response.json()['idle']))
+        print('Group:          ' + str(response.json()['group']))
+        print('Hiring:         ' + str(response.json()['hirings']))
+        print('Assignments:    ' + str(response.json()['assignments']))
+        return user_interaction_ui(auth_header, response.json())
+    else:
+        print('Could not connect to user')
 
 
 def send_message_to_user(auth_header, response_json):
