@@ -179,6 +179,66 @@ def search_for_adventurer(auth_header):
     search_ui(auth_header, name)
 
 
+def group_ui(auth_header, groups):
+    print('You can find a group to adventure with here... Want to?')
+    print('1: Join a group')
+    print('2: Delete one of your groups')
+    print('3: Post to your group')
+    print('4: Check the members of a group')
+    return group_filter(input('Hm? Tell me. \n> '), auth_header, groups)
+
+def group_filter(choice, auth_header, groups):
+    choice_filter = {
+        '1': join_group,
+        '2': delete_your_group,
+        '3': post_group,
+        '4': check_members
+    }
+    if not choice_filter.get(choice):
+        logout('')
+    return choice_filter.get(choice)(auth_header, groups), ''
+
+
 def show_groups(auth_header):
     response = requests.get(paths_util.group_url(), headers=auth_header)
-    print(response.json())
+    groups = {}
+    for group in enumerate(response.json()['objects']):
+        groups[group['id']]=group
+        print(group['id'] + ': Owner - ' + group['owner'] + ' | ' + group['members'] + ' | ' +  group['_links'])
+    return group_ui(auth_header, groups)
+
+
+def join_group(auth_header, groups):
+    divide_line()
+    group_id = input('Which group do you want to join then? [a valid id]\n> ')
+    group_existant = False
+    for g in groups:
+        if g['id'] == group_id:
+            group_existant = True
+            break
+    if group_existant:
+        response = requests.post(paths_util.group_url_id(group_id) + get_config()['member_url'], headers=auth_header)
+        print(response)
+        print('Joined Group?')
+    else:
+        print('The group with this id does not exist')
+
+
+def delete_your_group(auth_header, groups):
+    response = requests.delete(paths_util.server_uri(get_config()['group_uri']), headers=auth_header)
+    print(response)
+
+def post_group(auth_header, groups):
+    pass
+
+
+def check_members(auth_header, groups):
+    group_id = input('Which group do you want to join then? [a valid id]\n> ')
+    group_existant = False
+    for g in groups:
+        if g['id'] == group_id:
+            group_existant = True
+            break
+    if group_existant:
+        response = requests.get(paths_util.group_url_id(group_id) + get_config()['member_url'], headers=auth_header)
+        print(response.json())

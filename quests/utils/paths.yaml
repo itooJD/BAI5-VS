@@ -18,6 +18,7 @@ election_url : '/election'
 group_uri : ''
 group_url : '/groups'
 adventurers_url : '/adventurers'
+member_url : '/members'
 
 requirements: []
 quests : []
