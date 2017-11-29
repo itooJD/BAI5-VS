@@ -1,8 +1,8 @@
 import requests
-from .ui.ui import divide_line, quest_ui
+from quests.quest1.ui.ui import divide_line, quest_ui
 from quests.utils import paths_util, get_config, change_config
 from quests.utils.paths_util import current_quest
-from .questing import solve_quests
+from quests.quest1.questing import solve_quests
 
 
 def choose_quest(auth_header):
