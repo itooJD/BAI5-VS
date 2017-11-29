@@ -26,14 +26,13 @@ def choose_quest(auth_header):
     if not quest_no:
         return
     response = requests.get(paths_util.quest_uri() + '/' + str(quest_no), headers=auth_header)
-    print(response.status_code)
     quest_infos(response)
     change_config(current_quest, quest)
     return quest_starter(quest, quest_no, auth_header)
 
 
 def quest_starter(quest, quest_no, auth_header):
-    start = input('Should we go on a journey to solve this quest or go back to the main menu? [y/n]\n> ')
+    start = input('## Should we go on a journey to solve this quest or go back to the main menu? [y/n] ##\n> ')
     if start == 'y':
         return solve_quests(quest, quest_no, auth_header)
     else:
@@ -132,7 +131,8 @@ def look_at_map(auth_header):
 
 
 def quest_infos(response):
-    print('\nQuest')
+    print('\n The Quest we are taking to!')
     object = response.json()['object']
     print(object['name'])
     print(object['description'])
+    print()

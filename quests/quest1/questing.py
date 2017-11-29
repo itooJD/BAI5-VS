@@ -1,5 +1,6 @@
 import requests
 from quests.utils import get_config
+from quests.quest1.blackboard import look_at_map
 
 
 def solve_quests(quest, quest_no, auth_header):
@@ -17,7 +18,7 @@ def solve_quests(quest, quest_no, auth_header):
 
 def lookup_task(headers):
     print()
-    task_no = input('Quest: Which task are we looking for again? \n > ')
+    task_no = input('Which task are we looking for again? \n[Should be written in the tasks of the quest above]\n > ')
     task_resp = requests.get(get_config()['server'] + get_config()['blackboard_url'] + '/tasks/' + task_no, headers=headers)
     if task_resp.status_code == 200:
         print('### This task exists! You are making me proud Heroy! ###')
@@ -29,17 +30,18 @@ def lookup_task(headers):
 
 def search_location(auth_header, task):
     print()
-    print('Quest: Lets look this up on the map')
+    print('## Lets look this up on the map ##')
     map_resp = requests.get(get_config()['server'] + get_config()['map_url'], headers=auth_header)
     map = ''
     print()
-    print('Map: The map: \n' + str(map_resp.json()))
+    look_at_map(auth_header)
     print()
     for map_item in map_resp.json()['objects']:
         if int(task) in map_item['tasks']:
             print('What do we have here...! The place we have to go: ' + str(map_item['host']))
             map = map_item['host']
             break
+    input('Ready to go? \n> So ready!')
     return map
 
 
@@ -49,8 +51,8 @@ def deliver(headers, deliver_token, quest_no, task_uris):
     for task_uri in task_uris:
         token = '{"' + task_uri + '":"' + deliver_token + '"}'
         data = '{"tokens":' + token + '}'
-        print('Lets give our quest back to: ' + get_config()['server'] + get_config()['blackboard_url'] + get_config()['quest_url'] + '/' + quest_no + get_config()['deliver_url'])
-        last_resp = requests.post(get_config()['server'] + get_config()['blackboard_url'] + get_config()['quest_url'] + '/' + quest_no + get_config()['deliver_url'],
+        print('Lets give our quest back to: ' + get_config()['server'] + get_config()['blackboard_url'] + get_config()['quest_url'] + '/' + str(quest_no) + get_config()['deliver_url'])
+        last_resp = requests.post(get_config()['server'] + get_config()['blackboard_url'] + get_config()['quest_url'] + '/' + str(quest_no) + get_config()['deliver_url'],
                               headers=headers, data=data)
         print(last_resp.json())
     try:
