@@ -1,5 +1,6 @@
 from quests.quest1.blackboard import show_users, choose_quest, look_at_map
 from quests.quest1.utilities import logout, divide_line
+from quests.quest1.user import whoami
 
 
 def main_ui(auth_header):
@@ -26,7 +27,8 @@ def main_filter(choice, auth_header):
         '1': choose_quest,
         '3': show_users,
         '4': look_at_map,
-        '5': logout
+        '5': logout,
+        '6': whoami
     }
     return choice_filter.get(choice)(auth_header)
 
