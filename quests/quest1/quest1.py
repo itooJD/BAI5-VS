@@ -51,7 +51,7 @@ def quest(paths, headers):
     return str(int(quest_no) + 1), quest['tasks']
 
 
-def task(paths, headers):
+def lookup_task(paths, headers):
     print()
     task_no = input('Quest: Which task are we looking for again? \n > ')
     task_resp = requests.get(paths['server'] + paths['blackboard_url'] + '/tasks/' + task_no, headers=headers)
@@ -157,7 +157,7 @@ def main():
     print('Quest: Authentication Token: ' + str(headers))
     whoami(paths, headers)
     quest_no, task_uris = quest(paths, headers)
-    location_url, task = task(paths, headers)
+    location_url, task = lookup_task(paths, headers)
     quest_host = map(paths, headers, task)
     int_quest_no = int(quest_no)
     if int_quest_no == 1:
