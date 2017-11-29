@@ -181,4 +181,4 @@ def search_for_adventurer(auth_header):
 
 def show_groups(auth_header):
     response = requests.get(paths_util.group_url(), headers=auth_header)
-    print(response)
+    print(response.json())
