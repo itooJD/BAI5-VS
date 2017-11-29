@@ -149,5 +149,6 @@ def visit_wounded(auth_header, quest_host, location_url):
             step_result = visit_wounded(auth_header, quest_host, step)
             print(step_result)
     else:
-        print(visit_resp.json())
+        post_to = requests.post('http://' + quest_host + location_url, headers=auth_header)
+        print(post_to.json())
     return visit_resp.json()
