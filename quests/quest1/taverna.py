@@ -151,12 +151,16 @@ def get_adventurer(auth_header, name):
 
 
 def send_message_to_user(auth_header, response_json, user_url):
-    print()
+    divide_line()
+    print('It is time to send a message!')
     message = input('Your message:\n> ')
     data = '{"message": "' + message + '"}'
     response = requests.post(user_url + response_json['messages'], data=data)
-    print(response)
-    print(response.json())
+    if response.status_code == 200 or response.status_code == 201:
+        print('The message´has successfully been delivered!')
+        print(response.json())
+    else:
+        print('Message could not be delivered')
 
 
 def join_group_of_user(auth_header, response_json):

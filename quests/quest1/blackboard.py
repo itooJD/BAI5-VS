@@ -73,6 +73,7 @@ def show_available_quests(auth_header):
 
 def show_all_quests(auth_header):
     response = requests.get(paths_util.quest_uri(), headers=auth_header)
+    print(response.json())
     available_quests = []
     for idx, quest in enumerate(response.json()['objects']):
         divide_line()
@@ -113,6 +114,7 @@ def show_users(auth_header):
 
 def quest_infos(response):
     print('\nThe Quest we are going to solve!')
+    print(response.json())
     object = response.json()['object']
     print(object['name'])
     print(object['description'])

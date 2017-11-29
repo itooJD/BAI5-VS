@@ -5,7 +5,7 @@ from quests.utils import get_config
 
 class Heroy(Resource):
     def __init__(self):
-        self.idle = True
+        self.idle = False
 
     def get(self):
         paths = get_config()
