@@ -112,6 +112,7 @@ def search_adv_filter(choice, auth_header, name):
 def show_adventurers(auth_header):
     response = requests.get(paths_util.adventurers_uri(), headers=auth_header)
     adventurers = {}
+    divide_line()
     for idx, adventurer in enumerate(response.json()['objects']):
         adventurers[str(idx)] = adventurer
         print(str(idx) + ': ', end='')
