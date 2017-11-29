@@ -151,7 +151,7 @@ def deliver(paths, headers, deliver_token, quest_no, task_uris):
         print('Quest: Could not be completed, caught exception - ' + str(ex))
 
 
-if __name__ == '__main__':
+def main():
     paths = set_server_url_via_udp()
     _, headers = register(paths)
     print('Quest: Authentication Token: ' + str(headers))
@@ -166,3 +166,7 @@ if __name__ == '__main__':
     elif int_quest_no == 2:
         deliver_token = visit_rats(headers, quest_host, location_url)
         deliver(paths, headers, deliver_token, quest_no, task_uris)
+
+
+if __name__ == '__main__':
+    main()
