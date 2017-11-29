@@ -41,10 +41,10 @@ def quest_starter(quest, quest_no, auth_header):
 
 def show_available_quests(auth_header):
     response = requests.get(paths_util.quest_uri(), headers=auth_header)
-    quest = {}
     quests = []
     available_quests = []
-    print('Quest: Available quests: \n')
+    divide_line()
+    print('Available quests: \n')
     for idx, quest in enumerate(response.json()['objects']):
         requirements_fullfilled = True
         if quest['requirements']:
@@ -109,7 +109,7 @@ def show_users(auth_header):
 
 
 def quest_infos(response):
-    print('\n The Quest we are taking to!')
+    print('\nThe Quest we are going to solve!')
     object = response.json()['object']
     print(object['name'])
     print(object['description'])
