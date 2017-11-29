@@ -15,7 +15,7 @@ def solve_quests(quest, quest_no, auth_header):
         deliver_token = visit_rats(auth_header, quest_host, location_url)
         deliver(auth_header, deliver_token, quest_no, quest['tasks'])
     elif int_quest_no == 3:
-        deliver_token = visit_throneroom(auth_header, quest_host, location_url)
+        deliver_token = visit_wounded(auth_header, quest_host, location_url)
         deliver(auth_header, deliver_token, quest_no, quest['tasks'])
     else:
         print('Sorry, you do not have the required requirements to solve this. Back to the Main UI.')
@@ -26,6 +26,7 @@ def lookup_task(headers):
     task_resp = requests.get(get_config()['server'] + get_config()['blackboard_url'] + '/tasks/' + task_no, headers=headers)
     if task_resp.status_code == 200:
         print('### This task exists! You are making me proud Heroy! ###')
+        print()
         print(task_resp.json()['object']['description'])
         print('It seems we have to go to: ' + str(task_resp.json()['object']['location']))
         print('And there to: ' + str(task_resp.json()['object']['resource']))
@@ -135,3 +136,10 @@ def fight_rats(headers, quest_host, step):
     print(visit_resp.json()['message'])
     print('We got something... ew: ' + visit_resp.json()['token_name'])
     return visit_resp.json()['token'], visit_resp.json()['token_name']
+
+def visit_wounded(auth_header, quest_host, location_url):
+    print()
+    print('We arrived at {0}{1}. Lets see what where we can help!'.format(quest_host, location_url))
+    visit_resp = requests.get('http://' + quest_host + location_url, headers=auth_header)
+    print(visit_resp.json())
+    return visit_resp.json()['token']
