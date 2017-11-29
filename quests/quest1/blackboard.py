@@ -26,7 +26,7 @@ def choose_quest(auth_header):
     if not quest_no:
         return
     print(paths_util.quest_uri() + '/' + quest_no)
-    response = requests.get(paths_util.quest_uri() + '/' + quest_no, headers=auth_header)
+    response = requests.get(paths_util.quest_uri() + '/' + str(quest_no), headers=auth_header)
     print(response.status_code)
     quest_infos(response)
     change_config(current_quest, quest)
@@ -70,7 +70,7 @@ def show_available_quests(auth_header):
             break
     if quest_no:
         quest = quests[int(quest_no)]
-    return quest_no, quest
+    return int(quest_no) + 1, quest
 
 
 def show_all_quests(auth_header):
@@ -90,7 +90,7 @@ def show_all_quests(auth_header):
             break
     if quest_no:
         quest = available_quests[int(quest_no)]
-    return quest_no, quest
+    return int(quest_no) + 1, quest
 
 
 def print_quest(quest):
