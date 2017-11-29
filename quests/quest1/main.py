@@ -12,10 +12,17 @@ def main():
         research = input('Do you want to research for the blackboard host? [y] \n> ')
         if research == 'y':
             paths = set_server_url_via_udp()
+        else:
+            paths = get_config()
+    else:
+        paths = set_server_url_via_udp()
 
     # Authentication
     if get_config()[token] != '':
+        print('You are already logged in!')
         auth_header = get_config()[token]
+        whoami(paths, auth_header)
+        divide_line()
     else:
         user_authenticated = False
         while not user_authenticated:
