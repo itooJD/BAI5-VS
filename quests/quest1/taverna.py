@@ -1,4 +1,4 @@
-import requests
+import requests, json
 from quests.quest1.utilities import divide_line, logout
 from quests.utils import paths_util, get_config
 
@@ -93,6 +93,7 @@ def search_ui(auth_header, name):
     print('1: Look real close! Get all the details.')
     print('2: I dont like, so I change!')
     print('3: Kill.')
+    print('4: Hire him? This one? Hahaha, good luck')
     return search_adv_filter(input('Hm? Tell me. \n> '), auth_header, name)
 
 
@@ -100,7 +101,8 @@ def search_adv_filter(choice, auth_header, name):
     choice_filter = {
         '1': get_adventurer,
         '2': change_adventurer,
-        '3': kill_adventurer
+        '3': kill_adventurer,
+        '4': hire_adventurer
     }
     if not choice_filter.get(choice):
         logout('')
@@ -109,9 +111,27 @@ def search_adv_filter(choice, auth_header, name):
 
 def show_adventurers(auth_header):
     response = requests.get(paths_util.adventurers_uri(), headers=auth_header)
-    for adventurer in response.json()['objects']:
-        print(adventurer.get('heroclass','') + ' | ' + adventurer.get('user','') + ' | ' +
-              adventurer.get('capabilities', '') + ' | ' + adventurer.get('url',''))
+    adventurers = {}
+    print(response.json())
+    for idx, adventurer in enumerate(response.json()['objects']):
+        adventurers[str(idx)] = adventurer
+        print(str(idx) + ': ', end='')
+        if adventurer.get('heroclass',''):
+            print(adventurer.get('heroclass','') + ' | ', end='')
+        if adventurer.get('user',''):
+            print(adventurer.get('heroclass', '') + ' | ', end='')
+        if adventurer.get('capabilities', ''):
+            print(adventurer.get('capabilities', '') + ' | ', end='')
+        if adventurer.get('url',''):
+            print(adventurer.get('url', ''))
+
+    if get_config()['group_uri'] != '':
+        recruite = input('Want to recruite one of these guys? [id,id,id]')
+        to_hire = recruite.split(',')
+        for id in to_hire:
+            hire_adventurer(auth_header, adventurer=adventurers[id])
+
+
 
 def get_adventurer(auth_header, name):
     response = requests.get(paths_util.adventurer(name), headers=auth_header)
@@ -128,8 +148,23 @@ def kill_adventurer(auth_header, name):
     print(response)
 
 
+def hire_adventurer(auth_header, name=None, adventurer=None):
+    return
+    uri, adventurer_uris = adventurer(auth_header, name)
+    hiring_uri = uri + adventurer_uris['hirings']
+    message = input('An invite might not be enough. Write something: ')
+    hirings_data = json.dumps({
+        "group": group_uri,
+        "quest": "quest",
+        "message": message
+    })
+    response = requests.post(paths_util.http(hiring_uri), data=hirings_data, timeout=50)
+    print(response)
+
+
 def search_for_adventurer(auth_header):
-    name = input('So.. Whom then?')
+    name = input('So.. Whom then? \n> ')
+    search_ui(auth_header, name)
 
 
 def show_groups():
