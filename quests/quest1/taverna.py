@@ -237,13 +237,14 @@ def create_group(auth_header, _):
     create_new = False
     if get_config()['group_uri'] != '':
         print('You are already in a group! ' + str(get_config()['group_uri']))
-        create = input('Do you really want to create another one? [y]')
+        create = input('Do you really want to create another one? [y]\n> ')
         if create == 'y':
             create_new = True
     else:
         create_new = True
     if create_new:
         response = requests.post(paths_util.group_url(), headers=auth_header)
+        print(response)
         change_config(util_group,response.json()['_links']['self'])
         print(response.json()['message'])
 
