@@ -214,7 +214,6 @@ def join_group(auth_header, groups):
     divide_line()
     group_id = input('Which group do you want to join then? [a valid id]\n> ')
     group_existant = False
-    print(groups)
     for g in groups:
         print(g)
         if str(g['id']) == group_id:
