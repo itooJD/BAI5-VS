@@ -41,9 +41,11 @@ from quests.utils.paths_util import util_group, util_user
 
 def taverna_ui(auth_header):
     print('\nTaverna')
+    print()
     print('1: Be careful with the adventurers')
     print('2: To quest, you need groups! Go get one')
     print('Else to get out')
+    print()
     return taverna_filter(input('What will you do? \n> '), auth_header)
 
 
@@ -60,9 +62,11 @@ def taverna_filter(choice, auth_header):
 def adventurer_ui(auth_header):
     divide_line()
     print('\nWelcome, this is the place of the adventurers!')
+    print()
     print('1: Look at the list behind the bar')
     print('2: Searching for someone?')
     print('Else: Get outta here')
+    print()
     return adventurer_filter(input('Which list do you want to see: \n> '), auth_header)
 
 
@@ -92,10 +96,12 @@ def taverna(auth_header):
 
 def search_ui(auth_header, name):
     print('And what do you want to do with ' + name + '?')
+    print()
     print('1: Look real close! Get all the details.')
     print('2: I dont like, so I change!')
     print('3: Kill.')
     print('4: Hire him? This one? Hahaha, good luck')
+    print()
     return search_adv_filter(input('Hm? Tell me. \n> '), auth_header, name)
 
 
@@ -183,10 +189,12 @@ def search_for_adventurer(auth_header):
 
 def group_ui(auth_header, groups):
     print('You can find a group to adventure with here... Want to?')
+    print()
     print('1: Join a group')
     print('2: Delete one of your groups')
     print('3: Create your own group')
     print('4: Check the members of a group')
+    print()
     return group_filter(input('Sure about that? \n> '), auth_header, groups)
 
 def group_filter(choice, auth_header, groups):
