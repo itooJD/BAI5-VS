@@ -20,6 +20,7 @@ group_url : '/groups'
 adventurers_url : '/adventurers'
 member_url : '/members'
 
-requirements: []
+username : ''
+requirements : []
 quests : []
 ...

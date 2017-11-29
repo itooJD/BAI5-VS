@@ -219,6 +219,8 @@ def delete_your_group(auth_header, groups):
     if response.status_code == 200:
         change_config(util_group, '')
         print('Deleted your group!')
+    else:
+        print(response.json())
 
 
 def create_group(auth_header, _):
@@ -245,7 +247,18 @@ def check_members(auth_header, groups):
         group_existant = True
     if group_existant:
         response = requests.get(paths_util.group_url_id(group_id) + get_config()['member_url'], headers=auth_header)
-        print(response.json())
+        for member in response.json()['objects']:
+            if member.get('heroclass'):
+                print(member.get('heroclass') + ' | ', end='')
+            if member.get('user', ''):
+                print(member.get('user') + ' | ', end='')
+            if member.get('capabilities'):
+                print(member.get('capabilities') + ' | ', end='')
+            if member.get('url'):
+                print(member.get('url'), end='')
+            print()
+    else:
+        print('The group with the given id does not exist')
 
 
 def leave_group(auth_header, groups):
