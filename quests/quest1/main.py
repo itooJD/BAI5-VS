@@ -21,6 +21,7 @@ def main():
     if get_config()[token] != '':
         print('- You are already logged in!')
         auth_header = get_config()[token]
+        auth_header = "Authentication Token:" + '{"' + 'Authorization : Token ' + auth_header + '"}'
         whoami(auth_header)
         divide_line()
     else:
