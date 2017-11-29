@@ -1,5 +1,5 @@
 import requests
-from quests.quest1.utilities import divide_line
+from quests.quest1.utilities import divide_line, logout
 from quests.utils import paths_util, get_config, change_config
 from quests.utils.paths_util import current_quest
 from quests.quest1.questing import solve_quests
@@ -24,7 +24,7 @@ def choose_quest(auth_header):
     divide_line()
     quest_no, quest = quest_ui(auth_header)
     if not quest_no:
-        return False
+        logout('')
     response = requests.get(paths_util.quest_uri() + '/' + str(quest_no), headers=auth_header)
     quest_infos(response)
     change_config(current_quest, quest)
