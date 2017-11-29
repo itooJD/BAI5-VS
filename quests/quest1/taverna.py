@@ -54,7 +54,7 @@ def taverna_filter(choice, auth_header):
 def taverna(auth_header):
     # Entering the Taverna
     adventurer_data = '{"heroclass":"juggernaut","capabilities":"None","url":"172.19.0.13:5000/heroyjenkins"}'
-    requests.post(paths_util.adventurers, headers=auth_header, data=adventurer_data)
+    requests.post(paths_util.adventurers_uri(), headers=auth_header, data=adventurer_data)
     print('\nEntering the Taverna')
     in_taverna = True
     while in_taverna:
@@ -63,7 +63,7 @@ def taverna(auth_header):
 
 
 def show_adventurers(auth_header):
-    response = requests.get(paths_util.adventurers(), headers=auth_header)
+    response = requests.get(paths_util.adventurers_uri(), headers=auth_header)
     print(response)
     for adventurer in response.json()['objects']:
         print(adventurer)

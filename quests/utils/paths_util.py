@@ -27,12 +27,12 @@ def group(id):
     return get_config()['group_url'] + '/' + id
 
 
-def adventurers():
+def adventurers_uri():
     return server_uri(get_config()['taverna_url'] + get_config()['adventurers_url'])
 
 
 def adventurer(name):
-    return adventurers() + '/' + name
+    return adventurers_uri() + '/' + name
 
 '''
 ## Taverna
