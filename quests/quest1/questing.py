@@ -1,26 +1,57 @@
 import requests
 from quests.utils.config_manager import set_server_url_via_udp
-from quests.quest2.questing_resources.authentification import authentification
+from quests.utils import get_config, change_config, paths_util
+from quests.utils.paths_util import auth_token as token
+
+
+def authentication():
+    exit = False
+    auth_header = ''
+
+    choice = authentication_ui()
+    if choice in ['1', '2']:
+        username = input('Username: ')
+        password = input('Password: ')
+        if choice == '1':
+            user_data = '{"name":"' + username + '","password":"' + password + '"}'
+            response = requests.post(paths_util.server_uri(get_config()['user_url']), data=user_data)
+            print()
+            print(response.json()['message'])
+        response = requests.get(paths_util.server_uri(get_config()['login_url']), auth=(username, password))
+        if response.status_code == 200:
+            print(response.json()['message'])
+            auth_token = response.json()['token']
+            auth_header = {'Authorization': 'Token ' + auth_token}
+            change_config(token, auth_token)
+    else:
+        exit = True
+    return exit, auth_header
+
+
+def authentication_ui():
+    print('1: Register')
+    print('2: Login')
+    print('Else: Exit')
+    return input('> ')
 
 
 def whoami(paths, headers):
-    show = input('Show user info? [y/n]')
-    if show == 'y' or show == 'yes':
-        whoami_resp = requests.get(paths['server'] + paths['whoami_url'], headers=headers)
-        print(whoami_resp.json())
-        if whoami_resp.json().get('user'):
+    divide_line()
+    whoami_resp = requests.get(paths['server'] + paths['whoami_url'], headers=headers)
+    if whoami_resp.json().get('user'):
+        show = input('Show user info? [y/n] \n> ')
+        if show == 'y' or show == 'yes':
             print('## WhoAmI ##\n' +
               'Name: ' + str(whoami_resp.json()['user']['name']) + '\n' +
               'Finished deliverables: ' + str(whoami_resp.json()['user']['deliverables_done']) + '\n' +
               'Delivered: ' + str(whoami_resp.json()['user']['delivered']))
             print(whoami_resp.json().get('message'))
-            return True
         else:
-            print('You could not be authenticated')
-            return False
-    else:
-        print('Not showing user info')
+            print('Not showing user info')
         return True
+    else:
+        print('!!! You could not be authenticated. Please try again !!!')
+        return False
 
 
 def quest(paths, headers):
@@ -161,6 +192,7 @@ def exit_check(exit):
         raise Exception('Exiting')
 
 def divide_line():
+    print()
     print('#################################')
 
 def main():
@@ -170,7 +202,7 @@ def main():
     # Authentication
     user_authenticated = False
     while not user_authenticated:
-        exit, headers = authentification('')
+        exit, headers = authentification()
         exit_check(exit)
         user_authenticated = whoami(paths, headers)
     print('Authentication Token: ' + str(headers))
