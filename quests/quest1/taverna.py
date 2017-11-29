@@ -202,7 +202,9 @@ def group_filter(choice, auth_header, groups):
 def show_groups(auth_header):
     response = requests.get(paths_util.group_url(), headers=auth_header)
     groups = {}
+    print(response.json())
     for group in enumerate(response.json()['objects']):
+        print(group)
         groups[str(group['id'])]=group
         print(str(group['id']) + ': Owner - ' + group['owner'] + ' | ' + group['members'] + ' | ' +  group['_links'])
     return group_ui(auth_header, groups)
