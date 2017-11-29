@@ -144,11 +144,13 @@ def visit_wounded(auth_header, quest_host, location_url):
     visit_resp = requests.get('http://' + quest_host + location_url, headers=auth_header)
     print()
     print(visit_resp.json()['message'])
+    tokens = []
     if visit_resp.json().get('steps_todo'):
         for step in visit_resp.json()['steps_todo']:
             step_result = visit_wounded(auth_header, quest_host, step)
-            print(step_result)
+            tokens.append(step_result)
     else:
         post_to = requests.post('http://' + quest_host + location_url, headers=auth_header)
-        print(post_to.json())
-    return visit_resp.json()
+        print('Aquired Token! ' + post_to.json()['token_name'])
+        return post_to.json()['token']
+    return tokens
