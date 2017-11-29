@@ -19,7 +19,7 @@ def main():
     do_it_yourself, already_logged = False, False
     divide_line()
     print('Authentication')
-    if get_config()[token] != '':
+    if get_config().get(token) != '':
         print('- You are already logged in!')
         print()
         hand_login = input('Still... Do you want to login yourself? [y]\n> ')
