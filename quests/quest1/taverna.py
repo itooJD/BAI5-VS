@@ -112,17 +112,16 @@ def search_adv_filter(choice, auth_header, name):
 def show_adventurers(auth_header):
     response = requests.get(paths_util.adventurers_uri(), headers=auth_header)
     adventurers = {}
-    print(response.json())
     for idx, adventurer in enumerate(response.json()['objects']):
         adventurers[str(idx)] = adventurer
         print(str(idx) + ': ', end='')
-        if adventurer.get('heroclass',''):
-            print(adventurer.get('heroclass','') + ' | ', end='')
+        if adventurer.get('heroclass'):
+            print(adventurer.get('heroclass') + ' | ', end='')
         if adventurer.get('user',''):
-            print(adventurer.get('heroclass', '') + ' | ', end='')
-        if adventurer.get('capabilities', ''):
-            print(adventurer.get('capabilities', '') + ' | ', end='')
-        if adventurer.get('url',''):
+            print(adventurer.get('user') + ' | ', end='')
+        if adventurer.get('capabilities'):
+            print(adventurer.get('capabilities') + ' | ', end='')
+        if adventurer.get('url'):
             print(adventurer.get('url', ''))
 
     if get_config()['group_uri'] != '':
