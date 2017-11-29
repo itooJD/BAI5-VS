@@ -1,7 +1,7 @@
 import requests
 from quests.quest1.utilities import divide_line
 from quests.utils import paths_util, change_config, get_config
-from quests.utils.paths_util import auth_token as token
+from quests.utils.paths_util import auth_token as token, util_user
 
 
 def authentication_ui():
@@ -24,6 +24,7 @@ def authentication():
             response = requests.post(paths_util.server_uri(get_config()['user_url']), data=user_data)
             print()
             print(response.json()['message'])
+            change_config(util_user, username)
         response = requests.get(paths_util.server_uri(get_config()['login_url']), auth=(username, password))
         if response.status_code == 200:
             print(response.json()['message'])

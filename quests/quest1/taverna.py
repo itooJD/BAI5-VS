@@ -1,7 +1,7 @@
 import requests, json
 from quests.quest1.utilities import divide_line, logout
 from quests.utils import paths_util, get_config, change_config
-from quests.utils.paths_util import util_group
+from quests.utils.paths_util import util_group, util_user
 
 '''
 "/taverna/adventurers": {"get": {
@@ -41,10 +41,10 @@ from quests.utils.paths_util import util_group
 
 def taverna_ui(auth_header):
     print('\nTaverna')
-    print('1: Adventurers')
-    print('2: Groups')
+    print('1: Be careful with the adventurers')
+    print('2: To quest, you need groups! Go get one')
     print('Else to get out')
-    return taverna_filter(input('Which is more interesting do you think? \n> '), auth_header)
+    return taverna_filter(input('What will you do? \n> '), auth_header)
 
 
 def taverna_filter(choice, auth_header):
@@ -185,16 +185,17 @@ def group_ui(auth_header, groups):
     print('You can find a group to adventure with here... Want to?')
     print('1: Join a group')
     print('2: Delete one of your groups')
-    print('3: Post to your group')
+    print('3: Create your own group')
     print('4: Check the members of a group')
-    return group_filter(input('Hm? Tell me. \n> '), auth_header, groups)
+    return group_filter(input('Sure about that? \n> '), auth_header, groups)
 
 def group_filter(choice, auth_header, groups):
     choice_filter = {
         '1': join_group,
         '2': delete_your_group,
         '3': create_group,
-        '4': check_members
+        '4': check_members,
+        '5': leave_group
     }
     if not choice_filter.get(choice):
         return False
@@ -235,7 +236,7 @@ def create_group(auth_header, _):
     divide_line()
     create_new = False
     if get_config()['group_uri'] != '':
-        print('You are already in a group! ' + get_config()['group_uri'])
+        print('You are already in a group! ' + str(get_config()['group_uri']))
         create = input('Do you really want to create another one? [y]')
         if create == 'y':
             create_new = True
@@ -258,3 +259,24 @@ def check_members(auth_header, groups):
     if group_existant:
         response = requests.get(paths_util.group_url_id(group_id) + get_config()['member_url'], headers=auth_header)
         print(response.json())
+
+
+def leave_group(auth_header, groups):
+    divide_line()
+    print('The groups you are in:')
+    groups_you_are_in = []
+    for k,v in groups.items():
+        if v['owner'] == get_config()[util_user]:
+            groups_you_are_in.append(v)
+    print(groups_you_are_in)
+    divide_line()
+    group_id = input('Which group do you want to leave then? [a valid id]\n> ')
+    group_existant = False
+    if group_id in groups:
+        group_existant = True
+    if group_existant:
+        response = requests.post(paths_util.group_url_id(group_id) + get_config()['member_url'], headers=auth_header)
+        print(response.json())
+        print('Joined Group')
+    else:
+        print('The group with this id does not exist')
