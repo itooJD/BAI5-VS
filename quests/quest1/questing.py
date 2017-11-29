@@ -71,7 +71,6 @@ def deliver(headers, deliver_token, quest_no, task_uris):
         print('Lets give our quest back to: ' + get_config()['server'] + get_config()['blackboard_url'] + get_config()['quest_url'] + '/' + str(quest_no) + get_config()['deliver_url'])
         last_resp = requests.post(get_config()['server'] + get_config()['blackboard_url'] + get_config()['quest_url'] + '/' + str(quest_no) + get_config()['deliver_url'],
                               headers=headers, data=data)
-        print(last_resp.json())
     try:
         print(last_resp.json()['message'])
         if last_resp.json().get('status') == 'success':

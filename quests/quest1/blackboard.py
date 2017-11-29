@@ -77,7 +77,7 @@ def show_all_quests(auth_header):
     available_quests = []
     for idx, quest in enumerate(response.json()['objects']):
         divide_line()
-        available_quests.append(quest)
+        available_quests.append(idx)
         print_quest(quest)
     print('Available quests: ' + str(available_quests))
     quest_no = -1
