@@ -14,6 +14,6 @@ if __name__ == '__main__':
     elif answer == '2':
         print('Setup: Starting UI')
         from quests.quest1 import quest1
-        quest1
+        quest1.main()
     else:
         print('Exiting')
