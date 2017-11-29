@@ -26,11 +26,8 @@ def choose_quest(auth_header):
     divide_line()
     result = quest_ui(auth_header)
     quest_no, quest = result[0][0], result[0][1]
-    print(quest_no)
-    print(quest)
     if not quest_no:
         return
-    print(paths_util.quest_uri() + '/' + str(quest_no))
     response = requests.get(paths_util.quest_uri() + '/' + str(quest_no), headers=auth_header)
     quest_infos(response)
     change_config(current_quest, quest)

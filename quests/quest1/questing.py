@@ -14,6 +14,9 @@ def solve_quests(quest, quest_no, auth_header):
     elif int_quest_no == 2:
         deliver_token = visit_rats(auth_header, quest_host, location_url)
         deliver(auth_header, deliver_token, quest_no, quest['tasks'])
+    elif int_quest_no == 3:
+        deliver_token = visit_throneroom(auth_header, quest_host, location_url)
+        deliver(auth_header, deliver_token, quest_no, quest['tasks'])
     else:
         print('Sorry, you do not have the required requirements to solve this. Back to the Main UI.')
 
