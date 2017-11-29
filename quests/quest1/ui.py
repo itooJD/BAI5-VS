@@ -4,17 +4,12 @@ from quests.quest1.blackboard import show_users, show_all_quests, show_available
 from quests.quest1.utilities import logout
 
 
-def main_ui(auth_header, quest):
+def main_ui(auth_header):
     print('\nNext Steps')
     print('1: Quests')
-    print('2: Taverna')
     print('3: Users')
     print('4: Map')
     print('5: Logout')
-    if bool(quest):
-        print('6: Quest')
-    if get_config()['group_uri'] != '':
-        print('7: Group')
     print('else to exit')
     return main_filter(input('Where do you want to go: '), auth_header)
 
