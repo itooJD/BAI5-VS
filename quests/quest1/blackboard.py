@@ -24,7 +24,9 @@ def choose_quest(auth_header):
     divide_line()
     quest_no, quest = quest_ui(auth_header)
     print(quest)
-    quest_infos(requests.get(paths_util.quest_uri() + '/' + quest_no, headers=auth_header))
+    response = requests.get(paths_util.quest_uri() + '/' + quest_no, headers=auth_header)
+    print(response.status_code)
+    quest_infos(response)
     change_config(current_quest, quest)
     return quest_starter(quest, quest_no, auth_header)
 
@@ -56,7 +58,6 @@ def show_available_quests(auth_header):
             divide_line()
             print('Quest with index: ' + str(idx))
             print_quest(quest)
-        print()
     quest_no = -1
     divide_line()
     print('Available quests: ' + str(available_quests))
