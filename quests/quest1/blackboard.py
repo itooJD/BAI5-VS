@@ -90,36 +90,38 @@ def show_all_quests(auth_header):
 def print_quest(quest):
     print('Name:        ' + quest['name'])
     print('Description: ' + quest['description'])
-    print('URI:         ' + quest['_links']['self'])
-    print('Tasks:       ' + quest['tasks'])
-    print('Deliveries:  ' + quest['_links']['deliveries'])
+    print('URI:         ' + str(quest['_links']['self']))
+    print('Tasks:       ' + str(quest['tasks']))
+    print('Deliveries:  ' + str(quest['_links']['deliveries']))
 
 
 def show_users(auth_header):
     response = requests.get(paths_util.users_uri(), headers=auth_header)
-    print('\nAll Users')
+    print('\nWhata bunch of people there are in here. How do we get through these hords?')
+    divide_line()
     for user in response.json()['objects']:
         if user.get('name'):
             try:
                 print(user['name'], end=', ')
             except UnicodeEncodeError:
                 pass
+    print()
     return ''
 
 
 def look_at_map(auth_header):
     print()
-    print('Quest: Lets look this up on the map')
+    print('Lets look at our map')
     map_resp = requests.get(get_config()['server'] + get_config()['map_url'], headers=auth_header)
     print()
     if map_resp.json()['status'] == 'success':
         print('Map: \n')
         for location in map_resp.json().get('objects'):
+            print('Name:     ' + location['name'])
+            print('Host:     ' + location['host'])
+            print('Tasks:    ' + str(location['tasks']))
+            print('Visitors: ' + str(location['visitors']))
             divide_line()
-            print('Name: ' + location['name'])
-            print('Host: ' + location['host'])
-            print('Tasks: ' + location['tasks'])
-            print('Visitors: ' + location['visitors'])
     print()
     return ''
 
