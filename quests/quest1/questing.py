@@ -1,96 +1,24 @@
 import requests
-from quests.utils.config_manager import set_server_url_via_udp
-from quests.utils import get_config, change_config, paths_util
-from quests.utils.paths_util import auth_token as token
+from quests.utils import get_config
 
 
-def authentication():
-    exit = False
-    auth_header = ''
-
-    choice = authentication_ui()
-    if choice in ['1', '2']:
-        username = input('Username: ')
-        password = input('Password: ')
-        if choice == '1':
-            user_data = '{"name":"' + username + '","password":"' + password + '"}'
-            response = requests.post(paths_util.server_uri(get_config()['user_url']), data=user_data)
-            print()
-            print(response.json()['message'])
-        response = requests.get(paths_util.server_uri(get_config()['login_url']), auth=(username, password))
-        if response.status_code == 200:
-            print(response.json()['message'])
-            auth_token = response.json()['token']
-            auth_header = {'Authorization': 'Token ' + auth_token}
-            change_config(token, auth_token)
-    else:
-        exit = True
-    return exit, auth_header
+def solve_quests(quest, quest_no, auth_header):
+    # Questing
+    location_url, task = lookup_task(auth_header)
+    quest_host = search_location(auth_header, task)
+    int_quest_no = int(quest_no)
+    if int_quest_no == 1:
+        deliver_token = visit_throneroom(auth_header, quest_host, location_url)
+        deliver(auth_header, deliver_token, quest_no, quest['tasks'])
+    elif int_quest_no == 2:
+        deliver_token = visit_rats(auth_header, quest_host, location_url)
+        deliver(auth_header, deliver_token, quest_no, quest['tasks'])
 
 
-def authentication_ui():
-    print('1: Register')
-    print('2: Login')
-    print('Else: Exit')
-    return input('> ')
-
-
-def whoami(paths, headers):
-    divide_line()
-    whoami_resp = requests.get(paths['server'] + paths['whoami_url'], headers=headers)
-    if whoami_resp.json().get('user'):
-        show = input('Show user info? [y/n] \n> ')
-        if show == 'y' or show == 'yes':
-            print('## WhoAmI ##\n' +
-              'Name: ' + str(whoami_resp.json()['user']['name']) + '\n' +
-              'Finished deliverables: ' + str(whoami_resp.json()['user']['deliverables_done']) + '\n' +
-              'Delivered: ' + str(whoami_resp.json()['user']['delivered']))
-            print(whoami_resp.json().get('message'))
-        else:
-            print('Not showing user info')
-        return True
-    else:
-        print('!!! You could not be authenticated. Please try again !!!')
-        return False
-
-
-def quest(paths, headers):
-    quest_resp = requests.get(paths['server'] + paths['blackboard_url'] + paths['quest_url'], headers=headers)
-    quests = []
-    available_quests = []
-    print('Quest: Available quests: \n')
-    for idx, quest in enumerate(quest_resp.json()['objects']):
-        print('#################################')
-        print('Quest with index: ' + str(idx))
-        print(quest['name'])
-        print(quest['description'])
-        requirements_fullfilled = True
-        if quest['requirements']:
-            for req in quest['requirements']:
-                if req not in paths['requirements']:
-                    requirements_fullfilled = False
-                    print('\n!!! The requirements for this quest are not fullfilled by our hero :C !!!')
-                    break
-        if requirements_fullfilled:
-            available_quests.append(idx)
-            quests.append(quest)
-        print()
-    quest_no = -1
-    print('#################################')
-    print('Available quests: ' + str(available_quests))
-    while int(quest_no) not in available_quests:
-        quest_no = input('Which quest do you want to tackle mighty Heroy? [Index starting from 0] \n > ')
-    quest = quests[int(quest_no)]
-    print('Quest: Accepted quest ' + quest['name'])
-    print('Quest: This quest requires the tokens: ' + str(quest['requires_tokens']))
-    print('and requires of you to open the task: ' + str(quest['tasks']))
-    return str(int(quest_no) + 1), quest['tasks']
-
-
-def lookup_task(paths, headers):
+def lookup_task(headers):
     print()
     task_no = input('Quest: Which task are we looking for again? \n > ')
-    task_resp = requests.get(paths['server'] + paths['blackboard_url'] + '/tasks/' + task_no, headers=headers)
+    task_resp = requests.get(get_config()['server'] + get_config()['blackboard_url'] + '/tasks/' + task_no, headers=headers)
     if task_resp.status_code == 200:
         print('### This task exists! You are making me proud Heroy! ###')
         print(task_resp.json()['object']['description'])
@@ -99,13 +27,13 @@ def lookup_task(paths, headers):
     return str(task_resp.json()['object']['resource']), task_no
 
 
-def map(paths, headers, task):
+def search_location(auth_header, task):
     print()
     print('Quest: Lets look this up on the map')
-    map_resp = requests.get(paths['server'] + paths['map_url'], headers=headers)
+    map_resp = requests.get(get_config()['server'] + get_config()['map_url'], headers=auth_header)
     map = ''
     print()
-    print('Quest: The map: \n' + str(map_resp.json()))
+    print('Map: The map: \n' + str(map_resp.json()))
     print()
     for map_item in map_resp.json()['objects']:
         if int(task) in map_item['tasks']:
@@ -113,6 +41,27 @@ def map(paths, headers, task):
             map = map_item['host']
             break
     return map
+
+
+def deliver(headers, deliver_token, quest_no, task_uris):
+    print()
+    print('Quest: Now let us deliver our token. Back to the blackboard!')
+    for task_uri in task_uris:
+        token = '{"' + task_uri + '":"' + deliver_token + '"}'
+        data = '{"tokens":' + token + '}'
+        print('Lets give our quest back to: ' + get_config()['server'] + get_config()['blackboard_url'] + get_config()['quest_url'] + '/' + quest_no + get_config()['deliver_url'])
+        last_resp = requests.post(get_config()['server'] + get_config()['blackboard_url'] + get_config()['quest_url'] + '/' + quest_no + get_config()['deliver_url'],
+                              headers=headers, data=data)
+        print(last_resp.json())
+    try:
+        print(last_resp.json()['message'])
+        if last_resp.json().get('status') == 'success':
+            print("Quest successfully closed! Herrrrroooooooooy Jeeeeenkiiiiiins!!")
+        else:
+            print(last_resp.json()['error'])
+    except Exception as ex:
+        print('', end='')
+        print('Quest: Could not be completed, caught exception - ' + str(ex))
 
 
 def visit_throneroom(headers, quest_host, location_url):
@@ -164,61 +113,3 @@ def fight_rats(headers, quest_host, step):
     print(visit_resp.json()['message'])
     print('We got something... ew: ' + visit_resp.json()['token_name'])
     return visit_resp.json()['token'], visit_resp.json()['token_name']
-
-
-def deliver(paths, headers, deliver_token, quest_no, task_uris):
-    print()
-    print('Quest: Now let us deliver our token. Back to the blackboard!')
-    for task_uri in task_uris:
-        token = '{"' + task_uri + '":"' + deliver_token + '"}'
-        data = '{"tokens":' + token + '}'
-        print('Lets give our quest back to: ' + paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/' + quest_no + paths['deliver_url'])
-        last_resp = requests.post(paths['server'] + paths['blackboard_url'] + paths['quest_url'] + '/' + quest_no + paths['deliver_url'],
-                              headers=headers, data=data)
-        print(last_resp.json())
-    try:
-        print(last_resp.json()['message'])
-        if last_resp.json().get('status') == 'success':
-            print("Quest successfully closed! Herrrrroooooooooy Jeeeeenkiiiiiins!!")
-        else:
-            print(last_resp.json()['error'])
-    except Exception as ex:
-        print('', end='')
-        print('Quest: Could not be completed, caught exception - ' + str(ex))
-
-
-def exit_check(exit):
-    if exit:
-        raise Exception('Exiting')
-
-def divide_line():
-    print()
-    print('#################################')
-
-def main():
-    divide_line()
-    paths = set_server_url_via_udp()
-
-    # Authentication
-    user_authenticated = False
-    while not user_authenticated:
-        exit, headers = authentication()
-        exit_check(exit)
-        user_authenticated = whoami(paths, headers)
-    print('Authentication Token: ' + str(headers))
-
-    # Questing
-    quest_no, task_uris = quest(paths, headers)
-    location_url, task = lookup_task(paths, headers)
-    quest_host = map(paths, headers, task)
-    int_quest_no = int(quest_no)
-    if int_quest_no == 1:
-        deliver_token = visit_throneroom(headers, quest_host, location_url)
-        deliver(paths, headers, deliver_token, quest_no, task_uris)
-    elif int_quest_no == 2:
-        deliver_token = visit_rats(headers, quest_host, location_url)
-        deliver(paths, headers, deliver_token, quest_no, task_uris)
-
-
-if __name__ == '__main__':
-    main()
