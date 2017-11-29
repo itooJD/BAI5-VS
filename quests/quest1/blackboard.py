@@ -17,6 +17,8 @@ def quest_filter(choice, auth_header):
         '1': show_available_quests,
         '2': show_all_quests
     }
+    if not choice_filter.get(choice):
+        logout('')
     return choice_filter.get(choice)(auth_header), ''
 
 
@@ -24,7 +26,7 @@ def choose_quest(auth_header):
     divide_line()
     quest_no, quest = quest_ui(auth_header)
     if not quest_no:
-        logout('')
+        return
     response = requests.get(paths_util.quest_uri() + '/' + str(quest_no), headers=auth_header)
     quest_infos(response)
     change_config(current_quest, quest)

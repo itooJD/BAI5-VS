@@ -24,6 +24,8 @@ def main_filter(choice, auth_header):
         '5': logout,
         '6': whoami
     }
+    if not choice_filter.get(choice):
+        logout('')
     choice_filter.get(choice)(auth_header)
 
 
