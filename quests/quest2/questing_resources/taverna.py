@@ -94,6 +94,6 @@ def send_hiring_to_adventurer(auth_header, name, group_uri):
 
 
 def adventurer(auth_header, name):
-    adventurer = requests.get(paths_util.adventurer(name), headers=auth_header).json()['object']
+    adventurer = requests.get(paths_util.adventurer_uri_name(name), headers=auth_header).json()['object']
     url = adventurer['url'][0:adventurer['url'].find('/')]
     return url, requests.get(paths_util.http(adventurer['url'])).json()

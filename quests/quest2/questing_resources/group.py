@@ -25,7 +25,7 @@ def group(auth_header, group_uri, user_name, quest):
                 if user_name == obj['owner']:
                     print(requests.delete(paths_util.server_uri(group_uri), headers=auth_header).json()['message'])
                 else:
-                    requests.delete(paths_util.adventurer(user_name), headers=auth_header)
+                    requests.delete(paths_util.adventurer_uri_name(user_name), headers=auth_header)
                     print('You left the Group')
                 group_uri = ''
                 ser.serialize(group_uri, paths_util.group_link_file)

@@ -122,7 +122,7 @@ def show_adventurers(auth_header):
         if adventurer.get('capabilities'):
             print(adventurer.get('capabilities') + ' | ', end='')
         if adventurer.get('url'):
-            print(adventurer.get('url', end=''))
+            print(adventurer.get('url'), end='')
         print()
         divide_line()
 
