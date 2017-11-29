@@ -1,6 +1,7 @@
 import requests, json
 from quests.quest1.utilities import divide_line, logout
-from quests.utils import paths_util, get_config
+from quests.utils import paths_util, get_config, change_config
+from quests.utils.paths_util import util_group
 
 '''
 "/taverna/adventurers": {"get": {
@@ -191,7 +192,7 @@ def group_filter(choice, auth_header, groups):
     choice_filter = {
         '1': join_group,
         '2': delete_your_group,
-        '3': post_group,
+        '3': create_group,
         '4': check_members
     }
     if not choice_filter.get(choice):
@@ -202,11 +203,10 @@ def group_filter(choice, auth_header, groups):
 def show_groups(auth_header):
     response = requests.get(paths_util.group_url(), headers=auth_header)
     groups = {}
-    print(response.json())
     for group in response.json()['objects']:
-        print(group)
         groups[str(group['id'])]=group
         print(str(group['id']) + ': Owner - ' + group['owner'] + ' | ' + str(group['members']) + ' | ' + str(group['_links']))
+    divide_line()
     return group_ui(auth_header, groups)
 
 
@@ -215,6 +215,7 @@ def join_group(auth_header, groups):
     group_id = input('Which group do you want to join then? [a valid id]\n> ')
     group_existant = False
     for g in groups:
+        print(str(g['id']))
         if str(g['id']) == group_id:
             group_existant = True
             break
@@ -231,14 +232,18 @@ def delete_your_group(auth_header, groups):
     print(response)
 
 
-def post_group(auth_header, groups):
-    pass
+def create_group(auth_header, _):
+    response = requests.post(paths_util.group_url(), headers=auth_header)
+    print(response)
+    print(response.json())
+    change_config(util_group,response.json())
 
 
 def check_members(auth_header, groups):
     group_id = input('Which group do you want to join then? [a valid id]\n> ')
     group_existant = False
     for g in groups:
+        print(str(g['id']))
         if str(g['id']) == group_id:
             group_existant = True
             break

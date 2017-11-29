@@ -6,7 +6,6 @@ auth_token = 'auth_token'
 util_tokens = 'util_tokens'
 util_group = 'group_uri'
 
-
 def http(uri):
     return 'http://' + uri
 
