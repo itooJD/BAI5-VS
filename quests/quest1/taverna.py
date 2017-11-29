@@ -72,7 +72,7 @@ def adventurer_filter(choice, auth_header):
         '2': search_for_adventurer
     }
     if not choice_filter.get(choice):
-        logout('')
+        return False
     return choice_filter.get(choice)(auth_header), ''
 
 
@@ -85,6 +85,7 @@ def taverna(auth_header):
     print('\nYou enter the dusty taverna')
     in_taverna = True
     while in_taverna:
+        divide_line()
         in_taverna = taverna_ui(auth_header)
     print('Leaving the taverna')
 
@@ -106,7 +107,7 @@ def search_adv_filter(choice, auth_header, name):
         '4': hire_adventurer
     }
     if not choice_filter.get(choice):
-        logout('')
+        return False
     return choice_filter.get(choice)(auth_header, name), ''
 
 
@@ -196,7 +197,7 @@ def group_filter(choice, auth_header, groups):
         '4': check_members
     }
     if not choice_filter.get(choice):
-        logout('')
+        return False
     return choice_filter.get(choice)(auth_header, groups), ''
 
 
@@ -219,8 +220,8 @@ def join_group(auth_header, groups):
         group_existant = True
     if group_existant:
         response = requests.post(paths_util.group_url_id(group_id) + get_config()['member_url'], headers=auth_header)
-        print(response)
-        print('Joined Group?')
+        print(response.json())
+        print('Joined Group')
     else:
         print('The group with this id does not exist')
 
@@ -231,17 +232,26 @@ def delete_your_group(auth_header, groups):
 
 
 def create_group(auth_header, _):
-    response = requests.post(paths_util.group_url(), headers=auth_header)
-    print(response)
-    print(response.json())
-    change_config(util_group,response.json())
+    divide_line()
+    create_new = False
+    if get_config()['group_uri'] != '':
+        print('You are already in a group! ' + get_config()['group_uri'])
+        create = input('Do you really want to create another one? [y]')
+        if create == 'y':
+            create_new = True
+    else:
+        create_new = True
+    if create_new:
+        response = requests.post(paths_util.group_url(), headers=auth_header)
+        change_config(util_group,response.json()['_links']['self'])
+        print(response.json()['message'])
 
 
 def check_members(auth_header, groups):
+    divide_line()
     group_id = input('Which group do you want to join then? [a valid id]\n> ')
     group_existant = False
     for g in groups:
-        print(str(g['id']))
         if str(g['id']) == group_id:
             group_existant = True
             break
