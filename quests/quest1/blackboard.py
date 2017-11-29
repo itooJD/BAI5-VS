@@ -17,7 +17,7 @@ def quest_filter(choice, auth_header):
         '1': show_available_quests,
         '2': show_all_quests
     }
-    return choice_filter.get(choice)(auth_header)
+    return choice_filter.get(choice)(auth_header), ''
 
 
 def choose_quest(auth_header):
@@ -76,6 +76,7 @@ def show_all_quests(auth_header):
         divide_line()
         available_quests.append(idx)
         print_quest(quest)
+    divide_line()
     print('Available quests: ' + str(available_quests))
     quest_no = -1
     while int(quest_no) not in available_quests:
