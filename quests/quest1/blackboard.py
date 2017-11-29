@@ -99,7 +99,8 @@ def show_users(auth_header):
     response = requests.get(paths_util.users_uri(), headers=auth_header)
     print('\nAll Users')
     for user in response.json()['objects']:
-        print(user['name'], end=', ')
+        if user.get('name'):
+            print(user['name'], end=', ')
     return ''
 
 
@@ -108,7 +109,14 @@ def look_at_map(auth_header):
     print('Quest: Lets look this up on the map')
     map_resp = requests.get(get_config()['server'] + get_config()['map_url'], headers=auth_header)
     print()
-    print('Map: The map: \n' + str(map_resp.json()))
+    if map_resp['status'] == 'success':
+        print('Map: \n')
+        for location in map_resp.json().get('objects'):
+            divide_line()
+            print('Name: ' + location['name'])
+            print('Host: ' + location['host'])
+            print('Tasks: ' + location['tasks'])
+            print('Visitors: ' + location['visitors'])
     print()
     return ''
 

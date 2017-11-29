@@ -1,9 +1,11 @@
 from quests.quest1.blackboard import show_users, choose_quest, look_at_map
-from quests.quest1.utilities import logout
+from quests.quest1.utilities import logout, divide_line
 
 
 def main_ui(auth_header):
-    print('\nNext Steps')
+    divide_line()
+    print('Welcome to the Main UI.')
+    print()
     print('1: Quests')
     print('3: Users')
     print('4: Map')
