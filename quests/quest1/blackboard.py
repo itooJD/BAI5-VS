@@ -87,6 +87,8 @@ def show_all_quests(auth_header):
         quest_no = input('Which quest do you want to tackle mighty Heroy? \n You can also go back to the main menu with [n] \n> ')
         if quest_no == 'n':
             return False
+    print(available_quests)
+    print(quest_no)
     quest = available_quests[int(quest_no)]
     return int(quest_no) + 1, quest
 
