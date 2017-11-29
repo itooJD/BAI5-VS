@@ -28,7 +28,7 @@ def group_url_id(id):
 
 
 def group_url():
-    return server_uri(get_config()['group_url'])
+    return server_uri(get_config()['taverna_url'] + get_config()['group_url'])
 
 
 def adventurers_uri():
@@ -37,20 +37,3 @@ def adventurers_uri():
 
 def adventurer_uri_name(name):
     return adventurers_uri() + '/' + name
-
-'''
-## Taverna
-taverna = server + '/taverna'
-groups = taverna + '/groups'
-
-
-def group(id):
-    return groups + '/' + id
-
-
-adventurers = taverna + '/adventurers'
-
-
-def adventurer(name):
-    return adventurers + '/' + name
-'''
