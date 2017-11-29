@@ -141,5 +141,8 @@ def visit_wounded(auth_header, quest_host, location_url):
     print()
     print('We arrived at {0}{1}. Lets see what where we can help!'.format(quest_host, location_url))
     visit_resp = requests.get('http://' + quest_host + location_url, headers=auth_header)
-    print(visit_resp.json())
+    print()
+    print(visit_resp.json()['message'])
+    for step in visit_resp.json()['steps_todo']:
+        visit_wounded(auth_header, quest_host, step)    
     return visit_resp.json()['token']
