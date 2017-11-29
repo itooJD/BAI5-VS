@@ -7,6 +7,7 @@ if __name__ == '__main__':
     paths = set_server_url_via_udp()
     print('Setup: Configuring flask-server')
     app, api = setup_flask()
+    app.debug = False
     print('Setup: Adding Rest-API')
     add_api(paths, api)
     print('Setup: Starting flask-server')
