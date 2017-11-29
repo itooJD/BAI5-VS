@@ -1,4 +1,5 @@
 from quests.quest1.blackboard import show_users, choose_quest
+from quests.quest1.taverna import taverna
 from quests.quest1.questing import look_at_map
 from quests.quest1.utilities import logout, divide_line
 from quests.quest1.user import whoami
@@ -9,6 +10,7 @@ def main_ui(auth_header):
     print('Welcome to the Main UI.')
     print()
     print('1: Quests')
+    print('2: Taverna')
     print('3: Users')
     print('4: Map')
     print('5: Logout')
@@ -19,6 +21,7 @@ def main_ui(auth_header):
 def main_filter(choice, auth_header):
     choice_filter = {
         '1': choose_quest,
+        '2': taverna,
         '3': show_users,
         '4': look_at_map,
         '5': logout,
@@ -27,17 +30,6 @@ def main_filter(choice, auth_header):
     if not choice_filter.get(choice):
         logout('')
     choice_filter.get(choice)(auth_header)
-
-
-
-
-
-def taverna_ui():
-    print('\nTaverna')
-    print('1: Adventurers')
-    print('2: Groups')
-    print('else to go back')
-    return input('Which list do you want to see: ')
 
 
 
