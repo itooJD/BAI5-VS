@@ -123,10 +123,14 @@ def get_adventurer(auth_header, name):
     if response.status_code == 200 or response.status_code == 201:
         print(response.json())
         user_url = response.json()['object']['url']
-        response = requests.get(user_url)
-        print(response)
-        print(response.json())
-        return user_interaction_ui(auth_header, response.json())
+        try:
+            response = requests.get(user_url)
+            print(response)
+            print(response.json())
+            return user_interaction_ui(auth_header, response.json())
+        except Exception:
+            pass
+        print('Could not connect to user')
 
 def change_adventurer(auth_header, name):
     response = requests.put(paths_util.adventurer_uri_name(name), headers=auth_header)
