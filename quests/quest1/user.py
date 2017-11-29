@@ -1,5 +1,6 @@
 import requests
-from quests.quest1.ui.ui import authentication_ui, divide_line
+
+from quests.quest1.ui import authentication_ui, divide_line
 from quests.utils import paths_util, change_config, get_config
 from quests.utils.paths_util import auth_token as token
 

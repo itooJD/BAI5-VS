@@ -1,5 +1,5 @@
+from quests.quest1.ui_filter import *
 from quests.utils import get_config
-from quests.quest1.ui.ui_filter import *
 
 
 def main_ui(auth_header, quest):
