@@ -25,6 +25,8 @@ def quest_filter(choice, auth_header):
 def choose_quest(auth_header):
     divide_line()
     quest_no, quest = quest_ui(auth_header)
+    print(quest_no)
+    print(quest)
     if not quest_no:
         return
     print(paths_util.quest_uri() + '/' + str(quest_no))
@@ -87,8 +89,6 @@ def show_all_quests(auth_header):
         quest_no = input('Which quest do you want to tackle mighty Heroy? \n You can also go back to the main menu with [n] \n> ')
         if quest_no == 'n':
             return False
-    print(available_quests)
-    print(quest_no)
     quest = available_quests[int(quest_no)]
     return int(quest_no) + 1, quest
 
