@@ -20,7 +20,7 @@ def quest_uri():
 
 
 def users_uri():
-    return server_uri(get_config()['blackboard_url'] + get_config()['user_url'])
+    return server_uri(get_config()['user_url'])
 
 
 def group(id):
