@@ -28,6 +28,7 @@ def choose_quest(auth_header):
     if not quest_no:
         return
     response = requests.get(paths_util.quest_uri() + '/' + str(quest_no), headers=auth_header)
+    print(response)
     quest_infos(response)
     change_config(current_quest, quest)
     return quest_starter(quest, quest_no, auth_header)
@@ -96,6 +97,8 @@ def print_quest(quest):
     print('URI:         ' + str(quest['_links']['self']))
     print('Tasks:       ' + str(quest['tasks']))
     print('Deliveries:  ' + str(quest['_links']['deliveries']))
+    if quest['requirements']:
+        print('Requirements:' + quest['requirements'])
 
 
 def show_users(auth_header):
@@ -114,7 +117,6 @@ def show_users(auth_header):
 
 def quest_infos(response):
     print('\nThe Quest we are going to solve!')
-    print(response.json())
     object = response.json()['object']
     print(object['name'])
     print(object['description'])
