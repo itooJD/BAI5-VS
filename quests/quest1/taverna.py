@@ -139,16 +139,16 @@ def get_adventurer(auth_header, name):
         user_url = response.json()['object']['url']
         try:
             response = requests.get(user_url)
-            print('User: ' + str(response.json()['user']))
+            print('User:           ' + str(response.json()['user']))
             print('How to message: ' + str(response.json()['messages']))
-            print('Idle: ' + str(response.json()['idle']))
-            print('Group: ' + str(response.json()['group']))
-            print('Hiring: ' + str(response.json()['hirings']))
-            print('Assignments: '+ str(response.json()['assignments']))
-            return user_interaction_ui(auth_header, response.json())
+            print('Idle:           ' + str(response.json()['idle']))
+            print('Group:          ' + str(response.json()['group']))
+            print('Hiring:         ' + str(response.json()['hirings']))
+            print('Assignments:    ' + str(response.json()['assignments']))
         except Exception:
+            print('Could not connect to user')
             pass
-        print('Could not connect to user')
+        return user_interaction_ui(auth_header, response.json())
 
 
 def send_message_to_user(auth_header, response_json):
