@@ -124,7 +124,7 @@ def show_adventurers(auth_header):
         if adventurer.get('url'):
             print(adventurer.get('url'), end='')
         print()
-        divide_line()
+    divide_line()
 
     if get_config()['group_uri'] != '':
         recruit = input('Want to recruit one of these guys? [id,id,id]')
@@ -178,6 +178,6 @@ def search_for_adventurer(auth_header):
     search_ui(auth_header, name)
 
 
-def show_groups():
-    response = requests.get(paths_util.group_url())
+def show_groups(auth_header):
+    response = requests.get(paths_util.group_url(), headers=auth_header)
     print(response)
