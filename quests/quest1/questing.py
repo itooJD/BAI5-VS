@@ -202,7 +202,7 @@ def main():
     # Authentication
     user_authenticated = False
     while not user_authenticated:
-        exit, headers = authentification()
+        exit, headers = authentication()
         exit_check(exit)
         user_authenticated = whoami(paths, headers)
     print('Authentication Token: ' + str(headers))
