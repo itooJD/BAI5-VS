@@ -137,13 +137,17 @@ def fight_rats(headers, quest_host, step):
     print('We got something... ew: ' + visit_resp.json()['token_name'])
     return visit_resp.json()['token'], visit_resp.json()['token_name']
 
+
 def visit_wounded(auth_header, quest_host, location_url):
     print()
     print('We arrived at {0}{1}. Lets see what where we can help!'.format(quest_host, location_url))
     visit_resp = requests.get('http://' + quest_host + location_url, headers=auth_header)
     print()
     print(visit_resp.json()['message'])
-    for step in visit_resp.json()['steps_todo']:
-        step_result = visit_wounded(auth_header, quest_host, step)
-        print(step_result)
+    if visit_resp.json()['steps_todo']:
+        for step in visit_resp.json()['steps_todo']:
+            step_result = visit_wounded(auth_header, quest_host, step)
+            print(step_result)
+    else:
+        print(visit_resp.json())
     return visit_resp.json()
