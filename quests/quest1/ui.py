@@ -15,13 +15,6 @@ def main_ui(auth_header):
     return main_filter(input('\nWhere do you want to go \n> '), auth_header)
 
 
-def authentication_ui():
-    print('1: Register')
-    print('2: Login')
-    print('Else: Exit')
-    return input('> ')
-
-
 def main_filter(choice, auth_header):
     choice_filter = {
         '1': choose_quest,
