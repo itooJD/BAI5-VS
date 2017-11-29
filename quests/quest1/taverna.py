@@ -214,11 +214,9 @@ def join_group(auth_header, groups):
     divide_line()
     group_id = input('Which group do you want to join then? [a valid id]\n> ')
     group_existant = False
-    for g in groups:
-        print(g)
-        if str(g['id']) == group_id:
-            group_existant = True
-            break
+    print(type(groups))
+    if group_id in groups:
+        group_existant = True
     if group_existant:
         response = requests.post(paths_util.group_url_id(group_id) + get_config()['member_url'], headers=auth_header)
         print(response)
