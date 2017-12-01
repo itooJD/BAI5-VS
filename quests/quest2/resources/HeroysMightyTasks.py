@@ -1,54 +1,60 @@
 import requests
 from flask_restful import Resource, reqparse
 from quests.utils import get_config
+from flask import request, abort, jsonify
+from quests.utils.config_manager import write_assignment, get_assignment
 
 
 # Post assignments
 class HeroysMightyTasks(Resource):
-    assignments = []
+    def get(self):
+        # depending if we want to save the data locally or not
+
+        json_data = request.get_json(force=True)
+        try:
+            if bool(json_data) and len(json_data) == 1 and json_data['heroy'] == 'user':
+                return jsonify(get_assignment())
+            else:
+                return jsonify({"message": "whaaat the hellllllll"})
+        except KeyError:
+            return abort(400)
 
     def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('id', required=True, location='args')
-        parser.add_argument('task', required=True, location='args')
-        parser.add_argument('resource', required=True, location='args')
-        parser.add_argument('method', required=True, location='args')
-        parser.add_argument('data', required=True, location='args')
-        parser.add_argument('callback', required=True, location='args')
-        parser.add_argument('message', required=True, location='args')
-        args = parser.parse_args()
+        try:
+            json_data = request.get_json(force=True)
+            if bool(json_data) and len(json_data) == 7:
+                write_assignment({
+                    "id": '"' + json_data['id'] + '"',
+                    "task": '"' + json_data['task'] + '"',
+                    "resource": '"' + json_data['resource'] + '"',
+                    "method": '"' + json_data['method'] + '"',
+                    "data": '"' + json_data['data'] + '"',
+                    "callback": '"' + json_data['callback'] + '"',
+                    "message": '"' + json_data['message'] + '"'
+                })
+                return jsonify({"message": "assignment received"})
+                # auto completing assignment?
+                '''
+                if json_data['method'] == 'GET':
+                    response = requests.post(json_data['resource'], headers=auth_header, data=json_data['data'])
+                elif json_data['method'] == 'POST':
+                    response = requests.post(json_data['resource'], headers=auth_header, data=json_data['data'])
+                else:
+                    return abort(400)
 
-        self.assignments.append(
-            {
-                'id': args['id'],
-                'task': args['task']
-            }
-        )
-
-        task = {
-            "id": "<some identity chosen by the initiator to identify this request>",
-            "task": "<uri to the task to accomplish>",
-            "resource": "<uri or url to resource where actions are required>",
-            "method": "<method to take – if already known>",
-            "data": "<data to use/post for the task>",
-            "callback": "<an url where the initiator can be reached with the results/token>",
-            "message": "<something you want to tell the other one>"
-        }
-        response = requests.post(args['resource'], data=task)
-        if response.status_code == 200:
-            answer = {
-                'id': args['id'],
-                'task': args['task'],
-                'resource': args['resource'],
-                'method': '<method used to get this result>',
-                'data': response.text,
-                'user': get_config()['hero_url'],
-                'message': 'Swifty swooty as ever has heroy done his job'
-            }
-            requests.post(args['callback'], data=answer)
-            return '', 200
-        else:
-            return '', 400
-
-    def get_mighty_tasks(self):
-        return self.assignments
+                if response.status_code == 200:
+                    answer = {
+                        'id': json_data['id'],
+                        'task': json_data['task'],
+                        'resource': json_data['resource'],
+                        'method': json_data['method'],
+                        'data': response,
+                        'user': hero_url,
+                        'message': 'Swifty swooty as ever has heroy done his job'
+                    }
+                    requests.post(json_data['callback'], data=answer)
+                    '''
+            else:
+                return abort(400)
+        except KeyError or TypeError:
+            return abort(400)
