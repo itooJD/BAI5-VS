@@ -157,7 +157,7 @@ def send_assignment(auth_header, response_json, user_url):
         "callback": get_config()['hero_url'],
         "message": "Do it nao xD"
     })
-    response = requests.post(user_url, data=data)
+    response = requests.post(user_url + response_json.get('assignments'), data=data)
     print(response.json())
     print('Send assignment')
 
