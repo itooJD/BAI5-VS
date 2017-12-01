@@ -106,7 +106,8 @@ def get_adventurer(auth_header, name):
         if not response.json()['object']['url'].startswith('http://'):
             user_url = 'http://' + response.json()['object']['url']
         else:
-            user_url = response.json()['object']['url']
+            user_url = response.json()['url'][0:response.json()['url'].find('/')]
+            print(user_url)
         try:
             user_info = requests.get(user_url)
             print('User:           ' + str(user_info.json()['user']))
@@ -158,8 +159,11 @@ def send_assignment(auth_header, response_json, user_url):
         "message": "Do it nao xD"
     })
     response = requests.post(user_url + response_json.get('assignments'), data=data)
-    print(response.json())
-    print('Send assignment')
+    if response.status_code == 200 or response.status_code == 201:
+        print(response.json())
+        print('Send assignment')
+    else:
+        print('Could not send the assignment. We are DOOOMED!')
 
 
 def change_adventurer(auth_header, name):
