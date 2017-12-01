@@ -165,7 +165,7 @@ def check_own_group(auth_header, groups):
     if get_config()[util_group] != '':
         print('Our group: ' + str(get_config()[util_group]))
         response = requests.get(paths_util.server_uri(get_config()[util_group]), headers=auth_header)
-        print(response.json())
+        print(str(response.json()))
     else:
         print('You are in no group!')
 
