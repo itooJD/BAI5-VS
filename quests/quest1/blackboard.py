@@ -25,8 +25,7 @@ def quest_filter(choice, auth_header):
 def choose_quest(auth_header):
     divide_line()
     result = quest_ui(auth_header)
-    print(str(result))
-    if result:
+    if result[0]:
         quest_no, quest = result[0][0], result[0][1]
         if not quest_no:
             return
@@ -115,9 +114,9 @@ def show_users(auth_header):
             try:
                 print(user['name'], end=', ')
             except UnicodeEncodeError:
-                pass
+                print('Unicode error :/ Bleep')
     print()
-    return ''
+    return
 
 
 def quest_infos(response):
