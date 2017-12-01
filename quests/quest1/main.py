@@ -2,12 +2,13 @@ from quests.utils.config_manager import set_server_url_via_udp
 from quests.quest1.ui import main_ui
 from quests.quest1.user import authentication, whoami
 from quests.quest1.utilities import exit_check, divide_line
-from quests.utils import get_config
-from quests.utils.paths_names import auth_token as token
+from quests.utils import get_config, change_config
+from quests.utils.paths_names import auth_token as token, util_req
 
 
 def main():
     divide_line()
+    change_config(util_req, [])
     if get_config()['server'] != '':
         research = input('Do you want to research for the blackboard host? [y] \n> ')
         if research == 'y':

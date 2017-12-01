@@ -56,12 +56,17 @@ def show_available_quests(auth_header):
         requirements_fullfilled = True
         if quest['requirements']:
             print(quest['requirements'])
-            for req in quest['requirements']:
-                print(str(req))
-                print(str(get_config()['requirements']))
-                if req not in get_config()['requirements']:
+            if type(quest['requirements']) == str:
+                if quest['requirements'] not in get_config()['requirements']:
                     requirements_fullfilled = False
                     break
+            else:
+                for req in quest['requirements']:
+                    print(str(req))
+                    print(str(get_config()['requirements']))
+                    if req not in get_config()['requirements']:
+                        requirements_fullfilled = False
+                        break
         if requirements_fullfilled:
             available_quests.append(idx)
             quests.append(quest)
