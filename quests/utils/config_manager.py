@@ -1,6 +1,7 @@
 import yaml, ast
 from socket import *
 from pathlib import Path
+from .paths_util import util_req
 __location__ = Path().cwd()
 
 
@@ -22,7 +23,10 @@ def write_config(paths):
 
 def change_config(path, data):
     config = get_config()
-    config[path] = data
+    if data == util_req:
+        config[path].append(data)
+    else:
+        config[path] = data
     write_config(config)
 
 

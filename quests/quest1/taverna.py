@@ -1,7 +1,7 @@
 import requests, json
 from quests.quest1.utilities import divide_line
 from quests.utils import paths_util, get_config, change_config
-from quests.utils.paths_util import util_group, util_user
+from quests.utils.paths_util import util_group, util_user, util_req
 
 
 def taverna_ui(auth_header):
@@ -265,13 +265,17 @@ def join_group(auth_header, groups):
     divide_line()
     group_id = input('Which group do you want to join then? [a valid id]\n> ')
     group_existant = False
-    print(type(groups))
     if group_id in groups:
         group_existant = True
     if group_existant:
         response = requests.post(paths_util.group_url_id(group_id) + get_config()['member_url'], headers=auth_header)
+        group_get = requests.post(paths_util.group_url_id(group_id), headers=auth_header)
+        print(group_get.json())
         print(response.json())
         print('Joined Group')
+        if response.status_code == 200 or response.status_code == 201:
+            change_config(util_group, response.json()['url'])
+            change_config(util_req,util_group)
     else:
         print('The group with this id does not exist')
 
