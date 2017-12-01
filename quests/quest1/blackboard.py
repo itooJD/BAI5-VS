@@ -25,6 +25,7 @@ def quest_filter(choice, auth_header):
 def choose_quest(auth_header):
     divide_line()
     result = quest_ui(auth_header)
+    print(str(result))
     if result:
         quest_no, quest = result[0][0], result[0][1]
         if not quest_no:
