@@ -109,7 +109,10 @@ def check_members(auth_header, groups):
     if group_id == 'y':
         group_url = get_config()[util_group]
         if group_url != '':
-            requests.get(group_url + get_config()['member_url'], headers=auth_header)
+            response = requests.get(group_url + get_config()['member_url'], headers=auth_header)
+            print('Members: ')
+            for member in response.json()['objects']:
+                print_member(member)
         else:
             print('Well you aint in no group duh.')
     else:
@@ -120,17 +123,20 @@ def check_members(auth_header, groups):
             response = requests.get(paths_util.group_url_id(group_id) + get_config()['member_url'], headers=auth_header)
             print('Members: ')
             for member in response.json()['objects']:
-                if member.get('heroclass'):
-                    print(member.get('heroclass') + ' | ', end='')
-                if member.get('user', ''):
-                    print(member.get('user') + ' | ', end='')
-                if member.get('capabilities'):
-                    print(member.get('capabilities') + ' | ', end='')
-                if member.get('url'):
-                    print(member.get('url'), end='')
-                print()
+                print_member(member)
         else:
             print('The group with the given id does not exist')
+
+def print_member(member_json):
+    if member_json.get('heroclass'):
+        print(member_json.get('heroclass') + ' | ', end='')
+    if member_json.get('user', ''):
+        print(member_json.get('user') + ' | ', end='')
+    if member_json.get('capabilities'):
+        print(member_json.get('capabilities') + ' | ', end='')
+    if member_json.get('url'):
+        print(member_json.get('url'), end='')
+    print()
 
 
 def leave_group(auth_header, groups):
@@ -157,8 +163,8 @@ def leave_group(auth_header, groups):
 def check_own_group(auth_header, groups):
     divide_line()
     if get_config()[util_group] != '':
-        print('Our group: ' + str(get_config()['group_uri']))
-        response = requests.get(paths_util.server_uri(get_config()['group_uri']), headers=auth_header)
+        print('Our group: ' + str(get_config()[util_group]))
+        response = requests.get(paths_util.server_uri(get_config()[util_group]), headers=auth_header)
         print(response.json())
     else:
         print('You are in no group!')
