@@ -14,6 +14,7 @@ def group_ui(auth_header, groups):
     print('5: Leave a group')
     print('6: Check your own group out')
     print('7: Show me all the groups')
+    print('8: Send assignment')
     print()
     return group_filter(input('Sure about that? \n> '), auth_header, groups)
 
@@ -26,7 +27,8 @@ def group_filter(choice, auth_header, groups):
         '4': check_members,
         '5': leave_group,
         '6': check_own_group,
-        '7': show_all_groups
+        '7': show_all_groups,
+        '8': send_assignment
     }
     if not choice_filter.get(choice):
         return False
