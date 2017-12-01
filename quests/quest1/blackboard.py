@@ -1,7 +1,7 @@
 import requests
 from quests.quest1.utilities import divide_line, logout
 from quests.utils import paths_util, get_config, change_config
-from quests.utils.paths_util import current_quest
+from quests.utils.paths_names import current_quest
 from quests.quest1.questing import solve_quests
 
 

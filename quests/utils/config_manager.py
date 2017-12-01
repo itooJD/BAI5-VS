@@ -1,7 +1,7 @@
 import yaml, ast
 from socket import *
 from pathlib import Path
-from .paths_util import util_req
+from .paths_names import util_req
 __location__ = Path().cwd()
 
 

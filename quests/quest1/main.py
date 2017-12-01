@@ -3,7 +3,7 @@ from quests.quest1.ui import main_ui
 from quests.quest1.user import authentication, whoami
 from quests.quest1.utilities import exit_check, divide_line
 from quests.utils import get_config
-from quests.utils.paths_util import auth_token as token
+from quests.utils.paths_names import auth_token as token
 
 
 def main():

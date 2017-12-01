@@ -1,7 +1,7 @@
 import requests, json
 from quests.quest1.utilities import divide_line
 from quests.utils import paths_util, get_config, change_config
-from quests.utils.paths_util import util_group, util_user, util_req
+from quests.utils.paths_names import util_group, util_user, util_req
 
 
 def taverna_ui(auth_header):
