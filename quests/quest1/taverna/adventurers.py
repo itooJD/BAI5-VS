@@ -103,7 +103,10 @@ def get_adventurer(auth_header, name):
     response = requests.get(paths_util.adventurer_uri_name(name), headers=auth_header)
     if response.status_code == 200 or response.status_code == 201:
         print('\nThe User: ' + str(response.json()))
-        user_url = response.json()['object']['url']
+        if not response.json()['object']['url'].startswith('http://'):
+            user_url = 'http://' + response.json()['object']['url']
+        else:
+            user_url = response.json()['object']['url']
         try:
             user_info = requests.get(user_url)
             print('User:           ' + str(user_info.json()['user']))
