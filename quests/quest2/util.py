@@ -1,4 +1,4 @@
-hero_url = '/heroyjenkins'
+hero_url = '/'
 diary_url = "/diary"
 taverna_url = "/taverna"
 assignment_url = '/noTimeToSleep'

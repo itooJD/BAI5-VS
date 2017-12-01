@@ -1,5 +1,6 @@
 ---
 server : ''
+own_address: ''
 user_url : '/users'
 login_url : '/login'
 whoami_url : '/whoami'
@@ -20,8 +21,10 @@ group_url : '/groups'
 adventurers_url : '/adventurers'
 member_url : '/members'
 group: ''
+current_assignment: ''
 
 username : ''
 requirements : []
 quests : []
+messages : []
 ...
