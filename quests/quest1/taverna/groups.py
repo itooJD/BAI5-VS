@@ -110,7 +110,6 @@ def check_members(auth_header, groups):
             group_existant = True
         if group_existant:
             response = requests.get(paths_util.group_url_id(group_id) + get_config()['member_url'], headers=auth_header)
-            print(response.json())
             print('Members: ')
             for member in response.json()['objects']:
                 if member.get('heroclass'):
