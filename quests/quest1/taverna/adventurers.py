@@ -101,6 +101,7 @@ def user_interaction_filter(choice, auth_header, response_json, user_url):
 
 def get_adventurer(auth_header, name):
     response = requests.get(paths_util.adventurer_uri_name(name), headers=auth_header)
+    divide_line()
     if response.status_code == 200 or response.status_code == 201:
         print('\nThe User: ' + str(response.json()))
         if not response.json()['object']['url'].startswith('http://'):
@@ -109,7 +110,6 @@ def get_adventurer(auth_header, name):
             user_url = response.json()['url'][0:response.json()['url'].find('/')]
             if user_url[:-1] == '/':
                 user_url = user_url[:-1]
-            print(user_url)
         try:
             user_info = requests.get(user_url)
             print('User:           ' + str(user_info.json()['user']))
@@ -130,6 +130,8 @@ def send_message_to_user(auth_header, response_json, user_url):
     print('It is time to send a message!')
     message = input('Your message:\n> ')
     data = '{"message": "' + message + '"}'
+    print(user_url)
+    print(response_json['messages'])
     response = requests.post(user_url + response_json['messages'], data=data)
     if response.status_code == 200 or response.status_code == 201:
         print('The message has successfully been delivered.')
