@@ -14,6 +14,7 @@ def group_ui(auth_header, groups):
     print('5: Leave a group')
     print('6: Check your own group out')
     print('7: Show me all the groups')
+    print('8: Send assignment to own group')
     print()
     return group_filter(input('Sure about that? \n> '), auth_header, groups)
 
@@ -26,7 +27,8 @@ def group_filter(choice, auth_header, groups):
         '4': check_members,
         '5': leave_group,
         '6': check_own_group,
-        '7': show_all_groups
+        '7': show_all_groups,
+        '8': send_assignment_to_group
     }
     if not choice_filter.get(choice):
         return False
@@ -69,7 +71,7 @@ def join_group(auth_header, groups):
 
 
 def delete_your_group(auth_header, groups):
-    response = requests.delete(paths_util.server_uri(get_config()['group_uri']), headers=auth_header)
+    response = requests.delete(paths_util.server_uri(get_config()[util_group]), headers=auth_header)
     if response.status_code == 200:
         change_config(util_group, '')
         rm_from(util_req,util_group)
@@ -85,8 +87,8 @@ def delete_your_group(auth_header, groups):
 def create_group(auth_header, groups):
     divide_line()
     create_new = False
-    if get_config()['group_uri'] != '':
-        print('You are already in a group! ' + str(get_config()['group_uri']))
+    if get_config()[util_group] != '':
+        print('You are already in a group! ' + str(get_config()[util_group]))
         create = input('Do you really want to create another one? [y]\n> ')
         if create == 'y':
             create_new = True
@@ -170,30 +172,31 @@ def check_own_group(auth_header, groups):
         print('You are in no group!')
 
 
-def send_assignment_to_group(auth_header, id=None, task=None, resource=None, method=None, data=None, message=None):
-    if not id:
-        id = input('ID:         ')
-    if not task:
-        task = input('Tasknumber: ')
-    if not resource:
-        resource = input('Resource:   ')
-    if not method:
-        mth = input('Method:     ')
-    if not data:
-        data = input('Data:       ')
-    if not message:
-        message = input('Message:    ')
+def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, method=None, data=None, message=None):
+    if get_config()[util_group] != '':
+        if not id:
+            id = input('ID:         ')
+        if not task:
+            task = input('Tasknumber: ')
+        if not resource:
+            resource = input('Resource:   ')
+        if not method:
+            mth = input('Method:     ')
+        if not data:
+            data = input('Data:       ')
+        if not message:
+            message = input('Message:    ')
 
-    response = requests.get(paths_util.server_uri(get_config()[util_group]) + get_config()['member_url'],
-                            headers=auth_header)
-    for member in response.json()['objects']:
-        data = json.dumps({
-            "id": id,
-            "task": '/blackboard/tasks/' + task,
-            "resource": resource,
-            "method": method,
-            "data": data,
-            "callback": get_config()['hero_url'],
-            "message": message
-        })
-        response = requests.post(member + response.json().get('assignments'), data=data)
+        response = requests.get(paths_util.server_uri(get_config()[util_group]) + get_config()['member_url'],
+                                headers=auth_header)
+        for member in response.json()['objects']:
+            data = json.dumps({
+                "id": id,
+                "task": '/blackboard/tasks/' + task,
+                "resource": resource,
+                "method": method,
+                "data": data,
+                "callback": paths_util.server_uri(get_config()['hero_url']),
+                "message": message
+            })
+            response = requests.post(member + response.json().get('assignments'), data=data)
