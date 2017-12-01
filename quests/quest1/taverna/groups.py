@@ -181,9 +181,11 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
         if not resource:
             resource = input('Resource:   ')
         if not method:
-            mth = input('Method:     ')
+            method = input('Method:     ')
         if not data:
             data = input('Data:       ')
+            if not data:
+                data = ''
         if not message:
             message = input('Message:    ')
 
