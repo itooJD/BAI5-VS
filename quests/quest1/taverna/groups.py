@@ -1,4 +1,4 @@
-import requests
+import requests, json
 from quests.utils import paths_util, get_config, change_config, add_to, rm_from
 from quests.quest1.utilities import divide_line
 from quests.utils.paths_names import util_group, util_user, util_req
@@ -96,6 +96,8 @@ def create_group(auth_header, groups):
         response = requests.post(paths_util.group_url(), headers=auth_header)
         change_config(util_group,response.json()['object'][0]['_links']['self'])
         print(response.json()['message'])
+    show_all_groups(auth_header, groups)
+    divide_line()
     join = input('Well you founded it... You want in? [y]\n> ')
     if join == 'y':
         join_group(auth_header, groups)
@@ -154,9 +156,38 @@ def leave_group(auth_header, groups):
 
 def check_own_group(auth_header, groups):
     divide_line()
-    if get_config()['group_uri'] != '':
+    if get_config()[util_group] != '':
         print('Our group: ' + str(get_config()['group_uri']))
         response = requests.get(paths_util.server_uri(get_config()['group_uri']), headers=auth_header)
         print(response.json())
     else:
         print('You are in no group!')
+
+
+def send_assignment_to_group(auth_header, id=None, task=None, resource=None, method=None, data=None, message=None):
+    if not id:
+        id = input('ID:         ')
+    if not task:
+        task = input('Tasknumber: ')
+    if not resource:
+        resource = input('Resource:   ')
+    if not method:
+        mth = input('Method:     ')
+    if not data:
+        data = input('Data:       ')
+    if not message:
+        message = input('Message:    ')
+
+    response = requests.get(paths_util.server_uri(get_config()[util_group]) + get_config()['member_url'],
+                            headers=auth_header)
+    for member in response.json()['objects']:
+        data = json.dumps({
+            "id": id,
+            "task": '/blackboard/tasks/' + task,
+            "resource": resource,
+            "method": method,
+            "data": data,
+            "callback": get_config()['hero_url'],
+            "message": message
+        })
+        response = requests.post(member + response.json().get('assignments'), data=data)

@@ -1,5 +1,6 @@
 import requests
 from quests.utils import get_config
+from quests.utils.paths_names import util_group
 from quests.quest1.utilities import divide_line
 
 
@@ -14,7 +15,7 @@ def solve_quests(quest, quest_no, auth_header):
     elif int_quest_no == 2:
         deliver_token = visit_rats(auth_header, quest_host, location_url)
         deliver(auth_header, deliver_token, quest_no, quest['tasks'])
-    elif int_quest_no == 3:
+    elif int_quest_no == 3 and get_config()[util_group] != '':
         deliver_token = visit_wounded(auth_header, quest_host, location_url)
         deliver(auth_header, deliver_token, quest_no, quest['tasks'])
     else:

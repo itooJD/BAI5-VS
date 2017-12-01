@@ -55,15 +55,12 @@ def show_available_quests(auth_header):
     for idx, quest in enumerate(response.json()['objects']):
         requirements_fullfilled = True
         if quest['requirements']:
-            print(quest['requirements'])
             if type(quest['requirements']) == str:
                 if quest['requirements'] not in get_config()['requirements']:
                     requirements_fullfilled = False
                     break
             else:
                 for req in quest['requirements']:
-                    print(str(req))
-                    print(str(get_config()['requirements']))
                     if req not in get_config()['requirements']:
                         requirements_fullfilled = False
                         break
