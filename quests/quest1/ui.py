@@ -1,31 +1,37 @@
-def authentication_ui():
-    print('1: Register')
-    print('2: Login')
-    print('Else: Exit')
-    return input('> ')
+from quests.quest1.blackboard import show_users, choose_quest
+from quests.quest1.taverna import taverna
+from quests.quest1.questing import look_at_map
+from quests.quest1.utilities import logout, divide_line
+from quests.quest1.user import whoami
 
 
-def main_ui(quest, group_uri):
-    print('\nNext Steps')
+def main_ui(auth_header):
+    divide_line()
+    print('Welcome to the Main UI.')
+    print()
     print('1: Quests')
     print('2: Taverna')
     print('3: Users')
     print('4: Map')
     print('5: Logout')
-    if bool(quest):
-        print('6: Quest')
-    if group_uri != '':
-        print('7: Group')
     print('else to exit')
-    return input('Where do you want to go: ')
+    return main_filter(input('\nWhere do you want to go \n> '), auth_header)
 
 
-def taverna_ui():
-    print('\nTaverna')
-    print('1: Adventurers')
-    print('2: Groups')
-    print('else to go back')
-    return input('Which list do you want to see: ')
+def main_filter(choice, auth_header):
+    choice_filter = {
+        '1': choose_quest,
+        '2': taverna,
+        '3': show_users,
+        '4': look_at_map,
+        '5': logout,
+        '6': whoami
+    }
+    if not choice_filter.get(choice):
+        logout('')
+    choice_filter.get(choice)(auth_header)
+
+
 
 
 def group_ui(group_uri):

@@ -1,5 +1,5 @@
 import os, requests
-from .utils import paths, serializer as ser, outputs
+from quests.utils import paths_util, serializer as ser, outputs
 
 
 class Authentificator():
@@ -12,19 +12,19 @@ class Authentificator():
             password = input('Password: ')
             if choice == '1':
                 user_data = '{"name":"' + username + '","password":"' + password + '"}'
-                response = requests.post(paths.users, data=user_data)
+                response = requests.post(paths_util.users, data=user_data)
                 print(response.json()['message'])
-            response = requests.get(paths.login, auth=(username, password))
+            response = requests.get(paths_util.login, auth=(username, password))
             if response.status_code == 200:
                 print(response.json()['message'])
                 auth_token = response.json()['token']
                 auth_header = {'Authorization': 'Token ' + auth_token}
-                ser.serialize(auth_token, paths.auth_token_file)
+                ser.serialize(auth_token, paths_util.auth_token_file)
         else:
             sleep = True
         return sleep, auth_header
 
 
     def logout(self):
-        os.remove(paths.auth_token_file)
+        os.remove(paths_util.auth_token_file)
         return {}

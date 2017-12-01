@@ -4,27 +4,27 @@ from .questing_resources import blackboard as bb
 from .questing_resources import users, game_map, taverna, group
 from .questing_resources.authentification import authentification as auth, logout
 from .questing_resources.quest import my_quest
-from ..utils import paths, serializer as ser, outputs
+from ..utils import paths_util, serializer as ser, outputs
 
 
 try:
-    auth_token = ser.de_serialize(paths.auth_token_file)
+    auth_token = ser.de_serialize(paths_util.auth_token_file)
     auth_header = {'Authorization': 'Token ' + auth_token}
 except Exception:
     auth_header = {}
 
 try:
-    group_uri = ser.de_serialize(paths.group_link_file)
+    group_uri = ser.de_serialize(paths_util.group_link_file)
 except Exception:
     group_uri = ''
 
 try:
-    quest = ser.de_serialize(paths.quest_file)
+    quest = ser.de_serialize(paths_util.quest_file)
 except Exception:
     quest = {}
 
 try:
-    tokens_id, tokens = ser.de_serialize(paths.tokens_file)
+    tokens_id, tokens = ser.de_serialize(paths_util.tokens_file)
 except Exception:
     tokens_id = {}
     tokens = {}
@@ -37,7 +37,7 @@ while not sleep:
         sleep, auth_header = auth(auth_header)
     else:
         # My Infos
-        user_name = outputs.my_infos(requests.get(paths.whoami, headers=auth_header))
+        user_name = outputs.my_infos(requests.get(paths_util.whoami, headers=auth_header))
         # MAIN UI
         choice_main = outputs.main_ui(quest, group_uri)
         if choice_main == '1':
@@ -46,7 +46,7 @@ while not sleep:
         elif choice_main == '2':
             # Entering the Taverna
             adventurer_data = '{"heroclass":"juggernaut","capabilities":"None","url":"172.19.0.68:5000/heroyjenkins"}'
-            requests.post(paths.adventurers, headers=auth_header, data=adventurer_data)
+            requests.post(paths_util.adventurers, headers=auth_header, data=adventurer_data)
             print('\nEntering the Taverna')
             in_taverna = True
             while in_taverna:
@@ -56,22 +56,22 @@ while not sleep:
                     taverna.adventurers(auth_header, group_uri)
                 elif choice_taverna == '2':
                     # Group UI
-                    ids_groups = outputs.groups(requests.get(paths.groups, headers=auth_header))
+                    ids_groups = outputs.groups(requests.get(paths_util.groups, headers=auth_header))
                     choice_group = outputs.group_ui(group_uri)
                     if choice_group in ids_groups:
-                        group_uri_tmp = outputs.group(requests.get(paths.group(choice_group), headers=auth_header))
+                        group_uri_tmp = outputs.group(requests.get(paths_util.group(choice_group), headers=auth_header))
                         if group_uri == '':
                             if input('do you want to join(y/else): ') == 'y':
-                                response = requests.post(paths.group(choice_group) + '/members', headers=auth_header)
+                                response = requests.post(paths_util.group(choice_group) + '/members', headers=auth_header)
                                 print(response.json()['message'])
                                 if response.json()['message'] == 'Welcome to the group':
                                     group_uri = group_uri_tmp
                     elif choice_group == 'new' and group_uri == '':
-                        response = requests.post(paths.groups, headers=auth_header)
+                        response = requests.post(paths_util.groups, headers=auth_header)
                         group_uri = response.json()['object'][0]['_links']['self']
-                        response = requests.post(paths.server_uri(group_uri) + '/members', headers=auth_header)
+                        response = requests.post(paths_util.server_uri(group_uri) + '/members', headers=auth_header)
                         print(response.json())
-                    ser.serialize(group_uri, paths.group_link_file)
+                    ser.serialize(group_uri, paths_util.group_link_file)
                 else:
                     # Leaving the Taverna
                     print('Leaving the Taverna')

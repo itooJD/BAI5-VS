@@ -1,12 +1,11 @@
-from utils import paths
-
 from .taverna import *
+from quests.utils import paths_util
 
 
 def group(auth_header, group_uri, user_name, quest):
     in_group = True
     while in_group:
-        obj = requests.get(paths.server_uri(group_uri), headers=auth_header).json()['object']
+        obj = requests.get(paths_util.server_uri(group_uri), headers=auth_header).json()['object']
         print('\nGroup: ', obj['id'], '\t', obj['owner'])
         print('Members')
         members = dict()
@@ -24,12 +23,12 @@ def group(auth_header, group_uri, user_name, quest):
         try:
             if choice_group == '1':
                 if user_name == obj['owner']:
-                    print(requests.delete(paths.server_uri(group_uri), headers=auth_header).json()['message'])
+                    print(requests.delete(paths_util.server_uri(group_uri), headers=auth_header).json()['message'])
                 else:
-                    requests.delete(paths.adventurer(user_name), headers=auth_header)
+                    requests.delete(paths_util.adventurer_uri_name(user_name), headers=auth_header)
                     print('You left the Group')
                 group_uri = ''
-                ser.serialize(group_uri, paths.group_link_file)
+                ser.serialize(group_uri, paths_util.group_link_file)
             elif choice_group == '2':
                 choice_member = input('whom do you want to send the message to: ')
                 if choice_member in members:

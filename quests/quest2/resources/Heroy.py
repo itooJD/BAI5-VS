@@ -14,8 +14,8 @@ class Heroy(Resource):
             "idle": self.idle,
             "group": paths['group_uri'],
             "hirings": paths['hero_url'],
-            "assignments": paths['hero_url'] + paths['assignment_url'],
-            "messages": paths['hero_url'] + paths['diary_url']
+            "assignments": paths['assignment_url'],
+            "messages": paths['diary_url']
         })
 
     def post(self):

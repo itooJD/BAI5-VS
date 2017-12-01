@@ -1,23 +1,22 @@
 import requests
-from utils import paths
-
-from quests.utils import serializer as ser
+from quests.utils import paths_util, get_config, change_config
+from quests.utils.paths_util import current_quest
 
 
 def quests(auth_header, actual_quest):
-    choice_quest, quests = quests_infos(requests.get(paths.quests, headers=auth_header))
+    choice_quest, quests = quests_infos(requests.get(get_config()['quests'], headers=auth_header))
     if choice_quest in quests:
         quest = quests[choice_quest]
         # Quest Info
-        quest_infos(requests.get(paths.server_uri(quest['uri']), headers=auth_header))
+        quest_infos(requests.get(paths_util.server_uri(quest['uri']), headers=auth_header))
         tasks = dict()
         for i in range(len(quest['tasks'])):
             tasks.update(
-                {str(i + 1): task_infos(requests.get(paths.server_uri(quest['tasks'][i]), headers=auth_header))})
+                {str(i + 1): task_infos(requests.get(paths_util.server_uri(quest['tasks'][i]), headers=auth_header))})
         quest['tasks'] = tasks
         if not bool(actual_quest):
             if input('do you want to accept the quest (y/else): ') == 'y':
-                ser.serialize(quest, paths.quest_file)
+                change_config(current_quest, quest)
                 return quest
         return actual_quest
 
