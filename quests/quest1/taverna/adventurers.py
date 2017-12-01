@@ -128,7 +128,8 @@ def send_message_to_user(auth_header, response_json, user_url):
     print('It is time to send a message!')
     message = input('Your message:\n> ')
     data = '{"message": "' + message + '"}'
-    if user_url[:-1] == '//':
+    if user_url[-1] == '/':
+        print('WOW')
         user_url = user_url[:-1]
     print(user_url)
     print(response_json['messages'])
