@@ -107,6 +107,8 @@ def get_adventurer(auth_header, name):
             user_url = 'http://' + response.json()['object']['url']
         else:
             user_url = response.json()['url'][0:response.json()['url'].find('/')]
+            if user_url[:-1] == '/':
+                user_url = user_url[:-1]
             print(user_url)
         try:
             user_info = requests.get(user_url)
