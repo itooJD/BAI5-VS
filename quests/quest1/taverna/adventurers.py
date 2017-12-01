@@ -104,7 +104,6 @@ def get_adventurer(auth_header, name):
         user_url = response.json()['object']['url']
         try:
             user_info = requests.get(user_url)
-            print(response.json())
             print('User:           ' + str(user_info.json()['user']))
             print('Messages:       ' + str(user_info.json()['messages']))
             print('Idle:           ' + str(user_info.json()['idle']))
@@ -125,7 +124,7 @@ def send_message_to_user(auth_header, response_json, user_url):
     data = '{"message": "' + message + '"}'
     response = requests.post(user_url + response_json['messages'], data=data)
     if response.status_code == 200 or response.status_code == 201:
-        print('The message´has successfully been delivered!')
+        print('The message has successfully been delivered.')
         print(response.json())
     else:
         print('Message could not be delivered')
