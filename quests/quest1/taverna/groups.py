@@ -1,5 +1,5 @@
 import requests
-from quests.utils import paths_util, get_config, change_config
+from quests.utils import paths_util, get_config, change_config, add_to, rm_from
 from quests.quest1.utilities import divide_line
 from quests.utils.paths_names import util_group, util_user, util_req
 
@@ -49,13 +49,18 @@ def join_group(auth_header, groups):
         group_existant = True
     if group_existant:
         response = requests.post(paths_util.group_url_id(group_id) + get_config()['member_url'], headers=auth_header)
-        print(response.json())
-        group_get = requests.get(paths_util.group_url_id(group_id), headers=auth_header)
-        print(group_get.json())
-        print('Joined Group')
+        print(response.json()['message'] + ' ' + str(group_id))
         if response.status_code == 200 or response.status_code == 201:
-            change_config(util_group, response.json()['url'])
-            change_config(util_req,util_group)
+            print('Joined Group!')
+            group_get = requests.get(paths_util.group_url_id(group_id), headers=auth_header)
+            if group_get.status_code == 200 or group_get.status_code == 201:
+                group_url = group_get.json()['object']['_links']['self']
+                change_config(util_group, paths_util.server_uri(group_url))
+                add_to(util_req,util_group)
+            else:
+                print('Could not find the group. Where did they hide?!')
+        else:
+            print('Seems they dont want you in this group. Could not join.')
     else:
         print('The group with this id does not exist')
 
@@ -64,12 +69,14 @@ def delete_your_group(auth_header, groups):
     response = requests.delete(paths_util.server_uri(get_config()['group_uri']), headers=auth_header)
     if response.status_code == 200:
         change_config(util_group, '')
+        rm_from(util_req,util_group)
         print('Deleted your group!')
     else:
+        print('Could not delete the group :C')
         print(response.json())
 
 
-def create_group(auth_header, _):
+def create_group(auth_header, groups):
     divide_line()
     create_new = False
     if get_config()['group_uri'] != '':
@@ -83,28 +90,38 @@ def create_group(auth_header, _):
         response = requests.post(paths_util.group_url(), headers=auth_header)
         change_config(util_group,response.json()['object'][0]['_links']['self'])
         print(response.json()['message'])
+    join = input('Well you founded it... You want in? [y]\n> ')
+    if join == 'y':
+        join_group(auth_header, groups)
 
 
 def check_members(auth_header, groups):
     divide_line()
-    group_id = input('Which group do you want to join then? [a valid id]\n> ')
-    group_existant = False
-    if group_id in groups.keys():
-        group_existant = True
-    if group_existant:
-        response = requests.get(paths_util.group_url_id(group_id) + get_config()['member_url'], headers=auth_header)
-        for member in response.json()['objects']:
-            if member.get('heroclass'):
-                print(member.get('heroclass') + ' | ', end='')
-            if member.get('user', ''):
-                print(member.get('user') + ' | ', end='')
-            if member.get('capabilities'):
-                print(member.get('capabilities') + ' | ', end='')
-            if member.get('url'):
-                print(member.get('url'), end='')
-            print()
+    group_id = input('So which groups members are ya lookin for? Your own? [a valid id / y (for own)]\n> ')
+    if group_id == 'y':
+        group_url = get_config()[util_group]
+        if group_url != '':
+            requests.get(group_url + get_config()['member_url'], headers=auth_header)
+        else:
+            print('Well you aint in no group duh.')
     else:
-        print('The group with the given id does not exist')
+        group_existant = False
+        if group_id in groups.keys():
+            group_existant = True
+        if group_existant:
+            response = requests.get(paths_util.group_url_id(group_id) + get_config()['member_url'], headers=auth_header)
+            for member in response.json()['objects']:
+                if member.get('heroclass'):
+                    print(member.get('heroclass') + ' | ', end='')
+                if member.get('user', ''):
+                    print(member.get('user') + ' | ', end='')
+                if member.get('capabilities'):
+                    print(member.get('capabilities') + ' | ', end='')
+                if member.get('url'):
+                    print(member.get('url'), end='')
+                print()
+        else:
+            print('The group with the given id does not exist')
 
 
 def leave_group(auth_header, groups):

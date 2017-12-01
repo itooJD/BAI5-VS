@@ -23,10 +23,19 @@ def write_config(paths):
 
 def change_config(path, data):
     config = get_config()
-    if data == util_req:
-        config[path].append(data)
-    else:
-        config[path] = data
+    config[path] = data
+    write_config(config)
+
+
+def add_to(token, data):
+    config = get_config()
+    config[token].append(data)
+    write_config(config)
+
+
+def rm_from(token, data):
+    config = get_config()
+    config[token].remove(data)
     write_config(config)
 
 

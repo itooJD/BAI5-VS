@@ -1,6 +1,6 @@
 current_quest = 'current_quest'
 auth_token = 'auth_token'
 util_tokens = 'util_tokens'
-util_group = 'group_uri'
+util_group = 'groups'
 util_user = 'username'
 util_req = 'requirements'
