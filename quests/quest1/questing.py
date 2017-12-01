@@ -148,7 +148,6 @@ def visit_wounded(auth_header, quest_host, location_url):
     if visit_resp.json().get('steps_todo'):
         for step in visit_resp.json()['steps_todo']:
             step_result = visit_wounded(auth_header, quest_host, step)
-            print(step_result)
             tokens.append(step_result)
     else:
         divide_line()

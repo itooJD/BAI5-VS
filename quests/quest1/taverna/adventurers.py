@@ -150,11 +150,13 @@ def send_assignment(auth_header, response_json, user_url):
         "task": '/blackboard/tasks/4' ,
         "resource": 'http://172.19.0.5:5000/stretcher/handle/back',
         "method": "POST",
-        "data": 'token',
+        "data": '',
         "callback": get_config()['hero_url'],
         "message": "Do it nao xD"
     })
     response = requests.post(user_url, data=data)
+    print(response.json())
+    print('Send assignment')
 
 
 def change_adventurer(auth_header, name):
