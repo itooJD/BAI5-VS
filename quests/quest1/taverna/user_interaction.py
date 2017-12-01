@@ -35,8 +35,6 @@ def send_message_to_user(auth_header, response_json, user_url):
     print('It is time to send a message!')
     message = input('Your message:\n> ')
     data = '{"message": "' + message + '"}'
-    print(user_url)
-    print(response_json['messages'])
     response = requests.post(user_url + response_json['messages'], data=data)
     if response.status_code == 200 or response.status_code == 201:
         print('The message has successfully been delivered.')

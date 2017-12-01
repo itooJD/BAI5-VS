@@ -189,7 +189,6 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
         if not message:
             message = input('Message:    ')
 
-        print(paths_util.server_uri(get_config()[util_group]) + get_config()['member_url'])
         response = requests.get(get_config()[util_group] + get_config()['member_url'],
                                 headers=auth_header)
         print(response)
@@ -204,4 +203,11 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
                 "callback": paths_util.server_uri(get_config()['hero_url']),
                 "message": message
             })
-            response = requests.post(member + response.json().get('assignments'), data=data)
+            if not response.json()['object']['url'].startswith('http://'):
+                user_url = 'http://' + response.json()['object']['url']
+            else:
+                user_url = response.json()['url'][0:response.json()['url'].find('/')]
+            if user_url[-1] == '/':
+                user_url = user_url[:-1]
+            response = requests.get(user_url)
+            print(response.json())
