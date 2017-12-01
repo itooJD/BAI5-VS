@@ -27,8 +27,7 @@ def group_filter(choice, auth_header, groups):
         '4': check_members,
         '5': leave_group,
         '6': check_own_group,
-        '7': show_all_groups,
-        '8': send_assignment
+        '7': show_all_groups
     }
     if not choice_filter.get(choice):
         return False
@@ -59,6 +58,9 @@ def join_group(auth_header, groups):
                 group_url = group_get.json()['object']['_links']['self']
                 change_config(util_group, paths_util.server_uri(group_url))
                 add_to(util_req,util_group)
+                adventurer_data = '{"heroclass":"juggernaut","capabilities":"' + str(
+                    get_config()[util_req]) + '","url":"http://172.19.0.13:5000/heroyjenkins"}'
+                requests.post(paths_util.adventurers_uri(), headers=auth_header, data=adventurer_data)
             else:
                 print('Could not find the group. Where did they hide?!')
         else:
@@ -72,6 +74,9 @@ def delete_your_group(auth_header, groups):
     if response.status_code == 200:
         change_config(util_group, '')
         rm_from(util_req,util_group)
+        adventurer_data = '{"heroclass":"juggernaut","capabilities":"' + str(
+            get_config()[util_req]) + '","url":"http://172.19.0.13:5000/heroyjenkins"}'
+        requests.post(paths_util.adventurers_uri(), headers=auth_header, data=adventurer_data)
         print('Deleted your group!')
     else:
         print('Could not delete the group :C')

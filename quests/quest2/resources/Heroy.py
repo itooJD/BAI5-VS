@@ -12,7 +12,7 @@ class Heroy(Resource):
         return jsonify({
             "user": paths['hero_url'],
             "idle": self.idle,
-            "group": paths['group_uri'],
+            "group": paths['groups'],
             "hirings": paths['hero_url'],
             "assignments": paths['assignment_url'],
             "messages": paths['diary_url']
