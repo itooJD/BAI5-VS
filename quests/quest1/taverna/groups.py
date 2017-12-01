@@ -187,7 +187,8 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
         if not message:
             message = input('Message:    ')
 
-        response = requests.get(paths_util.server_uri(get_config()[util_group]) + get_config()['member_url'],
+        print(paths_util.server_uri(get_config()[util_group]) + get_config()['member_url'])
+        response = requests.get(get_config()[util_group] + get_config()['member_url'],
                                 headers=auth_header)
         for member in response.json()['objects']:
             data = json.dumps({
