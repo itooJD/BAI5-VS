@@ -25,8 +25,12 @@ def quest_filter(choice, auth_header):
 def choose_quest(auth_header):
     divide_line()
     result = quest_ui(auth_header)
-    quest_no, quest = result[0][0], result[0][1]
-    if not quest_no:
+    if result:
+        quest_no, quest = result[0][0], result[0][1]
+        if not quest_no:
+            return
+    else:
+        print('Back to the main Menu')
         return
     response = requests.get(paths_util.quest_uri() + '/' + str(quest_no), headers=auth_header)
     quest_infos(response)

@@ -14,7 +14,6 @@ def group_ui(auth_header, groups):
     print('5: Leave a group')
     print('6: Check your own group out')
     print('7: Show me all the groups')
-    print('8: Send assignment')
     print()
     return group_filter(input('Sure about that? \n> '), auth_header, groups)
 
