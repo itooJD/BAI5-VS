@@ -51,7 +51,7 @@ def join_group(auth_header, groups):
         response = requests.post(paths_util.group_url_id(group_id) + get_config()['member_url'], headers=auth_header)
         print(response.json())
         group_get = requests.get(paths_util.group_url_id(group_id), headers=auth_header)
-        print(group_get)
+        print(group_get.json())
         print('Joined Group')
         if response.status_code == 200 or response.status_code == 201:
             change_config(util_group, response.json()['url'])
