@@ -1,4 +1,4 @@
-import requests
+import requests, sys
 from flask_restful import Resource
 from flask import request, abort, jsonify
 from quests.utils import change_config, get_config
@@ -22,7 +22,7 @@ class HeroysMightyTasks(Resource):
     def post(self):
         try:
             json_data = request.get_json(force=True)
-            print(json_data)
+            print(json_data, file=sys.stderr)
             if bool(json_data) and len(json_data) == 7:
                 change_config(util_assignments, {
                     "id": json_data['id'],
@@ -35,7 +35,7 @@ class HeroysMightyTasks(Resource):
                 })
                 # auto completing assignment?
 
-                print('Received Assignment')
+                print('Received Assignment', file=sys.stderr)
                 if json_data['method'].lower() == 'get':
                     response = requests.post(json_data['resource'], headers=get_config()[token], data=json_data['data'])
                 elif json_data['method'].lower() == 'post':
@@ -43,7 +43,7 @@ class HeroysMightyTasks(Resource):
                 else:
                     return abort(400)
 
-                print(response)
+                print(response, file=sys.stderr)
                 if response.status_code == 200:
                     answer = {
                         'id': json_data['id'],
@@ -58,8 +58,8 @@ class HeroysMightyTasks(Resource):
                 else:
                     return jsonify({"message": "That didnt go well duh"})
             else:
-                print('Nope')
+                print('Nope Assignment', file=sys.stderr)
                 return abort(400)
         except KeyError or TypeError:
-            print('Ney')
+            print('Ney Assignment', file=sys.stderr)
             return abort(400)
