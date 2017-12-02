@@ -15,7 +15,7 @@ class HeroysCallMeMaybeBack(Resource):
             if bool(json_data) and len(json_data) == 1 and json_data['heroy'] == 'user':
                 return jsonify(get_config()[util_assignments])
             else:
-                return jsonify({"message": "what do you want, unworthy scum"})
+                return jsonify({"message": "what do you want, unworthy scum?"})
         except KeyError:
             return abort(400)
 

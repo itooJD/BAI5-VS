@@ -200,7 +200,7 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
                 "resource": str(resource),
                 "method": str(method),
                 "data": str(task_data),
-                "callback": paths_util.server_uri(get_config()['hero_url']),
+                "callback": paths_util.server_uri(get_config()['callback_url']),
                 "message": str(message)
             })
             try:
