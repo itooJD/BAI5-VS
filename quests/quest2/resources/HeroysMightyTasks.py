@@ -57,14 +57,18 @@ class HeroysMightyTasks(Resource):
                         'message': 'Swifty swooty as ever has Heroy done his job.'
                     })
                     callback_address = paths_util.make_http(request.remote_addr + json_data['callback'])
+                    print(callback_address)
                     print('That went well, answering to Callback!')
-                    callback_resp = requests.post(callback_address, data=answer)
-                    if callback_resp.status_code == 200 or callback_resp.status_code == 201:
-                        divide_line()
-                        print('Callback sent successfully')
-                    else:
+                    try:
+                        callback_resp = requests.post(callback_address, data=answer)
+                        if callback_resp.status_code == 200 or callback_resp.status_code == 201:
+                            divide_line()
+                            print('Callback sent successfully')
+                        else:
+                            print('Could not reach callback url')
+                            divide_line()
+                    except Exception:
                         print('Could not reach callback')
-                        divide_line()
                 else:
                     divide_line()
                     return jsonify({"message": "That didnt go well duh"})
