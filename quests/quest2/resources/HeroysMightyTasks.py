@@ -50,7 +50,7 @@ class HeroysMightyTasks(Resource):
                         'task': json_data['task'],
                         'resource': json_data['resource'],
                         'method': json_data['method'],
-                        'data': response,
+                        'data': response.json(),
                         'user': get_config()['username'],
                         'message': 'Swifty swooty as ever has Heroy done his job.'
                     })
