@@ -155,7 +155,7 @@ def visit_wounded(auth_header, quest_host, location_url):
     else:
         divide_line()
         send_assignment_to_group(auth_header, '', id=2, task='4', resource='http://' + quest_host + location_url,
-                                 data='', method='POST',
+                                 task_data='', method='POST',
                                  message='Help me with Quest 3 please! Send me the token to callback :)')
         return
         # post_to = requests.post('http://' + quest_host + location_url, headers=auth_header)

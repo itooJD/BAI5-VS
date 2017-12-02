@@ -172,7 +172,7 @@ def check_own_group(auth_header, groups):
         print('You are in no group!')
 
 
-def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, method=None, data=None, message=None):
+def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, method=None, task_data=None, message=None):
     if get_config()[util_group] != '':
         if not id:
             id = input('ID:         ')
@@ -182,34 +182,33 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
             resource = input('Resource:   ')
         if not method:
             method = input('Method:     ')
-        if not data:
-            data = input('Data:       ')
-            if not data:
-                data = ''
+        if not task_data:
+            task_data = input('Data:       ')
+            if not task_data:
+                task_data = ''
         if not message:
             message = input('Message:    ')
 
         response = requests.get(get_config()[util_group] + get_config()['member_url'],
                                 headers=auth_header)
         print(response.json())
-        
+
         for member in response.json()['objects']:
             data = json.dumps({
                 "id": str(id),
                 "task": get_config()['blackboard_url'] + get_config()['task_url'] + task,
                 "resource": str(resource),
                 "method": str(method),
-                "data": str(data),
+                "data": str(task_data),
                 "callback": paths_util.server_uri(get_config()['hero_url']),
                 "message": str(message)
             })
             print(str(data))
-            print(member['url'])
             user_url = paths_util.make_http(member['url'])
             try:
                 response = requests.get(user_url)
                 print(response.json()['user'])
-                response = requests.post(user_url + response.json()['assignments'])
+                response = requests.post(user_url + response.json()['assignments'], data=data)
                 if response.status_code == 200:
                     print('Assignment sent to ' + str(member['user']))
             except Exception:
