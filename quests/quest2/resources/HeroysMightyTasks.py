@@ -22,6 +22,7 @@ class HeroysMightyTasks(Resource):
     def post(self):
         try:
             json_data = request.get_json(force=True)
+            print(json_data)
             if bool(json_data) and len(json_data) == 7:
                 change_config(util_assignments, {
                     "id": json_data['id'],
@@ -57,6 +58,8 @@ class HeroysMightyTasks(Resource):
                 else:
                     return jsonify({"message": "That didnt go well duh"})
             else:
+                print('Nope')
                 return abort(400)
         except KeyError or TypeError:
+            print('Ney')
             return abort(400)
