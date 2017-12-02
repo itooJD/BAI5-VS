@@ -1,8 +1,7 @@
-import requests
+import requests, json
 from quests.utils import get_config
 from quests.utils.paths_names import util_group
 from quests.quest1.utilities import divide_line
-from .taverna.groups import send_assignment_to_group
 
 
 def solve_quests(quest, quest_no, auth_header):
@@ -18,6 +17,7 @@ def solve_quests(quest, quest_no, auth_header):
         deliver(auth_header, deliver_token, quest_no, quest['tasks'])
     elif int_quest_no == 3 and get_config()[util_group] != '':
         deliver_token = visit_wounded(auth_header, quest_host, location_url)
+        deliver_token
         if deliver_token:
             deliver(auth_header, deliver_token, quest_no, quest['tasks'])
         else:
@@ -170,6 +170,12 @@ def visit_wounded(auth_header, quest_host, location_url):
         print('Aquired Token! ' + post_to.json()['token_name'])
         return post_to.json()['token']
     input('Received all tokens?')
+
+    deliver_token = json.dumps({
+        "tokens":tokens
+    })
+    return deliver_token
+    '''
     for idx, tk in enumerate(tokens):
         print(str(idx) + ' ' + tk)
     token_no = input('Which one do you want to take?')
@@ -177,3 +183,4 @@ def visit_wounded(auth_header, quest_host, location_url):
         return tokens[int(token_no)]
     else:
         return False
+    '''
