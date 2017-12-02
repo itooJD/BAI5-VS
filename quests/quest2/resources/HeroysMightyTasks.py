@@ -34,6 +34,7 @@ class HeroysMightyTasks(Resource):
                 })
                 # auto completing assignment?
 
+                print('Received Assignment')
                 if json_data['method'].lower() == 'get':
                     response = requests.post(json_data['resource'], headers=get_config()[token], data=json_data['data'])
                 elif json_data['method'].lower() == 'post':
@@ -41,6 +42,7 @@ class HeroysMightyTasks(Resource):
                 else:
                     return abort(400)
 
+                print(response)
                 if response.status_code == 200:
                     answer = {
                         'id': json_data['id'],

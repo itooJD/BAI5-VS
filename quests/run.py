@@ -10,7 +10,7 @@ if __name__ == '__main__':
         print('Setup: Adding Rest-API')
         add_api(paths, api)
         print('Setup: Starting flask-server')
-        app.run(host='0.0.0.0', debug=False)
+        app.run(host='0.0.0.0', debug=True)
     elif answer == '2':
         print('Setup: Starting UI')
         from quests.quest1 import main
