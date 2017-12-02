@@ -205,6 +205,7 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
             })
             print(str(data))
             user_url = paths_util.make_http(member['url'])
+            print(user_url + response.json()['assignments'])
             try:
                 response = requests.get(user_url)
                 print(response.json()['user'])
