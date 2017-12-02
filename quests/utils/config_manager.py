@@ -48,8 +48,7 @@ def get_server_url():
     port = ast.literal_eval(port_pre.decode('utf-8'))['blackboard_port']
     address = address_pre[0]
     print('Config: Received {0} as address and {1} as port'.format(address, port))
-    import socket
-    own_address = 'http://' + socket.gethostbyname(socket.gethostname()) + ':5000'
+    own_address = 'http://' + gethostbyname(gethostname()) + ':5000'
     change_config(util_own_server, own_address)
     print('Config: Set own address to: ' + own_address)
     return address, port
