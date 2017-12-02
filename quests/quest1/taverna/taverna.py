@@ -10,7 +10,7 @@ def taverna(auth_header):
     # Entering the Taverna
     divide_line()
     print('So you are a juggernaut huh? And I can reach you at 172.19.0.13:5000/heroyjenkins? Weird address, well have fun.')
-    adventurer_data = '{"heroclass":"juggernaut","capabilities":"'+ str(get_config()[util_req]) +'","url":"http://172.19.0.13:5000/heroyjenkins"}'
+    adventurer_data = '{"heroclass":"juggernaut","capabilities":"'+ str(get_config()[util_req]) +'","url":"http://172.19.0.13:5000/"}'
     requests.post(paths_util.adventurers_uri(), headers=auth_header, data=adventurer_data)
     print('\nYou enter the dusty taverna')
     in_taverna = True
