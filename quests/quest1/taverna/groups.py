@@ -191,8 +191,8 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
 
         response = requests.get(get_config()[util_group] + get_config()['member_url'],
                                 headers=auth_header)
-        print(response)
         print(response.json())
+        
         for member in response.json()['objects']:
             data = json.dumps({
                 "id": str(id),
