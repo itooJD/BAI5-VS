@@ -61,7 +61,7 @@ def join_group(auth_header, groups):
                 add_to(util_req,util_group)
                 adventurer_data = '{"heroclass":"juggernaut","capabilities":"' + str(
                     get_config()[util_req]) + '","url":' + get_config()[util_own_server] + '}'
-                requests.post(paths_util.adventurers_uri(), headers=auth_header, data=adventurer_data)
+                requests.put(paths_util.adventurer_uri_name(get_config()['username']), headers=auth_header, data=adventurer_data)
             else:
                 print('Could not find the group. Where did they hide?!')
         else:
