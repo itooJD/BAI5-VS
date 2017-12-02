@@ -60,7 +60,7 @@ def join_group(auth_header, groups):
                 change_config(util_group, paths_util.server_uri(group_url))
                 add_to(util_req,util_group)
                 adventurer_data = '{"heroclass":"juggernaut","capabilities":"' + str(
-                    get_config()[util_req]) + '","url":"http://172.19.0.13:5000/heroyjenkins"}'
+                    get_config()[util_req]) + '","url":"http://172.19.0.13:5000/"}'
                 requests.post(paths_util.adventurers_uri(), headers=auth_header, data=adventurer_data)
             else:
                 print('Could not find the group. Where did they hide?!')
@@ -76,7 +76,7 @@ def delete_your_group(auth_header, groups):
         change_config(util_group, '')
         rm_from(util_req,util_group)
         adventurer_data = '{"heroclass":"juggernaut","capabilities":"' + str(
-            get_config()[util_req]) + '","url":"http://172.19.0.13:5000/heroyjenkins"}'
+            get_config()[util_req]) + '","url":"http://172.19.0.13:5000/"}'
         requests.post(paths_util.adventurers_uri(), headers=auth_header, data=adventurer_data)
         print('Deleted your group!')
     else:
