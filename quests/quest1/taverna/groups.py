@@ -203,9 +203,11 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
                 "callback": paths_util.server_uri(get_config()['hero_url']),
                 "message": message
             })
+            print(member['url'])
             if not member['url'].startswith('http://'):
                 user_url = 'http://' + member['url']
             else:
+                print(member['url'][0:member['url'].find('/')])
                 user_url = member['url'][0:member['url'].find('/')]
             print(user_url)
             response = requests.get(user_url)
