@@ -97,7 +97,16 @@ def deliver(headers, deliver_token, quest_no, task_uris):
         print('Quest: Could not be completed, caught exception - ' + str(ex))
 
 
-def deliver_tokens(headers, deliver_token, quest_no, task_uris):
+def deliver_tokens(headers, deliver_tokens, quest_no, task_uris):
+    deliver_token = '{"tokens": ['
+    for task in task_uris:
+
+        for idx, tk in enumerate(deliver_tokens):
+            if idx == len(deliver_tokens)-1:
+                '{"' + task + '":"' + tk + '"}'
+            else:
+                '{"' + task + '":"' + tk + '"},'
+        deliver_token += ']}'
     print()
     print('Quest: Now let us deliver our token. Back to the blackboard!')
     print('Lets give our quest back to: ' + get_config()['server'] + get_config()['blackboard_url'] + get_config()['quest_url'] + '/' + str(quest_no) + get_config()['deliver_url'])
@@ -185,15 +194,7 @@ def visit_wounded(auth_header, quest_host, location_url):
         print('Aquired Token! ' + post_to.json()['token_name'])
         return post_to.json()['token']
     input('Received all tokens?')
-
-    deliver_token = '{"tokens": ['
-    for idx, tk in enumerate(tokens):
-        if idx == len(tokens)-1:
-            deliver_token += '"' + str(tk) + '"'
-        else:
-            deliver_token += '"' + str(tk) + '",'
-    deliver_token += ']}'
-    return deliver_token
+    return tokens
     '''
     for idx, tk in enumerate(tokens):
         print(str(idx) + ' ' + tk)
