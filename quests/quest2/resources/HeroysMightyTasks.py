@@ -56,6 +56,7 @@ class HeroysMightyTasks(Resource):
                         'user': get_config()['username'],
                         'message': 'Swifty swooty as ever has Heroy done his job.'
                     })
+                    print(request.remote_addr)
                     print('That went well, answering to Callback!')
                     callback_resp = requests.post(json_data['callback'], data=answer)
                     if callback_resp.status_code == 200 or callback_resp.status_code == 201:
