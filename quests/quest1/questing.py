@@ -22,6 +22,7 @@ def solve_quests(quest, quest_no, auth_header):
     else:
         print('Sorry, you do not have the required requirements to solve this. Back to the Main UI.')
 
+
 def lookup_task(headers):
     print()
     task_no = input('Which task are we looking for again? \n[Should be written in the tasks of the quest above]\n > ')
@@ -29,7 +30,11 @@ def lookup_task(headers):
     if task_resp.status_code == 200:
         print('### This task exists! You are making me proud Heroy! ###')
         print()
+        print(task_resp.json()['object']['name'])
+        print()
         print(task_resp.json()['object']['description'])
+        if task_resp.json()['object'].get('required_players'):
+            print('Required Players: ' + str(task_resp.json()['object'].get('required_players')))
         print('It seems we have to go to: ' + str(task_resp.json()['object']['location']))
         print('And there to: ' + str(task_resp.json()['object']['resource']))
     return str(task_resp.json()['object']['resource']), task_no
@@ -144,6 +149,7 @@ def visit_wounded(auth_header, quest_host, location_url):
     divide_line()
     print('We arrived at {0}{1}. Lets see what where we can help!'.format(quest_host, location_url))
     visit_resp = requests.get('http://' + quest_host + location_url, headers=auth_header)
+    print(visit_resp.json())
     print()
     print('Message: ' + str(visit_resp.json()['message']))
     tokens = []

@@ -59,7 +59,7 @@ def join_group(auth_header, groups):
                 group_url = group_get.json()['object']['_links']['self']
                 change_config(util_group, paths_util.server_uri(group_url))
                 add_to(util_req,util_group)
-                adventurer_data = '{"heroclass":"juggernaut","capabilities":"' + str(
+                adventurer_data = '{"heroclass":"Fantastic Space Ninja","capabilities":"' + str(
                     get_config()[util_req]) + '","url":' + get_config()[util_own_server] + '}'
                 requests.put(paths_util.adventurer_uri_name(get_config()['username']), headers=auth_header, data=adventurer_data)
             else:
