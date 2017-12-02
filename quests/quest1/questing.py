@@ -104,6 +104,8 @@ def deliver_tokens(headers, deliver_token, quest_no, task_uris):
     last_resp = requests.post(get_config()['server'] + get_config()['blackboard_url'] + get_config()['quest_url'] + '/' + str(quest_no) + get_config()['deliver_url'],
                               headers=headers, data=deliver_token)
     try:
+        print(deliver_token)
+        print(last_resp.json())
         print(last_resp.json()['message'])
         if last_resp.json().get('status') == 'success':
             print("Quest successfully closed! Herrrrroooooooooy Jeeeeenkiiiiiins!!")
@@ -112,6 +114,7 @@ def deliver_tokens(headers, deliver_token, quest_no, task_uris):
     except Exception as ex:
         print('', end='')
         print('Quest: Could not be completed, caught exception - ' + str(ex))
+
 
 def visit_throneroom(headers, quest_host, location_url):
     print()
