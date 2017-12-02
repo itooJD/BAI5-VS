@@ -1,4 +1,4 @@
-import requests
+import requests, json
 from flask_restful import Resource
 from flask import request, abort, jsonify
 from quests.utils import change_config, get_config
@@ -38,14 +38,14 @@ class HeroysMightyTasks(Resource):
                 print('Received assignment: ' + str(json_data['message']))
                 url = paths_util.make_http(json_data['resource'])
                 if json_data['method'].lower() == 'get':
-                    response = requests.post(url, headers=get_config()[token], data=json_data['data'])
+                    response = requests.get(url, headers=get_config()[token], data=json_data['data'])
                 elif json_data['method'].lower() == 'post':
                     response = requests.post(url, headers=get_config()[token], data=json_data['data'])
                 else:
                     return abort(400)
 
                 if response.status_code == 200:
-                    answer = {
+                    answer = json.dumps({
                         'id': json_data['id'],
                         'task': json_data['task'],
                         'resource': json_data['resource'],
@@ -53,8 +53,13 @@ class HeroysMightyTasks(Resource):
                         'data': response,
                         'user': get_config()['username'],
                         'message': 'Swifty swooty as ever has Heroy done his job.'
-                    }
-                    requests.post(json_data['callback'], data=answer)
+                    })
+                    print('That went well, answering to Callback!')
+                    callback_resp = requests.post(json_data['callback'], data=answer)
+                    if callback_resp.status_code == 200 or callback_resp.status_code == 201:
+                        print('Callback sent successfully')
+                    else:
+                        print('Could not reach callback')
                 else:
                     return jsonify({"message": "That didnt go well duh"})
             else:
