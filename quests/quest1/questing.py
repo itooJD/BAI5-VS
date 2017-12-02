@@ -18,7 +18,10 @@ def solve_quests(quest, quest_no, auth_header):
         deliver(auth_header, deliver_token, quest_no, quest['tasks'])
     elif int_quest_no == 3 and get_config()[util_group] != '':
         deliver_token = visit_wounded(auth_header, quest_host, location_url)
-        deliver(auth_header, deliver_token, quest_no, quest['tasks'])
+        if deliver_token:
+            deliver(auth_header, deliver_token, quest_no, quest['tasks'])
+        else:
+            print('Wrong token? Exiting Quest')
     else:
         print('Sorry, you do not have the required requirements to solve this. Back to the Main UI.')
 
@@ -160,12 +163,17 @@ def visit_wounded(auth_header, quest_host, location_url):
             tokens.append(step_result)
     else:
         divide_line()
-        send_assignment_to_group(auth_header, '', id=2, task='4', resource='http://' + quest_host + location_url,
-                                 task_data='', method='POST',
-                                 message='Help me with Quest 3 please! Send me the token to callback :)')
-        return
-        # post_to = requests.post('http://' + quest_host + location_url, headers=auth_header)
-        # print('Aquired Token! ' + post_to.json()['token_name'])
-        # return post_to.json()['token']
+        # send_assignment_to_group(auth_header, '', id=2, task='4', resource='http://' + quest_host + location_url,
+        #                         task_data='', method='POST',
+        #                         message='Help me with Quest 3 please! Send me the token to callback :)')
+        post_to = requests.post('http://' + quest_host + location_url, headers=auth_header)
+        print('Aquired Token! ' + post_to.json()['token_name'])
+        return post_to.json()['token']
     input('Received all tokens?')
-    return tokens
+    for idx, tk in enumerate(tokens):
+        print(str(idx) + ' ' + tk)
+    token_no = input('Which one do you want to take?')
+    if tokens[int(token_no)]:
+        return tokens[int(token_no)]
+    else:
+        return False
