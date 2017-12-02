@@ -4,6 +4,7 @@ from flask import request, abort, jsonify
 from quests.utils import change_config, get_config
 from quests.utils.paths_names import util_assignments, auth_token as token
 from quests.utils import paths_util
+from quests.quest1.utilities import divide_line
 
 
 # Post assignments
@@ -34,8 +35,9 @@ class HeroysMightyTasks(Resource):
                     "message": json_data['message']
                 })
                 # auto completing assignment?
-
-                print('Received assignment: ' + str(json_data['message']))
+                divide_line()
+                print('Received assignment: \n' + str(json_data['message']) + '\n' + str(json_data['method']) + '\n' + str(json_data['resource']))
+                print()
                 url = paths_util.make_http(json_data['resource'])
                 if json_data['method'].lower() == 'get':
                     response = requests.get(url, headers=get_config()[token], data=json_data['data'])
@@ -57,10 +59,13 @@ class HeroysMightyTasks(Resource):
                     print('That went well, answering to Callback!')
                     callback_resp = requests.post(json_data['callback'], data=answer)
                     if callback_resp.status_code == 200 or callback_resp.status_code == 201:
+                        divide_line()
                         print('Callback sent successfully')
                     else:
                         print('Could not reach callback')
+                        divide_line()
                 else:
+                    divide_line()
                     return jsonify({"message": "That didnt go well duh"})
             else:
                 return abort(400)
