@@ -17,7 +17,7 @@ def solve_quests(quest, quest_no, auth_header):
         deliver(auth_header, deliver_token, quest_no, quest['tasks'])
     elif int_quest_no == 3 and get_config()[util_group] != '':
         deliver_token = visit_wounded(auth_header, quest_host, location_url)
-        deliver_token
+        deliver_tokens(auth_header, deliver_token, quest_no, quest['tasks'])
         if deliver_token:
             deliver(auth_header, deliver_token, quest_no, quest['tasks'])
         else:
@@ -96,6 +96,22 @@ def deliver(headers, deliver_token, quest_no, task_uris):
         print('', end='')
         print('Quest: Could not be completed, caught exception - ' + str(ex))
 
+
+def deliver_tokens(headers, deliver_token, quest_no, task_uris):
+    print()
+    print('Quest: Now let us deliver our token. Back to the blackboard!')
+    print('Lets give our quest back to: ' + get_config()['server'] + get_config()['blackboard_url'] + get_config()['quest_url'] + '/' + str(quest_no) + get_config()['deliver_url'])
+    last_resp = requests.post(get_config()['server'] + get_config()['blackboard_url'] + get_config()['quest_url'] + '/' + str(quest_no) + get_config()['deliver_url'],
+                              headers=headers, data=deliver_token)
+    try:
+        print(last_resp.json()['message'])
+        if last_resp.json().get('status') == 'success':
+            print("Quest successfully closed! Herrrrroooooooooy Jeeeeenkiiiiiins!!")
+        else:
+            print(last_resp.json()['error'])
+    except Exception as ex:
+        print('', end='')
+        print('Quest: Could not be completed, caught exception - ' + str(ex))
 
 def visit_throneroom(headers, quest_host, location_url):
     print()
