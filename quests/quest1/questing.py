@@ -105,7 +105,7 @@ def deliver_tokens(headers, deliver_token, quest_no, task_uris):
                               headers=headers, data=deliver_token)
     try:
         print(deliver_token)
-        print(last_resp.json())
+        print(str(last_resp.json()))
         print(last_resp.json()['message'])
         if last_resp.json().get('status') == 'success':
             print("Quest successfully closed! Herrrrroooooooooy Jeeeeenkiiiiiins!!")
@@ -113,7 +113,7 @@ def deliver_tokens(headers, deliver_token, quest_no, task_uris):
             print(last_resp.json()['error'])
     except Exception as ex:
         print('', end='')
-        print('Quest: Could not be completed, caught exception - ' + str(ex))
+        print('Quest: Could not be completed, caught exception - ' + str(ex.__traceback__))
 
 
 def visit_throneroom(headers, quest_host, location_url):
@@ -191,7 +191,7 @@ def visit_wounded(auth_header, quest_host, location_url):
     input('Received all tokens?')
 
     deliver_token = json.dumps({
-        "tokens":tokens
+        "tokens":json.dumps(tokens)
     })
     return deliver_token
     '''
