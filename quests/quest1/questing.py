@@ -102,10 +102,11 @@ def deliver_tokens(headers, deliver_tokens, quest_no, task_uris):
     for task in task_uris:
 
         for idx, tk in enumerate(deliver_tokens):
+            print(tk)
             if idx == len(deliver_tokens)-1:
-                '{"' + task + '":"' + tk + '"}'
+                deliver_token += '{"' + task + '":"' + tk + '"}'
             else:
-                '{"' + task + '":"' + tk + '"},'
+                deliver_token += '{"' + task + '":"' + tk + '"},'
         deliver_token += ']}'
     print()
     print('Quest: Now let us deliver our token. Back to the blackboard!')
