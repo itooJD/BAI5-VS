@@ -186,13 +186,13 @@ def visit_wounded(auth_header, quest_host, location_url):
         return post_to.json()['token']
     input('Received all tokens?')
 
-    deliver_token = '{"tokens":"['
+    deliver_token = '{"tokens": ['
     for idx, tk in enumerate(tokens):
         if idx == len(tokens)-1:
             deliver_token += '"' + str(tk) + '"'
         else:
             deliver_token += '"' + str(tk) + '",'
-    deliver_token += ']"}'
+    deliver_token += ']}'
     return deliver_token
     '''
     for idx, tk in enumerate(tokens):
