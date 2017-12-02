@@ -76,7 +76,7 @@ def delete_your_group(auth_header, groups):
         change_config(util_group, '')
         rm_from(util_req,util_group)
         adventurer_data = '{"heroclass":"juggernaut","capabilities":"' + str(
-            get_config()[util_req]) + '","url":"http://172.19.0.13:5000/"}'
+            get_config()[util_req]) + '","url":' + get_config()[util_own_server] + '}'
         requests.post(paths_util.adventurers_uri(), headers=auth_header, data=adventurer_data)
         print('Deleted your group!')
     else:
