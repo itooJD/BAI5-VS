@@ -1,7 +1,7 @@
 import requests, json
 from quests.utils import paths_util, get_config, change_config, add_to, rm_from
 from quests.quest1.utilities import divide_line
-from quests.utils.paths_names import util_group, util_user, util_req
+from quests.utils.paths_names import util_group, util_user, util_req, util_own_server
 
 
 def group_ui(auth_header, groups):
@@ -203,22 +203,26 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
                 "callback": get_config()['callback_url'],
                 "message": str(message)
             })
-            try:
-                member_data = requests.get(member['url'])
-                if member_data and (member_data.status_code == 200 or member_data.status_code == 201):
-                    print(member_data.json())
-                    user_url = paths_util.make_http(member['url'])
-                    print(user_url + member_data.json()['assignments'])
+            if not member['url'] == get_config()[util_own_server]:
+                try:
+                    member_data = requests.get(member['url'])
+                    if member_data and (member_data.status_code == 200 or member_data.status_code == 201):
+                        print(member_data.json())
+                        user_url = paths_util.make_http(member['url'])
+                        print(user_url + member_data.json()['assignments'])
 
-                    try:
-                        response = requests.get(user_url)
-                        print(response.json()['user'])
-                        response = requests.post(user_url + member_data.json()['assignments'], data=data)
-                        if response.status_code == 200:
-                            print('Assignment sent to ' + str(member['user']))
-                    except Exception:
-                        print('Member: ' + str(member['user']) + ' could not be reached')
-            except Exception:
-                print('Member ' + str(member['user']) + ' could not be reached')
+                        try:
+                            response = requests.get(user_url)
+                            print(response.json()['user'])
+                            response = requests.post(user_url + member_data.json()['assignments'], data=data)
+                            if response.status_code == 200:
+                                print('Assignment sent to ' + str(member['user']))
+                        except Exception:
+                            print('Member: ' + str(member['user']) + ' could not be reached')
+                    else:
+                        print('Member URL could not be reached!')
+                except Exception:
+                    print('Member ' + str(member['user']) + ' could not be reached')
             else:
-                print('Member URL could not be reached!')
+                print('Skipping mighty me!')
+
