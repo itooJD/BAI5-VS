@@ -5,6 +5,17 @@ def http(uri):
     return 'http://' + uri
 
 
+def make_http(url):
+    if not url.startswith('http://'):
+        new_url = 'http://' + url
+    else:
+        if url[-1] == '/':
+            new_url = url[:-1]
+        else:
+            new_url = url
+    return new_url
+
+
 def server_uri(uri):
     return get_config()['server'] + uri
 

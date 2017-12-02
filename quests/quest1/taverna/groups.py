@@ -195,22 +195,17 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
         print(response.json())
         for member in response.json()['objects']:
             data = json.dumps({
-                "id": id,
-                "task": '/blackboard/tasks/' + task,
-                "resource": resource,
-                "method": method,
-                "data": data,
+                "id": str(id),
+                "task": get_config()['blackboard_url'] + get_config()['task_url'] + task,
+                "resource": str(resource),
+                "method": str(method),
+                "data": str(data),
                 "callback": paths_util.server_uri(get_config()['hero_url']),
-                "message": message
+                "message": str(message)
             })
+            print(str(data))
             print(member['url'])
-            if not member['url'].startswith('http://'):
-                user_url = 'http://' + member['url']
-            else:
-                if member['url'][-1] == '/':
-                    user_url = member['url'][:-1]
-                else:
-                    user_url = member['url']
+            user_url = paths_util.make_http(member['url'])
             try:
                 response = requests.get(user_url)
                 print(response.json()['user'])
