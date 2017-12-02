@@ -56,9 +56,9 @@ class HeroysMightyTasks(Resource):
                         'user': get_config()['username'],
                         'message': 'Swifty swooty as ever has Heroy done his job.'
                     })
-                    print(request.remote_addr)
+                    callback_address = paths_util.make_http(request.remote_addr + json_data['callback'])
                     print('That went well, answering to Callback!')
-                    callback_resp = requests.post(json_data['callback'], data=answer)
+                    callback_resp = requests.post(callback_address, data=answer)
                     if callback_resp.status_code == 200 or callback_resp.status_code == 201:
                         divide_line()
                         print('Callback sent successfully')
