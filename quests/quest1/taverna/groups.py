@@ -203,14 +203,22 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
                 "callback": paths_util.server_uri(get_config()['hero_url']),
                 "message": str(message)
             })
-            print(str(data))
-            user_url = paths_util.make_http(member['url'])
-            print(user_url + response.json()['assignments'])
             try:
-                response = requests.get(user_url)
-                print(response.json()['user'])
-                response = requests.post(user_url + response.json()['assignments'], data=data)
-                if response.status_code == 200:
-                    print('Assignment sent to ' + str(member['user']))
+                member_data = requests.get(member['url'])
             except Exception:
-                print('Member: ' + str(member['user']) + ' could not be reached')
+                print('Member ' + str(member['user']) + ' could not be reached')
+            if member_data and (member_data.status_code == 200 or member_data.status_code == 201):
+                print(member_data.json())
+                user_url = paths_util.make_http(member['url'])
+                print(user_url + member_data.json()['assignments'])
+
+                try:
+                    response = requests.get(user_url)
+                    print(response.json()['user'])
+                    response = requests.post(user_url + member_data.json()['assignments'], data=data)
+                    if response.status_code == 200:
+                        print('Assignment sent to ' + str(member['user']))
+                except Exception:
+                    print('Member: ' + str(member['user']) + ' could not be reached')
+            else:
+                print('Member URL could not be reached!')
