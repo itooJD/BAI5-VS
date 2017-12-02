@@ -211,6 +211,11 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
                     user_url = member['url'][:-1]
                 else:
                     user_url = member['url']
-            print(user_url)
-            response = requests.get(user_url)
-            print(response.json())
+            try:
+                response = requests.get(user_url)
+                print(response.json()['user'])
+                response = requests.post(user_url + response.json()['assignments'])
+                if response.status_code == 200:
+                    print('Assignment sent to ' + str(member['user']))
+            except Exception:
+                print('Member: ' + str(member['user']) + ' could not be reached')
