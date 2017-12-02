@@ -20,9 +20,12 @@ class HeroysMightyTasks(Resource):
             return abort(400)
 
     def post(self):
+        fh = logging.FileHandler('spam.log')
+        fh.setLevel(logging.DEBUG)
+        logger = logging.getLogger(__name__)
         try:
             json_data = request.get_json(force=True)
-            print(json_data, file=sys.stdout)
+            logger.info(str(json_data))
             if bool(json_data) and len(json_data) == 7:
                 change_config(util_assignments, {
                     "id": json_data['id'],
@@ -35,7 +38,7 @@ class HeroysMightyTasks(Resource):
                 })
                 # auto completing assignment?
 
-                print('Received Assignment', file=sys.stdout)
+                logger.info('Received Assignment')
                 if json_data['method'].lower() == 'get':
                     response = requests.post(json_data['resource'], headers=get_config()[token], data=json_data['data'])
                 elif json_data['method'].lower() == 'post':
@@ -43,7 +46,7 @@ class HeroysMightyTasks(Resource):
                 else:
                     return abort(400)
 
-                print(response, file=sys.stdout)
+                logger.info(str(response))
                 if response.status_code == 200:
                     answer = {
                         'id': json_data['id'],
@@ -58,8 +61,8 @@ class HeroysMightyTasks(Resource):
                 else:
                     return jsonify({"message": "That didnt go well duh"})
             else:
-                print('Nope Assignment', file=sys.stdout)
+                logger.info('Nope Assignment')
                 return abort(400)
         except KeyError or TypeError:
-            print('Ney Assignment', file=sys.stdout)
+            logger.info('Ney Assignment')
             return abort(400)
