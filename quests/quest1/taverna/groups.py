@@ -207,10 +207,8 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
             if not member['url'].startswith('http://'):
                 user_url = 'http://' + member['url']
             else:
-                print(member['url'][0:member['url'].find('/')])
-                user_url = member['url'][0:member['url'].find('/')]
+                if user_url[-1] == '/':
+                    user_url = user_url[:-1]
             print(user_url)
             response = requests.get(user_url)
-            if user_url[-1] == '/':
-                user_url = user_url[:-1]
             print(response.json())
