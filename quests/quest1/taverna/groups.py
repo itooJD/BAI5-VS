@@ -203,10 +203,10 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
                 "callback": paths_util.server_uri(get_config()['hero_url']),
                 "message": message
             })
-            if not response.json()['object']['url'].startswith('http://'):
-                user_url = 'http://' + response.json()['object']['url']
+            if not member['url'].startswith('http://'):
+                user_url = 'http://' + member['url']
             else:
-                user_url = response.json()['url'][0:response.json()['url'].find('/')]
+                user_url = member['url'][0:member['url'].find('/')]
             if user_url[-1] == '/':
                 user_url = user_url[:-1]
             response = requests.get(user_url)
