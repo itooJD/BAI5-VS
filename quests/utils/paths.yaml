@@ -11,7 +11,7 @@ quest_url : '/quests'
 deliver_url: '/deliveries'
 task_url : '/tasks'
 
-hero_url : '/heroyjenkins'
+hero_url : '/'
 diary_url : "/diary"
 taverna_url : "/taverna"
 assignment_url : '/noTimeToSleep'
