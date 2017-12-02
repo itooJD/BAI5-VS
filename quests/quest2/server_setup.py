@@ -7,10 +7,11 @@ def setup_flask():
     api = Api(app)
     return app, api
 
-from quests.quest2.resources import HelloToHeroysWorld, HeroyJenkins, HeroysDiary, HeroysMightyTasks, HeroyPresident
+from quests.quest2.resources import HeroysCallMeMaybeBack, HeroyJenkins, HeroysDiary, HeroysMightyTasks, HeroyPresident
 
 def add_api(paths, api):
     api.add_resource(HeroyJenkins, paths['hero_url'])
     api.add_resource(HeroysDiary, paths['diary_url'])
     api.add_resource(HeroysMightyTasks, paths['assignment_url'])
     api.add_resource(HeroyPresident, paths['election_url'])
+    api.add_resource(HeroysCallMeMaybeBack, paths['callback_url'])

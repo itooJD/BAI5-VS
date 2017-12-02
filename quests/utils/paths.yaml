@@ -16,7 +16,8 @@ diary_url : "/diary"
 taverna_url : "/taverna"
 assignment_url : '/noTimeToSleep'
 election_url : '/election'
-group_uri : ''
+callback_url : '/callMeMaybe'
+
 group_url : '/groups'
 adventurers_url : '/adventurers'
 member_url : '/members'
@@ -24,6 +25,8 @@ group: ''
 current_assignment: ''
 
 username : ''
+
+quest_tokens: []
 requirements : []
 quests : []
 messages : []
