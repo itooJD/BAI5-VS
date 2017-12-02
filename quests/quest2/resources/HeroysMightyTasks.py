@@ -23,6 +23,7 @@ class HeroysMightyTasks(Resource):
         fh = logging.FileHandler('spam.log')
         fh.setLevel(logging.DEBUG)
         logger = logging.getLogger(__name__)
+        logger.addHandler(fh)
         try:
             json_data = request.get_json(force=True)
             logger.info(str(json_data))
