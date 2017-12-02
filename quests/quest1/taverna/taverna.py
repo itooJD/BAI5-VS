@@ -1,6 +1,6 @@
 import requests
 from quests.utils import paths_util, get_config
-from quests.utils.paths_names import util_req
+from quests.utils.paths_names import util_req, util_own_server
 from quests.quest1.utilities import divide_line
 from .groups import group_ui
 from .adventurers import adventurer_ui
@@ -10,7 +10,7 @@ def taverna(auth_header):
     # Entering the Taverna
     divide_line()
     print('So you are a juggernaut huh? And I can reach you at 172.19.0.13:5000/heroyjenkins? Weird address, well have fun.')
-    adventurer_data = '{"heroclass":"juggernaut","capabilities":"'+ str(get_config()[util_req]) +'","url":"http://172.19.0.13:5000/"}'
+    adventurer_data = '{"heroclass":"juggernaut","capabilities":"'+ str(get_config()[util_req]) +'","url":' + get_config()[util_own_server]+ '}'
     requests.post(paths_util.adventurers_uri(), headers=auth_header, data=adventurer_data)
     print('\nYou enter the dusty taverna')
     in_taverna = True
