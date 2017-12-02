@@ -1,5 +1,6 @@
 import yaml, ast
 from pathlib import Path
+from socket import *
 from .paths_names import util_req, util_own_server
 __location__ = Path().cwd()
 
@@ -39,7 +40,6 @@ def rm_from(token, data):
 
 
 def get_server_url():
-    from socket import *
     s=socket(AF_INET, SOCK_DGRAM)
     s.bind(('',24000))
     udp_received = s.recvfrom(1024 )
