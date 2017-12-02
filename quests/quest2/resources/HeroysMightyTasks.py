@@ -7,6 +7,17 @@ from quests.utils.paths_names import util_assignments, auth_token as token
 
 # Post assignments
 class HeroysMightyTasks(Resource):
+    logger = ''
+
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
+        hdlr = logging.FileHandler('/root/BAI5-VS/logfile.log')
+        formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+        hdlr.setFormatter(formatter)
+        self.logger.addHandler(hdlr)
+        self.logger.setLevel(logging.DEBUG)
+
+
     def get(self):
         # depending if we want to save the data locally or not
 
@@ -20,13 +31,9 @@ class HeroysMightyTasks(Resource):
             return abort(400)
 
     def post(self):
-        fh = logging.FileHandler('spam.log')
-        fh.setLevel(logging.DEBUG)
-        logger = logging.getLogger(__name__)
-        logger.addHandler(fh)
         try:
             json_data = request.get_json(force=True)
-            logger.info(str(json_data))
+            self.logger.info(str(json_data))
             if bool(json_data) and len(json_data) == 7:
                 change_config(util_assignments, {
                     "id": json_data['id'],
@@ -39,7 +46,7 @@ class HeroysMightyTasks(Resource):
                 })
                 # auto completing assignment?
 
-                logger.info('Received Assignment')
+                self.logger.info('Received Assignment')
                 if json_data['method'].lower() == 'get':
                     response = requests.post(json_data['resource'], headers=get_config()[token], data=json_data['data'])
                 elif json_data['method'].lower() == 'post':
@@ -47,7 +54,7 @@ class HeroysMightyTasks(Resource):
                 else:
                     return abort(400)
 
-                logger.info(str(response))
+                self.logger.info(str(response))
                 if response.status_code == 200:
                     answer = {
                         'id': json_data['id'],
@@ -62,8 +69,8 @@ class HeroysMightyTasks(Resource):
                 else:
                     return jsonify({"message": "That didnt go well duh"})
             else:
-                logger.info('Nope Assignment')
+                self.logger.info('Nope Assignment')
                 return abort(400)
         except KeyError or TypeError:
-            logger.info('Ney Assignment')
+            self.logger.info('Ney Assignment')
             return abort(400)
