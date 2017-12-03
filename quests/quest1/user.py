@@ -1,7 +1,7 @@
 import requests
 from quests.quest1.utilities import divide_line
 from quests.utils import paths_util, change_config, get_config
-from quests.utils.paths_util import auth_token as token, util_user
+from quests.utils.paths_names import auth_token as token, util_user
 
 
 def authentication_ui():

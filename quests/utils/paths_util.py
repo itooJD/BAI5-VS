@@ -1,15 +1,19 @@
 from .config_manager import get_config
 
 
-current_quest = 'current_quest'
-auth_token = 'auth_token'
-util_tokens = 'util_tokens'
-util_group = 'group_uri'
-util_user = 'username'
-util_req = 'requirements'
-
 def http(uri):
     return 'http://' + uri
+
+
+def make_http(url):
+    if not url.startswith('http://'):
+        new_url = 'http://' + url
+    else:
+        if url[-1] == '/':
+            new_url = url[:-1]
+        else:
+            new_url = url
+    return new_url
 
 
 def server_uri(uri):

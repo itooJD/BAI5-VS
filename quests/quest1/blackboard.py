@@ -1,7 +1,7 @@
 import requests
 from quests.quest1.utilities import divide_line, logout
 from quests.utils import paths_util, get_config, change_config
-from quests.utils.paths_util import current_quest
+from quests.utils.paths_names import current_quest
 from quests.quest1.questing import solve_quests
 
 
@@ -25,8 +25,12 @@ def quest_filter(choice, auth_header):
 def choose_quest(auth_header):
     divide_line()
     result = quest_ui(auth_header)
-    quest_no, quest = result[0][0], result[0][1]
-    if not quest_no:
+    if result[0]:
+        quest_no, quest = result[0][0], result[0][1]
+        if not quest_no:
+            return
+    else:
+        print('Back to the main Menu')
         return
     response = requests.get(paths_util.quest_uri() + '/' + str(quest_no), headers=auth_header)
     quest_infos(response)
@@ -51,10 +55,15 @@ def show_available_quests(auth_header):
     for idx, quest in enumerate(response.json()['objects']):
         requirements_fullfilled = True
         if quest['requirements']:
-            for req in quest['requirements']:
-                if req not in get_config()['requirements']:
+            if type(quest['requirements']) == str:
+                if quest['requirements'] not in get_config()['requirements']:
                     requirements_fullfilled = False
                     break
+            else:
+                for req in quest['requirements']:
+                    if req not in get_config()['requirements']:
+                        requirements_fullfilled = False
+                        break
         if requirements_fullfilled:
             available_quests.append(idx)
             quests.append(quest)
@@ -110,9 +119,9 @@ def show_users(auth_header):
             try:
                 print(user['name'], end=', ')
             except UnicodeEncodeError:
-                pass
+                print('Unicode error :/ Bleep')
     print()
-    return ''
+    return
 
 
 def quest_infos(response):

@@ -1,8 +1,7 @@
 import yaml, ast
-from socket import *
 from pathlib import Path
-from .paths_util import util_req
-
+from socket import *
+from .paths_names import util_req, util_own_server
 __location__ = Path().cwd()
 
 
@@ -40,10 +39,19 @@ def write_config(paths):
 
 def change_config(path, data):
     config = get_config()
-    if data == util_req:
-        config[path].append(data)
-    else:
-        config[path] = data
+    config[path] = data
+    write_config(config)
+
+
+def add_to(token, data):
+    config = get_config()
+    config[token].append(data)
+    write_config(config)
+
+
+def rm_from(token, data):
+    config = get_config()
+    config[token].remove(data)
     write_config(config)
 
 
@@ -57,6 +65,12 @@ def get_server_url():
     address = address_pre[0]
     print('Config: Received {0} as address and {1} as port'.format(address, port))
     return address, port
+
+
+def set_own_url():
+    own_address = 'http://' + gethostbyname(gethostname()) + ':5000'
+    change_config(util_own_server, own_address)
+    print('Config: Set own address to: ' + own_address)
 
 
 def set_server_url_via_udp():

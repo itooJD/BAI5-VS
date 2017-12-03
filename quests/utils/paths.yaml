@@ -1,5 +1,6 @@
 ---
 server : ''
+own_address: ''
 user_url : '/users'
 login_url : '/login'
 whoami_url : '/whoami'
@@ -10,17 +11,23 @@ quest_url : '/quests'
 deliver_url: '/deliveries'
 task_url : '/tasks'
 
-hero_url : '/heroyjenkins'
+hero_url : '/'
 diary_url : "/diary"
 taverna_url : "/taverna"
 assignment_url : '/noTimeToSleep'
 election_url : '/election'
-group_uri : ''
+callback_url : '/callMeMaybe'
+
 group_url : '/groups'
 adventurers_url : '/adventurers'
 member_url : '/members'
+group: ''
+current_assignment: ''
 
 username : ''
+
+quest_tokens: []
 requirements : []
 quests : []
+messages : []
 ...

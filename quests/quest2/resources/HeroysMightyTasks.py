@@ -1,8 +1,10 @@
-import requests
-from flask_restful import Resource, reqparse
-from quests.utils import get_config
+import requests, json
+from flask_restful import Resource
 from flask import request, abort, jsonify
-from quests.utils.config_manager import write_assignment, get_assignment
+from quests.utils import change_config, get_config
+from quests.utils.paths_names import util_assignments, auth_token as token
+from quests.utils import paths_util
+from quests.quest1.utilities import divide_line
 
 
 # Post assignments
@@ -13,7 +15,7 @@ class HeroysMightyTasks(Resource):
         json_data = request.get_json(force=True)
         try:
             if bool(json_data) and len(json_data) == 1 and json_data['heroy'] == 'user':
-                return jsonify(get_assignment())
+                return jsonify(get_config()[util_assignments])
             else:
                 return jsonify({"message": "whaaat the hellllllll"})
         except KeyError:
@@ -23,37 +25,53 @@ class HeroysMightyTasks(Resource):
         try:
             json_data = request.get_json(force=True)
             if bool(json_data) and len(json_data) == 7:
-                write_assignment({
-                    "id": '"' + json_data['id'] + '"',
-                    "task": '"' + json_data['task'] + '"',
-                    "resource": '"' + json_data['resource'] + '"',
-                    "method": '"' + json_data['method'] + '"',
-                    "data": '"' + json_data['data'] + '"',
-                    "callback": '"' + json_data['callback'] + '"',
-                    "message": '"' + json_data['message'] + '"'
+                change_config(util_assignments, {
+                    "id": json_data['id'],
+                    "task": json_data['task'],
+                    "resource": json_data['resource'],
+                    "method": json_data['method'],
+                    "data": json_data['data'],
+                    "callback": json_data['callback'],
+                    "message": json_data['message']
                 })
-                return jsonify({"message": "assignment received"})
                 # auto completing assignment?
-                '''
-                if json_data['method'] == 'GET':
-                    response = requests.post(json_data['resource'], headers=auth_header, data=json_data['data'])
-                elif json_data['method'] == 'POST':
-                    response = requests.post(json_data['resource'], headers=auth_header, data=json_data['data'])
+                divide_line()
+                print('Received assignment: \n' + str(json_data['message']) + '\n' + str(json_data['method']) + '\n' + str(json_data['resource']))
+                print()
+                url = paths_util.make_http(json_data['resource'])
+                if json_data['method'].lower() == 'get':
+                    response = requests.get(url, headers=get_config()[token], data=json_data['data'])
+                elif json_data['method'].lower() == 'post':
+                    response = requests.post(url, headers=get_config()[token], data=json_data['data'])
                 else:
                     return abort(400)
 
                 if response.status_code == 200:
-                    answer = {
+                    answer = json.dumps({
                         'id': json_data['id'],
                         'task': json_data['task'],
                         'resource': json_data['resource'],
                         'method': json_data['method'],
-                        'data': response,
-                        'user': hero_url,
-                        'message': 'Swifty swooty as ever has heroy done his job'
-                    }
-                    requests.post(json_data['callback'], data=answer)
-                    '''
+                        'data': response.json(),
+                        'user': get_config()['username'],
+                        'message': 'Swifty swooty as ever has Heroy done his job.'
+                    })
+                    callback_address = paths_util.make_http(request.remote_addr + json_data['callback'])
+                    print(callback_address)
+                    print('That went well, answering to Callback!')
+                    try:
+                        callback_resp = requests.post(callback_address, data=answer)
+                        if callback_resp.status_code == 200 or callback_resp.status_code == 201:
+                            divide_line()
+                            print('Callback sent successfully')
+                        else:
+                            print('Could not reach callback url')
+                            divide_line()
+                    except ConnectionRefusedError:
+                        print('Could not reach callback, Connection Refused!')
+                else:
+                    divide_line()
+                    return jsonify({"message": "That didnt go well duh"})
             else:
                 return abort(400)
         except KeyError or TypeError:

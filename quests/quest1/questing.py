@@ -1,5 +1,6 @@
-import requests
+import requests, json
 from quests.utils import get_config
+from quests.utils.paths_names import util_group
 from quests.quest1.utilities import divide_line
 
 
@@ -14,11 +15,16 @@ def solve_quests(quest, quest_no, auth_header):
     elif int_quest_no == 2:
         deliver_token = visit_rats(auth_header, quest_host, location_url)
         deliver(auth_header, deliver_token, quest_no, quest['tasks'])
-    elif int_quest_no == 3:
+    elif int_quest_no == 3 and get_config()[util_group] != '':
         deliver_token = visit_wounded(auth_header, quest_host, location_url)
-        deliver(auth_header, deliver_token, quest_no, quest['tasks'])
+        deliver_tokens(auth_header, deliver_token, quest_no, quest['tasks'])
+        if deliver_token:
+            deliver(auth_header, deliver_token, quest_no, quest['tasks'])
+        else:
+            print('Wrong token? Exiting Quest')
     else:
         print('Sorry, you do not have the required requirements to solve this. Back to the Main UI.')
+
 
 def lookup_task(headers):
     print()
@@ -27,7 +33,11 @@ def lookup_task(headers):
     if task_resp.status_code == 200:
         print('### This task exists! You are making me proud Heroy! ###')
         print()
+        print(task_resp.json()['object']['name'])
+        print()
         print(task_resp.json()['object']['description'])
+        if task_resp.json()['object'].get('required_players'):
+            print('Required Players: ' + str(task_resp.json()['object'].get('required_players')))
         print('It seems we have to go to: ' + str(task_resp.json()['object']['location']))
         print('And there to: ' + str(task_resp.json()['object']['resource']))
     return str(task_resp.json()['object']['resource']), task_no
@@ -87,6 +97,31 @@ def deliver(headers, deliver_token, quest_no, task_uris):
         print('Quest: Could not be completed, caught exception - ' + str(ex))
 
 
+def deliver_tokens(headers, deliver_tokens, quest_no, task_uris):
+    deliver_token = '{"tokens": ['
+    for task in task_uris:
+
+        for idx, tk in enumerate(deliver_tokens):
+            print(tk)
+            if idx == len(deliver_tokens)-1:
+                deliver_token += '{"' + task + '":"' + tk + '"}'
+            else:
+                deliver_token += '{"' + task + '":"' + tk + '"},'
+        deliver_token += ']}'
+    print()
+    print('Quest: Now let us deliver our token. Back to the blackboard!')
+    print('Lets give our quest back to: ' + get_config()['server'] + get_config()['blackboard_url'] + get_config()['quest_url'] + '/' + str(quest_no) + get_config()['deliver_url'])
+    last_resp = requests.post(get_config()['server'] + get_config()['blackboard_url'] + get_config()['quest_url'] + '/' + str(quest_no) + get_config()['deliver_url'],
+                              headers=headers, data=deliver_token)
+    print(deliver_token)
+    print(str(last_resp.json()))
+    print(last_resp.json()['message'])
+    if last_resp.json().get('status') == 'success':
+        print("Quest successfully closed! Herrrrroooooooooy Jeeeeenkiiiiiins!!")
+    else:
+        print(last_resp.json()['error'])
+
+
 def visit_throneroom(headers, quest_host, location_url):
     print()
     print('Quest: Finally, we arrived at {0}{1}. Lets see what we can find at this place!'.format(quest_host,
@@ -142,16 +177,31 @@ def visit_wounded(auth_header, quest_host, location_url):
     divide_line()
     print('We arrived at {0}{1}. Lets see what where we can help!'.format(quest_host, location_url))
     visit_resp = requests.get('http://' + quest_host + location_url, headers=auth_header)
+    print(visit_resp.json())
     print()
-    print(visit_resp.json()['message'])
+    print('Message: ' + str(visit_resp.json()['message']))
     tokens = []
     if visit_resp.json().get('steps_todo'):
+        print('Next Steps: ' + str(visit_resp.json().get('steps_todo')))
         for step in visit_resp.json()['steps_todo']:
             step_result = visit_wounded(auth_header, quest_host, step)
             tokens.append(step_result)
     else:
         divide_line()
+        # send_assignment_to_group(auth_header, '', id=2, task='4', resource='http://' + quest_host + location_url,
+        #                         task_data='', method='POST',
+        #                         message='Help me with Quest 3 please! Send me the token to callback :)')
         post_to = requests.post('http://' + quest_host + location_url, headers=auth_header)
         print('Aquired Token! ' + post_to.json()['token_name'])
         return post_to.json()['token']
+    input('Received all tokens?')
     return tokens
+    '''
+    for idx, tk in enumerate(tokens):
+        print(str(idx) + ' ' + tk)
+    token_no = input('Which one do you want to take?')
+    if tokens[int(token_no)]:
+        return tokens[int(token_no)]
+    else:
+        return False
+    '''
