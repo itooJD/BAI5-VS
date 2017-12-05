@@ -206,7 +206,6 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
                 "callback": get_config()['callback_url'],
                 "message": str(message)
             })
-
             print('Sending assignment: ' + str(data) +  ' to group members')
             for member in response.json()['objects']:
                 if not member['url'] == get_config()[util_own_server]:
@@ -216,8 +215,6 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
                         member_data = requests.get(member_url)
                         if member_data and (member_data.status_code == 200 or member_data.status_code == 201):
                             user_url = paths_util.make_http(member['url'])
-                            print(user_url + member_data.json()['assignments'])
-
                             try:
                                 response = requests.get(user_url)
                                 print(response.json()['user'])
