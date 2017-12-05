@@ -8,8 +8,8 @@ from .paths_names import util_user, util_group, auth_token, util_own_server
 from .paths_util import make_http
 
 
-def election_algorithm(data):
-    data = json.dumps(data)
+def election_algorithm(election_data):
+    data = json.dumps(election_data)
     response = requests.get(get_config()[util_group] + get_config()['member_url'], headers=get_config()[auth_token])
     coordinator = True
     pool = ThreadPool(processes=3)
@@ -28,6 +28,7 @@ def election_algorithm(data):
     if coordinator:
         divide_line()
         print('Heroy is president!')
+        print(data)
         ok = solve_assignment(data['job'], data['job']['callback'])
         if not ok:
             print('Could not finish our assignment!')
