@@ -15,6 +15,7 @@ def election_algorithm(election_data):
     pool = ThreadPool(processes=3)
     for member in response.json()['objects']:
         if member['user'] > ('/users/' + get_config()[util_user]):
+            print(member['user'])
             if make_http(member['url']) != get_config()[util_own_server]:
                 try:
                     user = requests.get(make_http(member['url']))
@@ -48,6 +49,7 @@ def recv_ok(url, data):
         divide_line()
         print('Could not reach ' + url)
         print(ex)
+
 
 '''
 {
