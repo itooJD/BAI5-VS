@@ -176,7 +176,7 @@ def visit_wounded(auth_header, quest_host, location_url):
         print(quest_resp.json())
     else:
         divide_line()
-        send_as = input('Send as an assignment? [y]')
+        send_as = input('Send as an assignment? [y]\n> ')
         if send_as == 'y':
             send_assignment_to_group(auth_header, '', id=2, task='4', resource=quest_host + location_url,
                                  task_data='', method='POST',

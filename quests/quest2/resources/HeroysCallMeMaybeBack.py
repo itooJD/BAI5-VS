@@ -34,8 +34,8 @@ class HeroysCallMeMaybeBack(Resource):
                 }
                 change_config(util_assignments, assignment_data)
                 print('Received finished assignment: ' + str(assignment_data))
-                add_to(util_recv_tokens, json_data['data'])
-                print('Token received: ' +  json_data['data'])
+                add_to(util_recv_tokens, str(json_data['data']))
+                print('Token received: ' +  str(json_data['data']))
                 return jsonify({"message": "thats all?"}), 200
             else:
                 return abort(400)
