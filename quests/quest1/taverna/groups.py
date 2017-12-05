@@ -71,7 +71,8 @@ def join_group(auth_header, groups):
 
 
 def delete_your_group(auth_header, groups):
-    response = requests.delete(paths_util.server_uri(get_config()[util_group]), headers=auth_header)
+    print(paths_util.make_http(paths_util.server_uri(get_config()[util_group])) + '/')
+    response = requests.delete(paths_util.make_http(paths_util.server_uri(get_config()[util_group])) + '/', headers=auth_header)
     if response.status_code == 200:
         change_config(util_group, '')
         rm_from(util_req,util_group)
