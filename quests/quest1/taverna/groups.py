@@ -203,11 +203,13 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
                 "resource": str(resource),
                 "method": str(method),
                 "data": str(task_data),
-                "callback": get_config()['callback_url'],
+                "callback": get_config()['callback_url'] + ':5000',
                 "message": str(message)
             })
             print('Sending assignment: ' + str(data) +  ' to group members')
             for member in response.json()['objects']:
+                print(member['url'])
+                print(get_config()[util_own_server])
                 if not member['url'] == get_config()[util_own_server]:
                     try:
                         member_url = paths_util.make_http(member['url'])
