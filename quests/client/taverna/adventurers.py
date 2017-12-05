@@ -1,8 +1,8 @@
 import json
 import requests
 
-from quests.quest1.taverna.user_interaction import user_interaction_ui
-from quests.quest1.utilities import divide_line
+from quests.client.taverna.user_interaction import user_interaction_ui
+from quests.client.utilities import divide_line
 from quests.utils import paths_util, get_config
 from quests.utils.paths_names import util_group
 

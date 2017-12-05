@@ -1,8 +1,8 @@
-from quests.quest1.blackboard import show_users, choose_quest
-from quests.quest1.taverna.taverna import taverna
-from quests.quest1.questing import look_at_map
-from quests.quest1.utilities import logout, divide_line
-from quests.quest1.user import whoami
+from quests.client.blackboard import show_users, choose_quest
+from quests.client.taverna.taverna import taverna
+from quests.client.questing import look_at_map
+from quests.client.utilities import logout, divide_line
+from quests.client.user import whoami
 
 
 def main_ui(auth_header):

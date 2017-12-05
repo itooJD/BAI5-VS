@@ -1,10 +1,11 @@
 import json
 
 import requests
-from quests.quest1.taverna.groups import send_assignment_to_group, start_election
+from quests.utils.election_algorithm import start_election
+from quests.client.taverna.groups import send_assignment_to_group
 from quests.utils import get_config, change_config
 from quests.utils.paths_names import util_group, util_recv_tokens, util_user
-from quests.quest1.utilities import divide_line
+from quests.client.utilities import divide_line
 
 
 def solve_quests(quest, quest_no, auth_header):
@@ -198,9 +199,9 @@ def visit_wounded(auth_header, quest_host, location_url):
 def visit_elves(auth_header, quest_host, location_url):
     divide_line()
     visit_resp = requests.get('http://' + quest_host + location_url, headers=auth_header)
+    print(visit_resp.json())
     print(visit_resp.json()['message'])
     divide_line()
-    #result = send_election()
     assignment_data = {
         "id": 300000,
         "task": '/blackboard/tasks/7',
@@ -212,9 +213,13 @@ def visit_elves(auth_header, quest_host, location_url):
     }
     start_election(job_data=assignment_data)
     divide_line()
-    input('Did you get back the election result?\n> ')
-    data  = json.dumps({"group":get_config()[util_group]})
-    leader_resp = requests.post('http://' + quest_host + location_url, headers=auth_header, data=data)
-    print(leader_resp.status_code)
-    print(leader_resp.json())
+    ##input('Did you get back the election result?\n> ')
+    #data  = json.dumps({"group":get_config()[util_group]})
+    #leader_resp = requests.post('http://' + quest_host + location_url, headers=auth_header, data=data)
+    #print(leader_resp.status_code)
+    #print(leader_resp.json())
+    #data = json.dumps({"group": get_config()[util_group], "token": leader_resp.json()['token']})
+    #ok_resp =  requests.post('http://' + quest_host + location_url, headers=auth_header, data=data)
+    #print(ok_resp.json())
+    input('Done?')
 

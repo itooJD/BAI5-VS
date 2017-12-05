@@ -1,6 +1,6 @@
 import requests, json
 from quests.utils import paths_util, get_config
-from quests.quest1.utilities import divide_line
+from quests.client.utilities import divide_line
 
 
 def user_interaction_ui(auth_header, response_json, user_url):
