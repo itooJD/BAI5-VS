@@ -9,6 +9,6 @@ class HeroysDiary(Resource):
         json_data = request.get_json(force=True)
         if not json_data['message']:
             abort(400)
-        add_to(util_recv_messages,json_data['message'])
+        add_to(util_recv_messages, json_data['message'])
         print('Received: ' + str(json_data))
         return "Sent a message in a boooottle yeaah", 200

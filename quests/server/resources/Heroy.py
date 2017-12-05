@@ -1,23 +1,21 @@
 from flask import jsonify, request
 from flask_restful import Resource, abort
-from quests.quest2.util import hero_url, assignment_url, diary_url, quests, election_url
-from quests.utils.paths_names import util_group
 from quests.utils import get_config
 
 
-class HeroyJenkins(Resource):
+class Heroy(Resource):
     def __init__(self):
         self.idle = False
 
     def get(self):
         return jsonify({
-            "user": hero_url,
-            "idle": self.idle,
-            "group": get_config()[util_group],
-            "hirings": hero_url,
-            "assignments": assignment_url,
-            "messages": diary_url,
-            "election": election_url
+            "user": get_config()['hero_url'],
+            "idle": True,
+            "group": group_uri,
+            "hirings": get_config()['hero_url'],
+            "assignments": get_config()['hero_url'] + get_config()['assignment_url'],
+            "messages": get_config()['hero_url'] + get_config()['assignment_url'],
+            "election": get_config()['hero_url'] + get_config()['election_url']
         })
 
     def post(self):

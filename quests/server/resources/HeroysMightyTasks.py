@@ -34,9 +34,18 @@ class HeroysMightyTasks(Resource):
                     "callback": json_data['callback'],
                     "message": json_data['message']
                 })
+
+                print("id", json_data['id'])
+                print("task", json_data['task'])
+                print("resource", json_data['resource'])
+                print("method", json_data['method'])
+                print("data", json_data['data'])
+                print("callback", json_data['callback'])
+                print("message", json_data['message'])
                 # auto completing assignment?
                 divide_line()
-                print('Received assignment: \n' + str(json_data['message']) + '\n' + str(json_data['method']) + '\n' + str(json_data['resource']))
+                print('Received assignment: \n' + str(json_data['message']) + '\n' + str(
+                    json_data['method']) + '\n' + str(json_data['resource']))
                 print()
                 url = paths_util.make_http(json_data['resource'])
                 if json_data['method'].lower() == 'get':
@@ -56,6 +65,8 @@ class HeroysMightyTasks(Resource):
                         'user': get_config()['username'],
                         'message': 'Swifty swooty as ever has Heroy done his job.'
                     })
+
+                    response.post('http://172.19.0.13:5000' + json_data['callback'], data=answer)
                     callback_address = paths_util.make_http(request.remote_addr + json_data['callback'])
                     print(callback_address)
                     print('That went well, answering to Callback!')

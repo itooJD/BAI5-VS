@@ -1,7 +1,7 @@
 if __name__ == '__main__':
     answer = input('Do you want to start the flask server [1] or the ui [2]? \n > ')
     if answer == '1':
-        from quests.quest2.server_setup import setup_flask, add_api
+        from quests.server.server_setup import setup_flask, add_api
         from quests.utils import set_server_url_via_udp
         print('Setup: Setting server url')
         paths = set_server_url_via_udp()
