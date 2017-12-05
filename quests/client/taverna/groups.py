@@ -1,6 +1,6 @@
 import requests, json
 from quests.utils import paths_util, get_config, change_config, add_to, rm_from
-from quests.quest1.utilities import divide_line
+from quests.client.utilities import divide_line
 from quests.utils.paths_names import util_group, util_user, util_req, util_own_server
 
 

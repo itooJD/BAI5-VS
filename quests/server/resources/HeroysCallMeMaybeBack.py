@@ -2,7 +2,7 @@ import requests
 from flask_restful import Resource, reqparse
 from flask import request, abort, jsonify
 
-from quests.quest1.utilities import divide_line
+from quests.client.utilities import divide_line
 from quests.utils import change_config, get_config, add_to
 from quests.utils.paths_names import util_assignments, util_recv_tokens
 

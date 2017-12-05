@@ -1,10 +1,11 @@
 import json
 
 import requests
-from quests.quest1.taverna.groups import send_assignment_to_group, start_election
+from quests.utils.election_algorithm import start_election
+from quests.client.taverna.groups import send_assignment_to_group
 from quests.utils import get_config, change_config
 from quests.utils.paths_names import util_group, util_recv_tokens, util_user
-from quests.quest1.utilities import divide_line
+from quests.client.utilities import divide_line
 
 
 def solve_quests(quest, quest_no, auth_header):

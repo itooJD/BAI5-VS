@@ -1,7 +1,7 @@
 from quests.utils.config_manager import set_server_url_via_udp
-from quests.quest1.ui import main_ui
-from quests.quest1.user import authentication, whoami
-from quests.quest1.utilities import exit_check, divide_line
+from quests.client.ui import main_ui
+from quests.client.user import authentication, whoami
+from quests.client.utilities import exit_check, divide_line
 from quests.utils import get_config, change_config, set_own_url, add_to
 from quests.utils.paths_names import auth_token as token, util_req, util_own_server, util_group
 

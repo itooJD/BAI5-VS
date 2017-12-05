@@ -2,8 +2,8 @@ import requests, json
 from multiprocessing.pool import ThreadPool
 from .paths_names import util_user, util_own_server
 from .paths_util import make_http
-from quests.quest1.taverna.groups import create_assignment
-from quests.quest1.utilities import divide_line
+from quests.client.taverna.groups import create_assignment
+from quests.client.utilities import divide_line
 from quests.utils import paths_util, get_config, change_config
 from quests.utils.paths_names import auth_token, util_assignments, util_group
 
