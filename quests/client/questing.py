@@ -202,7 +202,6 @@ def visit_elves(auth_header, quest_host, location_url):
     print(visit_resp.json())
     print(visit_resp.json()['message'])
     divide_line()
-    #result = send_election()
     assignment_data = {
         "id": 300000,
         "task": '/blackboard/tasks/7',
@@ -212,14 +211,15 @@ def visit_elves(auth_header, quest_host, location_url):
         "callback": get_config()['callback_url'],
         "message": 'Help! Save the elves! Put on the ring!'
     }
-    #start_election(job_data=assignment_data)
+    start_election(job_data=assignment_data)
     divide_line()
-    #input('Did you get back the election result?\n> ')
-    data  = json.dumps({"group":get_config()[util_group]})
-    leader_resp = requests.post('http://' + quest_host + location_url, headers=auth_header, data=data)
-    print(leader_resp.status_code)
-    print(leader_resp.json())
-    data = json.dumps({"group": get_config()[util_group], "token": leader_resp.json()['token']})
-    ok_resp =  requests.post('http://' + quest_host + location_url, headers=auth_header, data=data)
-    print(ok_resp.json())
+    ##input('Did you get back the election result?\n> ')
+    #data  = json.dumps({"group":get_config()[util_group]})
+    #leader_resp = requests.post('http://' + quest_host + location_url, headers=auth_header, data=data)
+    #print(leader_resp.status_code)
+    #print(leader_resp.json())
+    #data = json.dumps({"group": get_config()[util_group], "token": leader_resp.json()['token']})
+    #ok_resp =  requests.post('http://' + quest_host + location_url, headers=auth_header, data=data)
+    #print(ok_resp.json())
+    input('Done?')
 
