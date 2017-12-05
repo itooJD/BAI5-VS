@@ -14,10 +14,7 @@ def election_algorithm(election_data):
     coordinator = True
     pool = ThreadPool(processes=3)
     for member in response.json()['objects']:
-        print(member['user'], ' > ', ('/users/' + get_config()[util_user]), ' = ',
-              member['user'] > ('/users/' + get_config()[util_user]))
         if member['user'] > ('/users/' + get_config()[util_user]):
-            print('will be tested')
             if make_http(member['url']) != get_config()[util_own_server]:
                 try:
                     user = requests.get(make_http(member['url']))

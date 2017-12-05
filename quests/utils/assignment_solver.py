@@ -22,6 +22,9 @@ def solve_assignment(json_data, sender_uri):
         return False
 
     if response.status_code == 200:
+        print(response.json()['message'])
+        print()
+        print(response.json())
         answer = json.dumps({
             'id': json_data['id'],
             'task': json_data['task'],
