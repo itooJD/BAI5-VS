@@ -31,7 +31,7 @@ class HeroysMightyTasks(Resource):
                     "resource": json_data['resource'],
                     "method": json_data['method'],
                     "data": json_data['data'],
-                    "callback": paths_util.make_http(request.remote_addr + json_data['callback']),
+                    "callback": paths_util.make_http(request.remote_addr + ':5000' + json_data['callback']),
                     "message": json_data['message']
                 }
                 # saving assignment
