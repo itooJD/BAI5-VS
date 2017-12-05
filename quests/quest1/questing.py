@@ -178,9 +178,10 @@ def visit_wounded(auth_header, quest_host, location_url):
             else:
                 tokens_string += '"' + token + '",'
         data = '{"tokens":' + tokens_string + '}'
-        quest_resp = requests.post('http://' + quest_host + location_url, headers=auth_header)
+        quest_resp = requests.post('http://' + quest_host + location_url, headers=auth_header, data=data)
         print(quest_resp)
         print(quest_resp.json())
+        token = quest_resp.json()['token']
     else:
         divide_line()
         send_as = input('Send as an assignment? [y]\n> ')
@@ -193,4 +194,4 @@ def visit_wounded(auth_header, quest_host, location_url):
             post_to = requests.post('http://' + quest_host + location_url, headers=auth_header)
             print('Aquired Token! ' + post_to.json()['token_name'])
             return post_to.json()['token']
-    return data
+    return token
