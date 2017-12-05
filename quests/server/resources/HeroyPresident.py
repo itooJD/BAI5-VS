@@ -21,5 +21,6 @@ class HeroyPresident(Resource):
             election_algorithm(election_data)
 
             return jsonify({"message": "OK"})
-        except Exception:
+        except Exception as ex:
+            print(ex)
             return abort(400)
