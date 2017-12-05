@@ -3,7 +3,7 @@ from multiprocessing.pool import ThreadPool
 
 from quests.utils.assignment_solver import solve_assignment
 from .config_manager import get_config
-from .paths_names import util_user, util_group, auth_token
+from .paths_names import util_user, util_group, auth_token, util_own_server
 from .paths_util import make_http
 
 
@@ -12,12 +12,13 @@ def election_algorithm(data):
     coordinator = True
     pool = ThreadPool(processes=3)
     for member in response.json()['objects']:
-        print(member)
         if member['user'] > ('/users/' + get_config()[util_user]):
-            async_result = pool.apply_async(recv_ok, (make_http(member['url']), data))
-            if async_result.get():
-                coordinator = False
-                break
+            if make_http(member['url']) != get_config()[util_own_server]:
+                print(member)
+                async_result = pool.apply_async(recv_ok, (make_http(member['url']), data))
+                if async_result.get():
+                    coordinator = False
+                    break
     if coordinator:
         print('Heroy is president!')
         solve_assignment(data['job'])

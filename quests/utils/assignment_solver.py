@@ -14,7 +14,6 @@ def solve_assignment(json_data):
         json_data['method']) + '\n' + str(json_data['resource']))
     print()
     url = paths_util.make_http(json_data['resource'])
-    print(url)
     if json_data['method'].lower() == 'get':
         response = requests.get(url, headers=get_config()[auth_token], data=json_data['data'])
     elif json_data['method'].lower() == 'post':
