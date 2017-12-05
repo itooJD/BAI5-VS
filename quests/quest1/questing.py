@@ -1,7 +1,6 @@
-import requests, json
-
+import requests
 from quests.quest1.taverna.groups import send_assignment_to_group
-from quests.utils import get_config
+from quests.utils import get_config, change_config
 from quests.utils.paths_names import util_group, util_recv_tokens
 from quests.quest1.utilities import divide_line
 
@@ -20,10 +19,6 @@ def solve_quests(quest, quest_no, auth_header):
     elif int_quest_no == 3 and get_config()[util_group] != '':
         deliver_token = visit_wounded(auth_header, quest_host, location_url)
         deliver(auth_header, deliver_token, quest_no, quest['tasks'])
-        if deliver_token:
-            deliver(auth_header, deliver_token, quest_no, quest['tasks'])
-        else:
-            print('Wrong token? Exiting Quest')
     else:
         print('Sorry, you do not have the required requirements to solve this. Back to the Main UI.')
 
@@ -159,21 +154,28 @@ def visit_wounded(auth_header, quest_host, location_url):
     print('Message: ' + str(visit_resp.json()['message']))
     tokens = []
     if visit_resp.json().get('steps_todo'):
+        change_config(util_recv_tokens,[])
         print('Next Steps: ' + str(visit_resp.json().get('steps_todo')))
         for step in visit_resp.json()['steps_todo']:
             step_result = visit_wounded(auth_header, quest_host, step)
-            tokens.append(step_result)
+            if step_result:
+                tokens.append(step_result)
+        divide_line()
+        print(get_config()[util_recv_tokens])
+        for tk in get_config()[util_recv_tokens]:
+            tokens.append(tk)
         input('Received all tokens?')
         tokens_string = '['
-        for idx, token in enumerate(tokens.extend(get_config()[util_recv_tokens])):
+        for idx, token in enumerate(tokens):
             if idx == len(tokens) - 1:
                 tokens_string += '"' + token + '"]'
             else:
                 tokens_string += '"' + token + '",'
         data = '{"tokens":' + tokens_string + '}'
-        quest_resp = requests.post('http://' + quest_host + location_url, headers=auth_header)
+        quest_resp = requests.post('http://' + quest_host + location_url, headers=auth_header, data=data)
         print(quest_resp)
         print(quest_resp.json())
+        token = quest_resp.json()['token']
     else:
         divide_line()
         send_as = input('Send as an assignment? [y]\n> ')
@@ -181,9 +183,9 @@ def visit_wounded(auth_header, quest_host, location_url):
             send_assignment_to_group(auth_header, '', id=2, task='4', resource=quest_host + location_url,
                                  task_data='', method='POST',
                                  message='Help me with Quest 3 please! Send me the token to callback :)')
-            return
+            return False
         else:
             post_to = requests.post('http://' + quest_host + location_url, headers=auth_header)
             print('Aquired Token! ' + post_to.json()['token_name'])
             return post_to.json()['token']
-    return data
+    return token

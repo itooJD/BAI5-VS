@@ -38,9 +38,12 @@ class HeroysCallMeMaybeBack(Resource):
                 divide_line()
                 print('Callback:')
                 print('Received finished assignment: ' + str(assignment_data))
-                add_to(util_recv_tokens, str(json_data['data']))
+                add_to(util_recv_tokens, str(json_data['data']['token']))
                 divide_line()
-                return jsonify({"message": "thats all?"}), 200
+                print(get_config()[util_recv_tokens])
+                divide_line()
+
+                return jsonify(message="thats all")
             else:
                 return abort(400)
         except KeyError or TypeError:
