@@ -1,5 +1,6 @@
 import requests
 from multiprocessing.pool import ThreadPool
+from flask import request
 
 from quests.quest1.utilities import divide_line
 from quests.utils.assignment_solver import solve_assignment
@@ -15,8 +16,10 @@ def election_algorithm(data):
     for member in response.json()['objects']:
         if member['user'] > ('/users/' + get_config()[util_user]):
             if make_http(member['url']) != get_config()[util_own_server]:
-                print(member)
-                async_result = pool.apply_async(recv_ok, (make_http(member['url']), data))
+                user = requests.get(make_http(member['url']))
+                print(user.json())
+                print(make_http(request.remote_addr) + user.json()['election'])
+                async_result = pool.apply_async(recv_ok, (make_http(request.remote_addr) + user.json()['election'], data))
                 if async_result.get():
                     coordinator = False
                     break
