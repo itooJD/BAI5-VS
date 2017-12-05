@@ -12,7 +12,8 @@ def election_algorithm(data):
     coordinator = True
     pool = ThreadPool(processes=3)
     for member in response.json()['objects']:
-        if member['name'] > get_config()[util_user]:
+        print(member)
+        if member['user'] > get_config()[util_user]:
             async_result = pool.apply_async(recv_ok, (make_http(member['url']), data))
             if async_result.get():
                 coordinator = False
