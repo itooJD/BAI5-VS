@@ -1,5 +1,5 @@
 import requests, json
-from quests.utils import paths_util, get_config, change_config, add_to, rm_from
+from quests.utils import paths_util, get_config, change_config, add_to, rm_from, election_algorithm
 from quests.quest1.utilities import divide_line
 from quests.utils.paths_names import util_group, util_user, util_req, util_own_server
 
@@ -38,8 +38,9 @@ def group_filter(choice, auth_header, groups):
 def show_all_groups(auth_header, groups):
     response = requests.get(paths_util.group_url(), headers=auth_header)
     for group in response.json()['objects']:
-        groups[str(group['id'])]=group
-        print(str(group['id']) + ': Owner - ' + group['owner'] + ' | ' + str(group['members']) + ' | ' + str(group['_links']))
+        groups[str(group['id'])] = group
+        print(str(group['id']) + ': Owner - ' + group['owner'] + ' | ' + str(group['members']) + ' | ' + str(
+            group['_links']))
     divide_line()
 
 
@@ -58,10 +59,11 @@ def join_group(auth_header, groups):
             if group_get.status_code == 200 or group_get.status_code == 201:
                 group_url = group_get.json()['object']['_links']['self']
                 change_config(util_group, paths_util.server_uri(group_url))
-                add_to(util_req,util_group)
+                add_to(util_req, util_group)
                 adventurer_data = '{"heroclass":"Fantastic Space Ninja","capabilities":"' + str(
                     get_config()[util_req]) + '","url":' + get_config()[util_own_server] + '}'
-                requests.put(paths_util.adventurer_uri_name(get_config()['username']), headers=auth_header, data=adventurer_data)
+                requests.put(paths_util.adventurer_uri_name(get_config()['username']), headers=auth_header,
+                             data=adventurer_data)
             else:
                 print('Could not find the group. Where did they hide?!')
         else:
@@ -72,10 +74,11 @@ def join_group(auth_header, groups):
 
 def delete_your_group(auth_header, groups):
     print(paths_util.server_uri(get_config()[util_group]) + '/')
-    response = requests.delete(paths_util.make_http(paths_util.server_uri(get_config()[util_group])) + '/', headers=auth_header)
+    response = requests.delete(paths_util.make_http(paths_util.server_uri(get_config()[util_group])) + '/',
+                               headers=auth_header)
     if response.status_code == 200:
         change_config(util_group, '')
-        rm_from(util_req,util_group)
+        rm_from(util_req, util_group)
         adventurer_data = '{"heroclass":"juggernaut","capabilities":"' + str(
             get_config()[util_req]) + '","url":' + get_config()[util_own_server] + '}'
         requests.post(paths_util.adventurers_uri(), headers=auth_header, data=adventurer_data)
@@ -97,7 +100,7 @@ def create_group(auth_header, groups):
         create_new = True
     if create_new:
         response = requests.post(paths_util.group_url(), headers=auth_header)
-        change_config(util_group,response.json()['object'][0]['_links']['self'])
+        change_config(util_group, response.json()['object'][0]['_links']['self'])
         print(response.json()['message'])
     show_all_groups(auth_header, groups)
     divide_line()
@@ -130,6 +133,7 @@ def check_members(auth_header, groups):
         else:
             print('The group with the given id does not exist')
 
+
 def print_member(member_json):
     if member_json.get('heroclass'):
         print(member_json.get('heroclass') + ' | ', end='')
@@ -146,7 +150,7 @@ def leave_group(auth_header, groups):
     divide_line()
     print('The groups you are in:')
     groups_you_are_in = []
-    for k,v in groups.items():
+    for k, v in groups.items():
         if v['owner'] == get_config()[util_user]:
             groups_you_are_in.append(v)
     print(groups_you_are_in)
@@ -173,7 +177,8 @@ def check_own_group(auth_header, groups):
         print('You are in no group!')
 
 
-def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, method=None, task_data=None, message=None, answers_needed=1):
+def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, method=None, task_data=None,
+                             message=None, answers_needed=1):
     answers = 0
     if get_config()[util_group] != '':
         if not id:
@@ -238,3 +243,44 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
                     print('Skipping mighty me!')
 
 
+def start_election():
+    config = get_config()
+    print('\nSo you want to be the President?')
+
+    algorithm = input('let me ask you, how do you want to achieve this?')
+    print('and who might you be? ', config['username'], ' perhaps?')
+
+    job_data = create_assignment()
+
+    election_data = {
+        "algorithm": algorithm,
+        "payload": config['username'],
+        "user": "user",
+        "job": job_data,
+        "message": "",
+    }
+
+    election_algorithm(election_data)
+
+
+def create_assignment():
+    id = input('ID:         ')
+    task = input('Tasknumber: ')
+    resource = input('Resource:   ')
+    method = input('Method:     ')
+    task_data = input('Data:       ')
+    if not task_data:
+        task_data = ''
+    message = input('Message:    ')
+
+    assignment = json.dumps({
+        "id": str(id),
+        "task": get_config()['blackboard_url'] + get_config()['task_url'] + task,
+        "resource": str(resource),
+        "method": str(method),
+        "data": str(task_data),
+        "callback": get_config()['callback_url'],
+        "message": str(message)
+    })
+
+    return assignment
