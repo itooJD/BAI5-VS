@@ -1,6 +1,8 @@
 import requests
 from flask_restful import Resource, reqparse
 from flask import request, abort, jsonify
+
+from quests.quest1.utilities import divide_line
 from quests.utils import change_config, get_config, add_to
 from quests.utils.paths_names import util_assignments, util_recv_tokens
 
@@ -33,9 +35,11 @@ class HeroysCallMeMaybeBack(Resource):
                     "message": str(json_data['message'])
                 }
                 change_config(util_assignments, assignment_data)
+                divide_line()
+                print('Callback:')
                 print('Received finished assignment: ' + str(assignment_data))
                 add_to(util_recv_tokens, str(json_data['data']))
-                print('Token received: ' +  str(json_data['data']))
+                divide_line()
                 return jsonify({"message": "thats all?"}), 200
             else:
                 return abort(400)
