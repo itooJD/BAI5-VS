@@ -1,32 +1,25 @@
 from flask_restful import Resource
-from flask import request, abort
-import requests, json
+from flask import request, abort, jsonify
+from quests.utils import election_algorithm, get_config
 
 
 class HeroyPresident(Resource):
     def post(self):
         json_data = request.get_json(force=True)
         try:
-
+            config = get_config()
             print(json_data)
 
             election_data = {
                 "algorithm": json_data['algorithm'],
-                "payload": "my user name",
+                "payload": config['username'],
                 "user": "user_uri",
                 "job": json_data['job'],
                 "message": "hello you there?"
             }
-            print(json_data['algorithm'])
-            print(json_data['payload'])
-            print(json_data['user'])
-            print(json_data['job'])
-            print(json_data['message'])
+            print(election_data)
+            election_algorithm(election_data)
 
-            # start_thread:
-            #   if group_members > self:
-            #       send election
-
-            return 200
-        except Exception as ex:
+            return jsonify({"message": "OK"})
+        except Exception:
             return abort(400)
