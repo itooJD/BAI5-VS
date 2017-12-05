@@ -24,7 +24,6 @@ def election_algorithm(election_data):
                     async_result = pool.apply_async(recv_ok, (make_http(member['url']) + user.json()['election'], data))
                     if async_result.get():
                         coordinator = False
-                        break
                 except Exception as ex:
                     print('Could not reach - ' + str(member['user']))
                     print(ex)
@@ -40,12 +39,12 @@ def election_algorithm(election_data):
 
     else:
         divide_line()
-        print('What?! We were not elected? Change our name to "AAAA" immediatly!')
+        print('What?! We were not elected? Change our name to "zzzz" immediatly!')
 
 
 def recv_ok(url, data):
     try:
-        response = requests.post(url, data=data, timeout=1)
+        response = requests.post(url, data=data)
         print('Reached user ' + url)
         if response.status_code == 200 or response.status_code == 201:
             if response.json()['message'].lower() == 'ok':
