@@ -16,13 +16,17 @@ def election_algorithm(data):
     for member in response.json()['objects']:
         if member['user'] > ('/users/' + get_config()[util_user]):
             if make_http(member['url']) != get_config()[util_own_server]:
-                user = requests.get(make_http(member['url']))
-                print(user.json())
-                print(make_http(request.remote_addr) + user.json()['election'])
-                async_result = pool.apply_async(recv_ok, (make_http(request.remote_addr) + user.json()['election'], data))
-                if async_result.get():
-                    coordinator = False
-                    break
+                try:
+                    user = requests.get(make_http(member['url']))
+                    print(user.json())
+                    print(make_http(request.remote_addr) + user.json()['election'])
+                    async_result = pool.apply_async(recv_ok, (make_http(request.remote_addr) + user.json()['election'], data))
+                    if async_result.get():
+                        coordinator = False
+                        break
+                except Exception as ex:
+                    print('Could not reach - ' + str(member['user']))
+                    print(ex)
     if coordinator:
         print('Heroy is president!')
         solve_assignment(data['job'])
