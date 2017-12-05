@@ -1,4 +1,6 @@
 import requests, json
+
+from quests.quest1.taverna.groups import send_assignment_to_group
 from quests.utils import get_config
 from quests.utils.paths_names import util_group
 from quests.quest1.utilities import divide_line
@@ -188,12 +190,13 @@ def visit_wounded(auth_header, quest_host, location_url):
             tokens.append(step_result)
     else:
         divide_line()
-        # send_assignment_to_group(auth_header, '', id=2, task='4', resource='http://' + quest_host + location_url,
-        #                         task_data='', method='POST',
-        #                         message='Help me with Quest 3 please! Send me the token to callback :)')
-        post_to = requests.post('http://' + quest_host + location_url, headers=auth_header)
-        print('Aquired Token! ' + post_to.json()['token_name'])
-        return post_to.json()['token']
+        send_assignment_to_group(auth_header, '', id=2, task='4', resource='http://' + quest_host + location_url,
+                                 task_data='', method='POST',
+                                 message='Help me with Quest 3 please! Send me the token to callback :)')
+        #post_to = requests.post('http://' + quest_host + location_url, headers=auth_header)
+        #print('Aquired Token! ' + post_to.json()['token_name'])
+        #return post_to.json()['token']
+        return
     input('Received all tokens?')
     return tokens
     '''
