@@ -71,7 +71,7 @@ def join_group(auth_header, groups):
 
 
 def delete_your_group(auth_header, groups):
-    print(paths_util.make_http(paths_util.server_uri(get_config()[util_group])) + '/')
+    print(paths_util.server_uri(get_config()[util_group]) + '/')
     response = requests.delete(paths_util.make_http(paths_util.server_uri(get_config()[util_group])) + '/', headers=auth_header)
     if response.status_code == 200:
         change_config(util_group, '')
@@ -209,7 +209,7 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
             })
             print('Sending assignment: ' + str(data) +  ' to group members')
             for member in response.json()['objects']:
-                if not member['url'] == get_config()[util_own_server] or member['url'] == (get_config()[util_own_server] + '/'):
+                if not str(member['url']) == str(get_config()[util_own_server]) or not str(member['url']) == str((get_config()[util_own_server] + '/')):
                     print(member['url'])
                     print(get_config()[util_own_server])
                     print(get_config()[util_own_server] + '/')
