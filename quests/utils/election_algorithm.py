@@ -8,8 +8,8 @@ from .paths_names import util_user, util_group, auth_token, util_own_server
 from .paths_util import make_http
 
 
-def election_algorithm(data):
-    data = json.dumps(data)
+def election_algorithm(election_data):
+    data = json.dumps(election_data)
     response = requests.get(get_config()[util_group] + get_config()['member_url'], headers=get_config()[auth_token])
     coordinator = True
     pool = ThreadPool(processes=3)
@@ -28,7 +28,7 @@ def election_algorithm(data):
     if coordinator:
         divide_line()
         print('Heroy is president!')
-        ok = solve_assignment(data['job'], data['job']['callback'])
+        ok = solve_assignment(election_data['job'], election_data['job']['callback'])
         if not ok:
             print('Could not finish our assignment!')
     else:
@@ -38,7 +38,8 @@ def election_algorithm(data):
 
 def recv_ok(url, data):
     try:
-        response = requests.post(url, data=data)
+        response = requests.post(url, data=data, timeout=1)
+        print('Reached user ' + url)
         if response.status_code == 200 or response.status_code == 201:
             if response.json()['message'].lower() == 'ok':
                 return True
