@@ -25,7 +25,11 @@ class HeroysMightyTasks(Resource):
         try:
             json_data = request.get_json(force=True)
             if bool(json_data) and len(json_data) == 7:
-                solve_assignment(json_data, request.remote_addr)
+                ok = solve_assignment(json_data, request.remote_addr)
+                if ok:
+                    return 200
+                else:
+                    return 500
             else:
                 return abort(400)
         except KeyError or TypeError:

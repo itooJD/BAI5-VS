@@ -28,9 +28,7 @@ def election_algorithm(election_data):
     if coordinator:
         divide_line()
         print('Heroy is president!')
-        print(data)
-        print(data['job'])
-        ok = solve_assignment(data['job'], data['job']['callback'])
+        ok = solve_assignment(election_data['job'], election_data['job']['callback'])
         if not ok:
             print('Could not finish our assignment!')
     else:
@@ -40,7 +38,7 @@ def election_algorithm(election_data):
 
 def recv_ok(url, data):
     try:
-        response = requests.post(url, data=data)
+        response = requests.post(url, data=data, timeout=1)
         print('Reached user ' + url)
         if response.status_code == 200 or response.status_code == 201:
             if response.json()['message'].lower() == 'ok':
