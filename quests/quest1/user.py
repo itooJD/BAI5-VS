@@ -25,14 +25,14 @@ def authentication():
             print()
             print(response.json()['message'])
             change_config(util_user, username)
+        else:
+            change_config(util_user, username)
         response = requests.get(paths_util.server_uri(get_config()['login_url']), auth=(username, password))
         if response.status_code == 200:
             print(response.json()['message'])
             auth_token = response.json()['token']
             auth_header = {'Authorization': 'Token ' + auth_token}
             change_config(token, auth_header)
-        else:
-            change_config(util_user, username)
     else:
         exit = True
     return exit, auth_header
