@@ -1,6 +1,7 @@
 import requests
 from multiprocessing.pool import ThreadPool
 
+from quests.quest1.utilities import divide_line
 from quests.utils.assignment_solver import solve_assignment
 from .config_manager import get_config
 from .paths_names import util_user, util_group, auth_token, util_own_server
@@ -34,6 +35,7 @@ def recv_ok(url, data):
                 return True
         return False
     except Exception as ex:
+        divide_line()
         print('Could not reach ' + url)
         print(ex)
 

@@ -48,4 +48,3 @@ def solve_assignment(json_data):
             print(cre)
     else:
         divide_line()
-        return jsonify({"message": "That didnt go well duh"})
