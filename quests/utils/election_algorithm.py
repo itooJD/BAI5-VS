@@ -13,7 +13,7 @@ def election_algorithm(data):
     pool = ThreadPool(processes=3)
     for member in response.json()['objects']:
         print(member)
-        if member['user'] > get_config()[util_user]:
+        if member['user'] > ('/users/' + get_config()[util_user]):
             async_result = pool.apply_async(recv_ok, (make_http(member['url']), data))
             if async_result.get():
                 coordinator = False
@@ -26,11 +26,15 @@ def election_algorithm(data):
 
 
 def recv_ok(url, data):
-    response = requests.post(url, data=data)
-    if response.status_code == 200 or response.status_code == 201:
-        if response.json()['message'].lower() == 'ok':
-            return True
-    return False
+    try:
+        response = requests.post(url, data=data)
+        if response.status_code == 200 or response.status_code == 201:
+            if response.json()['message'].lower() == 'ok':
+                return True
+        return False
+    except Exception as ex:
+        print('Could not reach ' + url)
+        print(ex)
 
 '''
 {
