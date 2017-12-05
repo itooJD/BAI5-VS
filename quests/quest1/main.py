@@ -2,8 +2,8 @@ from quests.utils.config_manager import set_server_url_via_udp
 from quests.quest1.ui import main_ui
 from quests.quest1.user import authentication, whoami
 from quests.quest1.utilities import exit_check, divide_line
-from quests.utils import get_config, change_config, set_own_url
-from quests.utils.paths_names import auth_token as token, util_req, util_own_server
+from quests.utils import get_config, change_config, set_own_url, add_to
+from quests.utils.paths_names import auth_token as token, util_req, util_own_server, util_group
 
 
 def main():
@@ -39,6 +39,10 @@ def main():
             exit_check(exit)
             user_authenticated = whoami(auth_header)
         print()
+    if get_config()[util_group] != '':
+        if not util_group in get_config()[util_req]:
+            add_to(util_req, util_group)
+            print('Added "Group" to capabilities!\n')
     print('Authentication Token: ' + str(auth_header))
     print()
     print('Online at: ' + get_config()[util_own_server])
