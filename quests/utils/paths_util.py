@@ -9,10 +9,12 @@ def make_http(url):
     if not url.startswith('http://'):
         new_url = 'http://' + url
     else:
-        if url[-1] == '/':
-            new_url = url[:-1]
-        else:
-            new_url = url
+        new_url = url
+
+    if new_url[-1] == '/':
+        new_url = new_url[:-1]
+    else:
+        new_url = url
     return new_url
 
 

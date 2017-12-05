@@ -206,6 +206,7 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
             if not member['url'] == get_config()[util_own_server]:
                 try:
                     member_url = paths_util.make_http(member['url'])
+                    print(member_url)
                     member_data = requests.get(member_url)
                     if member_data and (member_data.status_code == 200 or member_data.status_code == 201):
                         print(member_data.json())
