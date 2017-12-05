@@ -1,3 +1,5 @@
+import json
+
 import requests
 from quests.quest1.taverna.groups import send_assignment_to_group
 from quests.utils import get_config, change_config
@@ -197,3 +199,8 @@ def visit_elves(auth_header, quest_host, location_url):
     divide_line()
     visit_resp = requests.get('http://' + quest_host + location_url, headers=auth_header)
     print(visit_resp.json()['message'])
+    divide_line()
+    data  = json.dumps({"group":get_config()[util_group]})
+    leader_resp = requests.post('http://' + quest_host + location_url, headers=auth_header, data=data)
+    print(leader_resp.status_code)
+    print(leader_resp.json())
