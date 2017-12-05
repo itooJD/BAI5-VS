@@ -243,24 +243,23 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
                     print('Skipping mighty me!')
 
 
-def start_election(job_data=None):
+def start_election(election_data=None, job_data=None):
     config = get_config()
     print('\nSo you want to be the President?')
 
     algorithm = input('let me ask you, how do you want to achieve this?')
     print('and who might you be? ', config['username'], ' perhaps?')
+    if not election_data:
+        if not job_data:
+            job_data = create_assignment()
 
-    if not job_data:
-        job_data = create_assignment()
-
-    election_data = {
-        "algorithm": algorithm,
-        "payload": config['username'],
-        "user": "user",
-        "job": job_data,
-        "message": "",
-    }
-
+        election_data = {
+            "algorithm": algorithm,
+            "payload": config['username'],
+            "user": "user",
+            "job": job_data,
+            "message": "",
+        }
     election_algorithm(election_data)
 
 
