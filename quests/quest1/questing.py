@@ -218,4 +218,7 @@ def visit_elves(auth_header, quest_host, location_url):
     leader_resp = requests.post('http://' + quest_host + location_url, headers=auth_header, data=data)
     print(leader_resp.status_code)
     print(leader_resp.json())
+    data = json.dumps({"group": get_config()[util_group], "token": leader_resp.json()['token']})
+    ok_resp =  requests.post('http://' + quest_host + location_url, headers=auth_header, data=data)
+    print(ok_resp.json())
 

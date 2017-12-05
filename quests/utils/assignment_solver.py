@@ -1,9 +1,10 @@
 import requests
 from flask import json, abort
 
+from quests.quest1.taverna.groups import start_election
 from quests.quest1.utilities import divide_line
 from quests.utils import paths_util, get_config, change_config
-from quests.utils.paths_names import auth_token, util_assignments
+from quests.utils.paths_names import auth_token, util_assignments, util_group
 
 
 def solve_assignment(json_data, sender_uri):
@@ -25,6 +26,25 @@ def solve_assignment(json_data, sender_uri):
         print(response.json()['message'])
         print()
         print(response.json())
+        if response.json().get('hint'):
+            print(response.json()['hint'])
+            divide_line()
+            print('Starting new election')
+            new_assignment = json_data
+            new_assignment['job'] = {
+                "id": json_data['id'],
+                "task": json_data['task'],
+                "resource": json_data['resource'],
+                "method": json_data['method'],
+                "data": str(json.dumps({
+                    "group": get_config()[util_group],
+                    "token": response.json()['token']
+                })),
+                "callback": json_data['callback'],
+                "message" : "Oh no, i am unconcious, take over please!"
+            }
+            start_election(election_data=new_assignment)
+
         answer = json.dumps({
             'id': json_data['id'],
             'task': json_data['task'],
