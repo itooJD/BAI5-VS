@@ -207,12 +207,12 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
                 "callback": get_config()['callback_url'],
                 "message": str(message)
             })
-            print('Sending assignment: ' + str(data) +  ' to group members')
+            print('Sending assignment: ' + str(data) + ' to group members')
             for member in response.json()['objects']:
-                if not str(member['url']) == str(get_config()[util_own_server]) or not str(member['url']) == str((get_config()[util_own_server] + '/')):
-                    print(member['url'])
-                    print(get_config()[util_own_server])
-                    print(get_config()[util_own_server] + '/')
+                if not str(member['url']) == str(get_config()[util_own_server]) or not str(member['url']) == str(get_config()[util_own_server] + '/'):
+                    print(str(member['url']))
+                    print(str(get_config()[util_own_server]))
+                    print(str(get_config()[util_own_server] + '/'))
                     try:
                         member_url = paths_util.make_http(member['url'])
                         print('Sending assignment to: ' + str(member_url))
@@ -226,9 +226,9 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
                                 if response.status_code == 200:
                                     print('Assignment sent to ' + str(member['user']))
                                     answers += 1
-                                    if answers_needed == answers:
-                                        print('Send all')
-                                        return
+                                    #if answers_needed == answers:
+                                    #    print('Send all')
+                                    #    return
                             except Exception as ex:
                                 print('Member: ' + str(member['user']) + ' could not be reached')
                                 print(ex)
