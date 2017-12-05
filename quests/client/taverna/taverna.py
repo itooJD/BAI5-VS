@@ -1,7 +1,7 @@
 import requests, json
 from quests.utils import paths_util, get_config
 from quests.utils.paths_names import util_req, util_own_server
-from quests.quest1.utilities import divide_line
+from quests.client.utilities import divide_line
 from .groups import group_ui
 from .adventurers import adventurer_ui
 

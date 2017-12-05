@@ -2,7 +2,7 @@ import requests, json
 from flask_restful import Resource
 from flask import request, abort, jsonify
 from quests.utils import change_config, get_config
-from quests.utils.assignment_solver import solve_assignment
+from quests.utils.election_algorithm import solve_assignment
 from quests.utils.paths_names import util_assignments
 from quests.utils import paths_util
 
