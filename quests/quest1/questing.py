@@ -162,7 +162,8 @@ def visit_wounded(auth_header, quest_host, location_url):
         print('Next Steps: ' + str(visit_resp.json().get('steps_todo')))
         for step in visit_resp.json()['steps_todo']:
             step_result = visit_wounded(auth_header, quest_host, step)
-            tokens.append(step_result)
+            if step_result:
+                tokens.append(step_result)
         divide_line()
         print(tokens)
         print(get_config()[util_recv_tokens])
@@ -186,7 +187,7 @@ def visit_wounded(auth_header, quest_host, location_url):
             send_assignment_to_group(auth_header, '', id=2, task='4', resource=quest_host + location_url,
                                  task_data='', method='POST',
                                  message='Help me with Quest 3 please! Send me the token to callback :)')
-            return
+            return False
         else:
             post_to = requests.post('http://' + quest_host + location_url, headers=auth_header)
             print('Aquired Token! ' + post_to.json()['token_name'])
