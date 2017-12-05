@@ -163,10 +163,12 @@ def visit_wounded(auth_header, quest_host, location_url):
         for step in visit_resp.json()['steps_todo']:
             step_result = visit_wounded(auth_header, quest_host, step)
             tokens.append(step_result)
-        print(get_config()[util_recv_tokens])
+        print(tokens)
         input('Received all tokens?')
+        gathered_tokens = tokens.extend(get_config()[util_recv_tokens])
+        print(gathered_tokens)
         tokens_string = '['
-        for idx, token in enumerate(tokens.extend(get_config()[util_recv_tokens])):
+        for idx, token in enumerate(gathered_tokens):
             if idx == len(tokens) - 1:
                 tokens_string += '"' + token + '"]'
             else:
