@@ -7,6 +7,16 @@ class HeroyPresident(Resource):
     def post(self):
         json_data = request.get_json(force=True)
         try:
+
+            print(json_data)
+
+            election_data = {
+                "algorithm": json_data['algorithm'],
+                "payload": "my user name",
+                "user": "user_uri",
+                "job": json_data['job'],
+                "message": "hello you there?"
+            }
             print(json_data['algorithm'])
             print(json_data['payload'])
             print(json_data['user'])
