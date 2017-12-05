@@ -12,7 +12,7 @@ class Heroy(Resource):
         data = {
             "user": config['hero_url'],
             "idle": True,
-            "group": config['util_group'],
+            "group": config['group'],
             "hirings": config['hero_url'],
             "assignments": config['hero_url'] + get_config()['assignment_url'],
             "messages": config['hero_url'] + get_config()['assignment_url'],
