@@ -209,10 +209,7 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
             })
             print('Sending assignment: ' + str(data) + ' to group members')
             for member in response.json()['objects']:
-                if not str(member['url']) == str(get_config()[util_own_server]) or not str(member['url']) == str(get_config()[util_own_server] + '/'):
-                    print(str(member['url']))
-                    print(str(get_config()[util_own_server]))
-                    print(str(get_config()[util_own_server] + '/'))
+                if not paths_util.make_http(member['url']) == str(get_config()[util_own_server]):
                     try:
                         member_url = paths_util.make_http(member['url'])
                         print('Sending assignment to: ' + str(member_url))
