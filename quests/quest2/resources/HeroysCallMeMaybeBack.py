@@ -23,15 +23,17 @@ class HeroysCallMeMaybeBack(Resource):
         try:
             json_data = request.get_json(force=True)
             if bool(json_data) and len(json_data) == 7:
-                change_config(util_assignments, {
-                    "id": json_data['id'],
-                    "task": json_data['task'],
-                    "resource": json_data['resource'],
-                    "method": json_data['method'],
-                    "data": json_data['data'],
-                    "user": json_data['user'],
-                    "message": json_data['message']
-                })
+                assignment_data ={
+                    "id": str(json_data['id']),
+                    "task": str(json_data['task']),
+                    "resource": str(json_data['resource']),
+                    "method": str(json_data['method']),
+                    "data": str(json_data['data']),
+                    "user": str(json_data['user']),
+                    "message": str(json_data['message'])
+                }
+                change_config(util_assignments, assignment_data)
+                print('Received finished assignment: ' + str(assignment_data))
                 add_to(util_recv_tokens, json_data['data'])
                 print('Token received: ' +  json_data['data'])
                 return jsonify({"message": "thats all?"}), 200

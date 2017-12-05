@@ -227,11 +227,13 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
                             except Exception as ex:
                                 print('Member: ' + str(member['user']) + ' could not be reached')
                                 print(ex)
+                                print()
                         else:
                             print('Member URL could not be reached!')
                     except Exception as ex:
-                        print('Member ' + str(member['user']) + ' could not be reached')
+                        print('Member ' + str(member['user']) + ' could not be reached\n-> Reason:\n')
                         print(ex)
+                        print()
                 else:
                     print('Skipping mighty me!')
 
