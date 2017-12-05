@@ -1,4 +1,4 @@
-import requests
+import requests, json
 from quests.utils import paths_util, get_config
 from quests.utils.paths_names import util_req, util_own_server
 from quests.quest1.utilities import divide_line
@@ -11,7 +11,7 @@ def taverna(auth_header):
     divide_line()
     print('So you are a juggernaut huh? And I can reach you at ' + get_config()[util_own_server] + '? Weird address, well have fun.')
     print( get_config()[util_own_server])
-    adventurer_data = '{"heroclass":"FantasticSpaceNinja","capabilities":"'+ str(get_config()[util_req]) +'","url":' + get_config()[util_own_server]+ '}'
+    adventurer_data = json.dumps({"heroclass":"space_ninja","capabilities": str(get_config()[util_req]),"url": get_config()[util_own_server]})
     taverna_enter_resp = requests.post(paths_util.adventurers_uri(), headers=auth_header, data=adventurer_data)
     print(('System: ' + taverna_enter_resp.json()['message']))
     print('\nYou enter the dusty taverna')
