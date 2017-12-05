@@ -11,7 +11,7 @@ class Heroy(Resource):
         return jsonify({
             "user": get_config()['hero_url'],
             "idle": True,
-            "group": group_uri,
+            "group": get_config()['util_group'],
             "hirings": get_config()['hero_url'],
             "assignments": get_config()['hero_url'] + get_config()['assignment_url'],
             "messages": get_config()['hero_url'] + get_config()['assignment_url'],
