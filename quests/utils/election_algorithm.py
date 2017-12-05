@@ -1,6 +1,5 @@
-import requests
+import requests, json
 from multiprocessing.pool import ThreadPool
-from flask import request
 
 from quests.quest1.utilities import divide_line
 from quests.utils.assignment_solver import solve_assignment
@@ -10,6 +9,7 @@ from .paths_util import make_http
 
 
 def election_algorithm(data):
+    data = json.dumps(data)
     response = requests.get(get_config()[util_group] + get_config()['member_url'], headers=get_config()[auth_token])
     coordinator = True
     pool = ThreadPool(processes=3)
@@ -18,7 +18,6 @@ def election_algorithm(data):
             if make_http(member['url']) != get_config()[util_own_server]:
                 try:
                     user = requests.get(make_http(member['url']))
-                    print(user.json())
                     async_result = pool.apply_async(recv_ok, (make_http(member['url']) + user.json()['election'], data))
                     if async_result.get():
                         coordinator = False
@@ -27,9 +26,13 @@ def election_algorithm(data):
                     print('Could not reach - ' + str(member['user']))
                     print(ex)
     if coordinator:
+        divide_line()
         print('Heroy is president!')
-        solve_assignment(data['job'], data['job']['callback'])
+        ok = solve_assignment(data['job'], data['job']['callback'])
+        if not ok:
+            print('Could not finish our assignment!')
     else:
+        divide_line()
         print('What?! We were not elected? Change our name to "AAAA" immediatly!')
 
 

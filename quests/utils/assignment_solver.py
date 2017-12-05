@@ -1,5 +1,5 @@
 import requests
-from flask import request, json, abort, jsonify
+from flask import json, abort
 
 from quests.quest1.utilities import divide_line
 from quests.utils import paths_util, get_config, change_config
@@ -19,7 +19,7 @@ def solve_assignment(json_data, sender_uri):
     elif json_data['method'].lower() == 'post':
         response = requests.post(url, headers=get_config()[auth_token], data=json_data['data'])
     else:
-        return abort(400)
+        return False
 
     if response.status_code == 200:
         answer = json.dumps({
@@ -48,3 +48,4 @@ def solve_assignment(json_data, sender_uri):
             print(cre)
     else:
         divide_line()
+        return False
