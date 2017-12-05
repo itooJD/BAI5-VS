@@ -134,7 +134,7 @@ def hire_adventurer(auth_header, name=None, adventurer=None):
         "message": message
     })
     try:
-        response = requests.post(hiring_uri, data=hirings_data, timeout=50)
+        response = requests.post(hiring_uri, data=hirings_data, timeout=10)
         print(response.status_code)
     except Exception:
         print('Could not hire')

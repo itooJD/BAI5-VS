@@ -12,10 +12,10 @@ def make_http(url):
         new_url = url
 
     if new_url[-1] == '/':
-        new_url = new_url[:-1]
+        http_url = new_url[:-1]
     else:
-        new_url = url
-    return new_url
+        http_url = new_url
+    return http_url
 
 
 def server_uri(uri):

@@ -71,7 +71,8 @@ def join_group(auth_header, groups):
 
 
 def delete_your_group(auth_header, groups):
-    response = requests.delete(paths_util.server_uri(get_config()[util_group]), headers=auth_header)
+    print(paths_util.server_uri(get_config()[util_group]) + '/')
+    response = requests.delete(paths_util.make_http(paths_util.server_uri(get_config()[util_group])) + '/', headers=auth_header)
     if response.status_code == 200:
         change_config(util_group, '')
         rm_from(util_req,util_group)
@@ -206,9 +207,9 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
                 "callback": get_config()['callback_url'],
                 "message": str(message)
             })
-            print('Sending assignment: ' + str(data) +  ' to group members')
+            print('Sending assignment: ' + str(data) + ' to group members')
             for member in response.json()['objects']:
-                if not member['url'] == get_config()[util_own_server] or member['url'] == get_config()[util_own_server] + '/':
+                if not paths_util.make_http(member['url']) == str(get_config()[util_own_server]):
                     try:
                         member_url = paths_util.make_http(member['url'])
                         print('Sending assignment to: ' + str(member_url))
@@ -216,8 +217,6 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
                         if member_data and (member_data.status_code == 200 or member_data.status_code == 201):
                             user_url = paths_util.make_http(member['url'])
                             try:
-                                response = requests.get(user_url)
-                                print(response.json()['user'])
                                 response = requests.post(user_url + member_data.json()['assignments'], data=data)
                                 if response.status_code == 200:
                                     print('Assignment sent to ' + str(member['user']))
@@ -228,11 +227,13 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
                             except Exception as ex:
                                 print('Member: ' + str(member['user']) + ' could not be reached')
                                 print(ex)
+                                print()
                         else:
                             print('Member URL could not be reached!')
                     except Exception as ex:
-                        print('Member ' + str(member['user']) + ' could not be reached')
+                        print('Member ' + str(member['user']) + ' could not be reached\n-> Reason:\n')
                         print(ex)
+                        print()
                 else:
                     print('Skipping mighty me!')
 

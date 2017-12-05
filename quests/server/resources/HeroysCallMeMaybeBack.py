@@ -1,6 +1,8 @@
 import requests
 from flask_restful import Resource, reqparse
 from flask import request, abort, jsonify
+
+from quests.quest1.utilities import divide_line
 from quests.utils import change_config, get_config, add_to
 from quests.utils.paths_names import util_assignments, util_recv_tokens
 
@@ -23,17 +25,21 @@ class HeroysCallMeMaybeBack(Resource):
         try:
             json_data = request.get_json(force=True)
             if bool(json_data) and len(json_data) == 7:
-                change_config(util_assignments, {
-                    "id": json_data['id'],
-                    "task": json_data['task'],
-                    "resource": json_data['resource'],
-                    "method": json_data['method'],
-                    "data": json_data['data'],
-                    "user": json_data['user'],
-                    "message": json_data['message']
-                })
-                add_to(util_recv_tokens, json_data['data'])
-                print('Token received: ' +  json_data['data'])
+                assignment_data ={
+                    "id": str(json_data['id']),
+                    "task": str(json_data['task']),
+                    "resource": str(json_data['resource']),
+                    "method": str(json_data['method']),
+                    "data": str(json_data['data']),
+                    "user": str(json_data['user']),
+                    "message": str(json_data['message'])
+                }
+                change_config(util_assignments, assignment_data)
+                divide_line()
+                print('Callback:')
+                print('Received finished assignment: ' + str(assignment_data))
+                add_to(util_recv_tokens, str(json_data['data']))
+                divide_line()
                 return jsonify({"message": "thats all?"}), 200
             else:
                 return abort(400)
