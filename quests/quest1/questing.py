@@ -193,6 +193,6 @@ def visit_wounded(auth_header, quest_host, location_url):
     return token
 
 
-def visit_elves(headers, quest_host, location_url):
-    visit_resp = requests.post('http://' + quest_host + location_url, headers=headers)
-    print(visit_resp.json()['message'] + ' with token: ' + visit_resp.json()['token_name'])
+def visit_elves(auth_header, quest_host, location_url):
+    visit_resp = requests.get('http://' + quest_host + location_url, headers=auth_header)
+    print(visit_resp.json())
