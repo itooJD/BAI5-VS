@@ -14,9 +14,9 @@ class Heroy(Resource):
             "idle": True,
             "group": config['group'],
             "hirings": config['hero_url'],
-            "assignments": config['hero_url'] + get_config()['assignment_url'],
-            "messages": config['hero_url'] + get_config()['assignment_url'],
-            "election": config['hero_url'] + get_config()['election_url']
+            "assignments": get_config()['assignment_url'],
+            "messages": get_config()['assignment_url'],
+            "election": get_config()['election_url']
         }
         print(data)
         return jsonify(data)
