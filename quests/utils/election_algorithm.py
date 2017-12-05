@@ -19,8 +19,7 @@ def election_algorithm(data):
                 try:
                     user = requests.get(make_http(member['url']))
                     print(user.json())
-                    print(make_http(request.remote_addr) + user.json()['election'])
-                    async_result = pool.apply_async(recv_ok, (make_http(request.remote_addr) + user.json()['election'], data))
+                    async_result = pool.apply_async(recv_ok, (make_http(member['url']) + user.json()['election'], data))
                     if async_result.get():
                         coordinator = False
                         break
@@ -29,7 +28,7 @@ def election_algorithm(data):
                     print(ex)
     if coordinator:
         print('Heroy is president!')
-        solve_assignment(data['job'])
+        solve_assignment(data['job'], data['job']['callback'])
     else:
         print('What?! We were not elected? Change our name to "AAAA" immediatly!')
 

@@ -6,7 +6,7 @@ from quests.utils import paths_util, get_config, change_config
 from quests.utils.paths_names import auth_token, util_assignments
 
 
-def solve_assignment(json_data):
+def solve_assignment(json_data, sender_uri):
     change_config(util_assignments, json_data)
 
     divide_line()
@@ -32,8 +32,8 @@ def solve_assignment(json_data):
             'message': 'Swifty swooty as ever has Heroy done his job.'
         })
 
-        requests.post(paths_util.make_http(request.remote_addr + json_data['callback']), data=answer)
-        callback_address = paths_util.make_http(request.remote_addr + json_data['callback'])
+        requests.post(paths_util.make_http(sender_uri + json_data['callback']), data=answer)
+        callback_address = paths_util.make_http(sender_uri + json_data['callback'])
         print('That went well, answering to Callback! ' + str(callback_address))
         try:
             callback_resp = requests.post(callback_address, data=answer)
