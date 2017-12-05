@@ -3,7 +3,7 @@ import json
 import requests
 from quests.quest1.taverna.groups import send_assignment_to_group, start_election
 from quests.utils import get_config, change_config
-from quests.utils.paths_names import util_group, util_recv_tokens
+from quests.utils.paths_names import util_group, util_recv_tokens, util_user
 from quests.quest1.utilities import divide_line
 
 
@@ -201,7 +201,16 @@ def visit_elves(auth_header, quest_host, location_url):
     print(visit_resp.json()['message'])
     divide_line()
     #result = send_election()
-    start_election()
+    assignment_data = {
+        "id": 300000,
+        "task": '/blackboard/tasks/7',
+        "resource": (quest_host + location_url),
+        "method": 'POST',
+        "data": '',
+        "user": get_config()[util_user],
+        "message": 'Help! Save the elves! Put on the ring!'
+    }
+    start_election(job_data=assignment_data)
     data  = json.dumps({"group":get_config()[util_group]})
     leader_resp = requests.post('http://' + quest_host + location_url, headers=auth_header, data=data)
     print(leader_resp.status_code)
