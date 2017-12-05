@@ -208,9 +208,7 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
             })
             print('Sending assignment: ' + str(data) +  ' to group members')
             for member in response.json()['objects']:
-                print(member['url'])
-                print(get_config()[util_own_server])
-                if not member['url'] == get_config()[util_own_server]:
+                if not member['url'] == get_config()[util_own_server] or member['url'] == get_config()[util_own_server] + '/':
                     try:
                         member_url = paths_util.make_http(member['url'])
                         print('Sending assignment to: ' + str(member_url))
