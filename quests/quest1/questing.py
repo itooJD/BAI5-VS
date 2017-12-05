@@ -1,7 +1,6 @@
-import requests, json
-
+import requests
 from quests.quest1.taverna.groups import send_assignment_to_group
-from quests.utils import get_config
+from quests.utils import get_config, change_config
 from quests.utils.paths_names import util_group, util_recv_tokens
 from quests.quest1.utilities import divide_line
 
@@ -159,12 +158,13 @@ def visit_wounded(auth_header, quest_host, location_url):
     print('Message: ' + str(visit_resp.json()['message']))
     tokens = []
     if visit_resp.json().get('steps_todo'):
+        change_config(util_recv_tokens,[])
         print('Next Steps: ' + str(visit_resp.json().get('steps_todo')))
         for step in visit_resp.json()['steps_todo']:
             step_result = visit_wounded(auth_header, quest_host, step)
             tokens.append(step_result)
-        input('Received all tokens?')
         print(get_config()[util_recv_tokens])
+        input('Received all tokens?')
         tokens_string = '['
         for idx, token in enumerate(tokens.extend(get_config()[util_recv_tokens])):
             if idx == len(tokens) - 1:
