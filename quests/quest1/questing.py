@@ -164,6 +164,7 @@ def visit_wounded(auth_header, quest_host, location_url):
             step_result = visit_wounded(auth_header, quest_host, step)
             tokens.append(step_result)
         input('Received all tokens?')
+        print(get_config()[util_recv_tokens])
         tokens_string = '['
         for idx, token in enumerate(tokens.extend(get_config()[util_recv_tokens])):
             if idx == len(tokens) - 1:
