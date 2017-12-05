@@ -81,6 +81,7 @@ def look_at_map(auth_header):
 def deliver(headers, deliver_token, quest_no, task_uris):
     print()
     print('Quest: Now let us deliver our token. Back to the blackboard!')
+    print(task_uris)
     for task_uri in task_uris:
         token = '{"' + task_uri + '":"' + deliver_token + '"}'
         data = '{"tokens":' + token + '}'
