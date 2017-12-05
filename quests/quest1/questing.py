@@ -1,5 +1,7 @@
+import json
+
 import requests
-from quests.quest1.taverna.groups import send_assignment_to_group
+from quests.quest1.taverna.groups import send_assignment_to_group, start_election
 from quests.utils import get_config, change_config
 from quests.utils.paths_names import util_group, util_recv_tokens
 from quests.quest1.utilities import divide_line
@@ -19,6 +21,8 @@ def solve_quests(quest, quest_no, auth_header):
     elif int_quest_no == 3 and get_config()[util_group] != '':
         deliver_token = visit_wounded(auth_header, quest_host, location_url)
         deliver(auth_header, deliver_token, quest_no, quest['tasks'])
+    elif int_quest_no == 4 and get_config()[util_group] != '':
+        visit_elves(auth_header, quest_host, location_url)
     else:
         print('Sorry, you do not have the required requirements to solve this. Back to the Main UI.')
 
@@ -189,3 +193,17 @@ def visit_wounded(auth_header, quest_host, location_url):
             print('Aquired Token! ' + post_to.json()['token_name'])
             return post_to.json()['token']
     return token
+
+
+def visit_elves(auth_header, quest_host, location_url):
+    divide_line()
+    visit_resp = requests.get('http://' + quest_host + location_url, headers=auth_header)
+    print(visit_resp.json()['message'])
+    divide_line()
+    #result = send_election()
+    start_election()
+    data  = json.dumps({"group":get_config()[util_group]})
+    leader_resp = requests.post('http://' + quest_host + location_url, headers=auth_header, data=data)
+    print(leader_resp.status_code)
+    print(leader_resp.json())
+
