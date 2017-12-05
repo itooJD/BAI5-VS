@@ -165,6 +165,7 @@ def visit_wounded(auth_header, quest_host, location_url):
             tokens.append(step_result)
         divide_line()
         print(tokens)
+        print(get_config()[util_recv_tokens])
         input('Received all tokens?')
         gathered_tokens = tokens.extend(get_config()[util_recv_tokens])
         print(gathered_tokens)

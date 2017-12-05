@@ -40,6 +40,8 @@ class HeroysCallMeMaybeBack(Resource):
                 print('Received finished assignment: ' + str(assignment_data))
                 add_to(util_recv_tokens, str(json_data['data']['token']))
                 divide_line()
+                print(get_config()[util_recv_tokens])
+                divide_line()
 
                 return jsonify(message="thats all")
             else:
