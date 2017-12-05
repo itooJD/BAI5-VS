@@ -167,11 +167,12 @@ def visit_wounded(auth_header, quest_host, location_url):
         divide_line()
         print(tokens)
         print(get_config()[util_recv_tokens])
+        for tk in get_config()[util_recv_tokens]:
+            tokens.append(tk)
+        print(tokens)
         input('Received all tokens?')
-        gathered_tokens = tokens.extend(list(get_config()[util_recv_tokens]))
-        print(gathered_tokens)
         tokens_string = '['
-        for idx, token in enumerate(gathered_tokens):
+        for idx, token in enumerate(tokens):
             if idx == len(tokens) - 1:
                 tokens_string += '"' + token + '"]'
             else:
