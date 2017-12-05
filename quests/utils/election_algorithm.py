@@ -2,10 +2,32 @@ import requests, json
 from multiprocessing.pool import ThreadPool
 from .paths_names import util_user, util_own_server
 from .paths_util import make_http
-from quests.quest1.taverna.groups import start_election
+from quests.quest1.taverna.groups import create_assignment
 from quests.quest1.utilities import divide_line
 from quests.utils import paths_util, get_config, change_config
 from quests.utils.paths_names import auth_token, util_assignments, util_group
+
+
+def start_election(election_data=None, job_data=None):
+    config = get_config()
+    print('\nSo you want to be the President?')
+    print('And who might you be? ', config[util_user], ' perhaps?')
+
+
+    if not election_data:
+        algorithm = input('Let me ask you, how do you want to achieve this? [algorithm]')
+
+        if not job_data:
+            job_data = create_assignment()
+
+        election_data = {
+            "algorithm": algorithm,
+            "payload": config['username'],
+            "user": "user",
+            "job": job_data,
+            "message": "",
+        }
+    election_algorithm(election_data)
 
 
 def election_algorithm(election_data):
@@ -52,25 +74,6 @@ def recv_ok(url, data):
         print('Could not reach ' + url)
         print(ex)
 
-
-'''
-{
-"algorithm":"<name of the algorithm used>",
-"payload":"<the payload for the current state of the algorithm>",
-"user":"<uri of the user sending this request>",
-"job":"<JSON description of the job to do>",
-"message": "<something you want to tell the other one>"
-}
-{
-"id":"<some identity choosen by the initiator to identify this request>",
-"task":"<uri to the task to accomplish>",
-"resource":"<uri or url to resource where actions are required>",
-"method":"<method to take – if already known>",
-"data":"<data to use/post for the task>",
-"callback": "<an url where the initiator can be reached with the results/token>",
-"message": "<something you want to tell the other one>"
-
-'''
 
 def solve_assignment(json_data, sender_uri):
     change_config(util_assignments, json_data)
