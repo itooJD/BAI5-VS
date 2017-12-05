@@ -246,11 +246,11 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
 def start_election(election_data=None, job_data=None):
     config = get_config()
     print('\nSo you want to be the President?')
-    print('and who might you be? ', config['username'], ' perhaps?')
+    print('And who might you be? ', config[util_user], ' perhaps?')
 
 
     if not election_data:
-        algorithm = input('let me ask you, how do you want to achieve this?')
+        algorithm = input('Let me ask you, how do you want to achieve this? [algorithm]')
 
         if not job_data:
             job_data = create_assignment()

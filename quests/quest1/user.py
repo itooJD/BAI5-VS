@@ -31,6 +31,8 @@ def authentication():
             auth_token = response.json()['token']
             auth_header = {'Authorization': 'Token ' + auth_token}
             change_config(token, auth_header)
+        else:
+            change_config(util_user, username)
     else:
         exit = True
     return exit, auth_header
