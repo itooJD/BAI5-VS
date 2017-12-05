@@ -1,12 +1,12 @@
 import requests
-from flask import request, json, abort, jsonify
+from flask import json, abort
 
 from quests.quest1.utilities import divide_line
 from quests.utils import paths_util, get_config, change_config
 from quests.utils.paths_names import auth_token, util_assignments
 
 
-def solve_assignment(json_data):
+def solve_assignment(json_data, sender_uri):
     change_config(util_assignments, json_data)
 
     divide_line()
@@ -14,13 +14,12 @@ def solve_assignment(json_data):
         json_data['method']) + '\n' + str(json_data['resource']))
     print()
     url = paths_util.make_http(json_data['resource'])
-    print(url)
     if json_data['method'].lower() == 'get':
         response = requests.get(url, headers=get_config()[auth_token], data=json_data['data'])
     elif json_data['method'].lower() == 'post':
         response = requests.post(url, headers=get_config()[auth_token], data=json_data['data'])
     else:
-        return abort(400)
+        return False
 
     if response.status_code == 200:
         answer = json.dumps({
@@ -33,8 +32,8 @@ def solve_assignment(json_data):
             'message': 'Swifty swooty as ever has Heroy done his job.'
         })
 
-        requests.post(paths_util.make_http(request.remote_addr + json_data['callback']), data=answer)
-        callback_address = paths_util.make_http(request.remote_addr + json_data['callback'])
+        requests.post(paths_util.make_http(sender_uri + json_data['callback']), data=answer)
+        callback_address = paths_util.make_http(sender_uri + json_data['callback'])
         print('That went well, answering to Callback! ' + str(callback_address))
         try:
             callback_resp = requests.post(callback_address, data=answer)
@@ -49,4 +48,4 @@ def solve_assignment(json_data):
             print(cre)
     else:
         divide_line()
-        return jsonify({"message": "That didnt go well duh"})
+        return False

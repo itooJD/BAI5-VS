@@ -1,27 +1,38 @@
-import requests
+import requests, json
 from multiprocessing.pool import ThreadPool
 
+from quests.quest1.utilities import divide_line
 from quests.utils.assignment_solver import solve_assignment
 from .config_manager import get_config
-from .paths_names import util_user, util_group, auth_token
+from .paths_names import util_user, util_group, auth_token, util_own_server
 from .paths_util import make_http
 
 
 def election_algorithm(data):
+    data = json.dumps(data)
     response = requests.get(get_config()[util_group] + get_config()['member_url'], headers=get_config()[auth_token])
     coordinator = True
     pool = ThreadPool(processes=3)
     for member in response.json()['objects']:
-        print(member)
         if member['user'] > ('/users/' + get_config()[util_user]):
-            async_result = pool.apply_async(recv_ok, (make_http(member['url']), data))
-            if async_result.get():
-                coordinator = False
-                break
+            if make_http(member['url']) != get_config()[util_own_server]:
+                try:
+                    user = requests.get(make_http(member['url']))
+                    async_result = pool.apply_async(recv_ok, (make_http(member['url']) + user.json()['election'], data))
+                    if async_result.get():
+                        coordinator = False
+                        break
+                except Exception as ex:
+                    print('Could not reach - ' + str(member['user']))
+                    print(ex)
     if coordinator:
+        divide_line()
         print('Heroy is president!')
-        solve_assignment(data['job'])
+        ok = solve_assignment(data['job'], data['job']['callback'])
+        if not ok:
+            print('Could not finish our assignment!')
     else:
+        divide_line()
         print('What?! We were not elected? Change our name to "AAAA" immediatly!')
 
 
@@ -33,6 +44,7 @@ def recv_ok(url, data):
                 return True
         return False
     except Exception as ex:
+        divide_line()
         print('Could not reach ' + url)
         print(ex)
 
