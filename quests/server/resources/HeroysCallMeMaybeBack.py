@@ -41,7 +41,7 @@ class HeroysCallMeMaybeBack(Resource):
                 add_to(util_recv_tokens, str(json_data['data']['token']))
                 divide_line()
 
-                return jsonify({"message": "thats all?"}), 200
+                return jsonify(message="thats all")
             else:
                 return abort(400)
         except KeyError or TypeError:

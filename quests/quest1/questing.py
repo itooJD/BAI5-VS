@@ -163,6 +163,7 @@ def visit_wounded(auth_header, quest_host, location_url):
         for step in visit_resp.json()['steps_todo']:
             step_result = visit_wounded(auth_header, quest_host, step)
             tokens.append(step_result)
+        divide_line()
         print(tokens)
         input('Received all tokens?')
         gathered_tokens = tokens.extend(get_config()[util_recv_tokens])
