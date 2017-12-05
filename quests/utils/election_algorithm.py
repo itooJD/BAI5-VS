@@ -33,7 +33,7 @@ def election_algorithm(election_data):
             print('Could not finish our assignment!')
     else:
         divide_line()
-        print('What?! We were not elected? Change our name to "AAAA" immediatly!')
+        print('What?! We were not elected? Change our name to "zzzz" immediatly!')
 
 
 def recv_ok(url, data):

@@ -10,7 +10,8 @@ def taverna(auth_header):
     # Entering the Taverna
     divide_line()
     print('So you are a juggernaut huh? And I can reach you at ' + get_config()[util_own_server] + '? Weird address, well have fun.')
-    adventurer_data = '{"heroclass":"Fantastic Space Ninja","capabilities":"'+ str(get_config()[util_req]) +'","url":' + get_config()[util_own_server]+ '}'
+    print( get_config()[util_own_server])
+    adventurer_data = '{"heroclass":"FantasticSpaceNinja","capabilities":"'+ str(get_config()[util_req]) +'","url":' + get_config()[util_own_server]+ '}'
     taverna_enter_resp = requests.post(paths_util.adventurers_uri(), headers=auth_header, data=adventurer_data)
     print(('System: ' + taverna_enter_resp.json()['message']))
     print('\nYou enter the dusty taverna')
