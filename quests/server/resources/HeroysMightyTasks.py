@@ -25,23 +25,18 @@ class HeroysMightyTasks(Resource):
         try:
             json_data = request.get_json(force=True)
             if bool(json_data) and len(json_data) == 7:
-                change_config(util_assignments, {
+                assignment = {
                     "id": json_data['id'],
                     "task": json_data['task'],
                     "resource": json_data['resource'],
                     "method": json_data['method'],
                     "data": json_data['data'],
-                    "callback": json_data['callback'],
+                    "callback": paths_util.make_http(request.remote_addr + json_data['callback']),
                     "message": json_data['message']
-                })
-
-                print("id", json_data['id'])
-                print("task", json_data['task'])
-                print("resource", json_data['resource'])
-                print("method", json_data['method'])
-                print("data", json_data['data'])
-                print("callback", json_data['callback'])
-                print("message", json_data['message'])
+                }
+                # saving assignment
+                change_config(util_assignments, assignment)
+                print(assignment)
                 # auto completing assignment?
                 divide_line()
                 print('Received assignment: \n' + str(json_data['message']) + '\n' + str(
@@ -67,7 +62,7 @@ class HeroysMightyTasks(Resource):
                         'message': 'Swifty swooty as ever has Heroy done his job.'
                     })
 
-                    requests.post('http://172.19.0.13:5000' + json_data['callback'], data=answer)
+                    requests.post(assignment['callback'], data=answer)
                     callback_address = paths_util.make_http(request.remote_addr + json_data['callback'])
                     print('That went well, answering to Callback! ' + str(callback_address))
                     try:
