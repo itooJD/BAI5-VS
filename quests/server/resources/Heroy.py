@@ -8,15 +8,18 @@ class Heroy(Resource):
         self.idle = False
 
     def get(self):
-        return jsonify({
-            "user": get_config()['hero_url'],
+        config = get_config()
+        data = {
+            "user": config['hero_url'],
             "idle": True,
-            "group": get_config()['util_group'],
-            "hirings": get_config()['hero_url'],
-            "assignments": get_config()['hero_url'] + get_config()['assignment_url'],
-            "messages": get_config()['hero_url'] + get_config()['assignment_url'],
-            "election": get_config()['hero_url'] + get_config()['election_url']
-        })
+            "group": config['util_group'],
+            "hirings": config['hero_url'],
+            "assignments": config['hero_url'] + get_config()['assignment_url'],
+            "messages": config['hero_url'] + get_config()['assignment_url'],
+            "election": config['hero_url'] + get_config()['election_url']
+        }
+        print(data)
+        return jsonify(data)
 
     def post(self):
         json_data = request.get_json(force=True)
