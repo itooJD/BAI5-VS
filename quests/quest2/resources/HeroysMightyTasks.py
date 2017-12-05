@@ -67,8 +67,9 @@ class HeroysMightyTasks(Resource):
                         else:
                             print('Could not reach callback url')
                             divide_line()
-                    except ConnectionRefusedError:
+                    except Exception as cre:
                         print('Could not reach callback, Connection Refused!')
+                        print(cre)
                 else:
                     divide_line()
                     return jsonify({"message": "That didnt go well duh"})
