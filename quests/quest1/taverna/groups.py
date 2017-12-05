@@ -217,15 +217,13 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
                         if member_data and (member_data.status_code == 200 or member_data.status_code == 201):
                             user_url = paths_util.make_http(member['url'])
                             try:
-                                response = requests.get(user_url)
-                                print(response.json()['user'])
                                 response = requests.post(user_url + member_data.json()['assignments'], data=data)
                                 if response.status_code == 200:
                                     print('Assignment sent to ' + str(member['user']))
                                     answers += 1
-                                    #if answers_needed == answers:
-                                    #    print('Send all')
-                                    #    return
+                                    if answers_needed == answers:
+                                        print('Send all')
+                                        return
                             except Exception as ex:
                                 print('Member: ' + str(member['user']) + ' could not be reached')
                                 print(ex)
