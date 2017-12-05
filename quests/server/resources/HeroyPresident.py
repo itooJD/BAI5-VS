@@ -7,7 +7,7 @@ from quests.utils.paths_names import util_user
 class HeroyPresident(Resource):
     def post(self):
         json_data = request.get_json(force=True)
-        # try:
+
         config = get_config()
         print(json_data)
 
@@ -22,6 +22,3 @@ class HeroyPresident(Resource):
         election_algorithm(election_data)
 
         return jsonify({"message": "OK"})
-        # except Exception as ex:
-        #    print(ex)
-        #    return abort(400)

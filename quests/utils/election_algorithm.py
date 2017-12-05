@@ -31,9 +31,13 @@ def election_algorithm(election_data):
     if coordinator:
         divide_line()
         print('Heroy is president!')
-        ok = solve_assignment(election_data['job'], election_data['job']['callback'])
-        if not ok:
-            print('Could not finish our assignment!')
+        if input('solve the assginment? ') == 'y':
+            ok = solve_assignment(election_data['job'], election_data['job']['callback'])
+            if not ok:
+                print('Could not finish our assignment!')
+        else:
+            election_algorithm(election_data)
+
     else:
         divide_line()
         print('What?! We were not elected? Change our name to "AAAA" immediatly!')
