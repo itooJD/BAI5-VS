@@ -38,7 +38,7 @@ class HeroysMightyTasks(Resource):
                 divide_line()
                 print('Received assignment: \n' + str(json_data['message']) + '\n' + str(json_data['method']) + '\n' + str(json_data['resource']))
                 print()
-                url = paths_util.make_http(json_data['resource'])
+                url = 'http://' + paths_util.make_http(json_data['resource'])
                 print(url)
                 if json_data['method'].lower() == 'get':
                     response = requests.get(url, headers=get_config()[token], data=json_data['data'])

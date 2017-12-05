@@ -203,7 +203,7 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
                 "resource": str(resource),
                 "method": str(method),
                 "data": str(task_data),
-                "callback": get_config()['callback_url'] + ':5000',
+                "callback": get_config()['callback_url'],
                 "message": str(message)
             })
             print('Sending assignment: ' + str(data) +  ' to group members')
