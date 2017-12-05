@@ -172,7 +172,8 @@ def check_own_group(auth_header, groups):
         print('You are in no group!')
 
 
-def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, method=None, task_data=None, message=None):
+def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, method=None, task_data=None, message=None, answers_needed=1):
+    answers = 0
     if get_config()[util_group] != '':
         if not id:
             id = input('ID:         ')
@@ -191,9 +192,11 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
 
         response = requests.get(get_config()[util_group] + get_config()['member_url'],
                                 headers=auth_header)
-        print(response.json())
-
-        for member in response.json()['objects']:
+        if not response.status_code == 200 or response.status_code == 201:
+            print()
+            print('Could not get the members of your group')
+            divide_line()
+        else:
             data = json.dumps({
                 "id": str(id),
                 "task": get_config()['blackboard_url'] + get_config()['task_url'] + task,
@@ -203,30 +206,37 @@ def send_assignment_to_group(auth_header, _, id=None, task=None, resource=None, 
                 "callback": get_config()['callback_url'],
                 "message": str(message)
             })
-            if not member['url'] == get_config()[util_own_server]:
-                try:
-                    member_url = paths_util.make_http(member['url'])
-                    print(member_url)
-                    member_data = requests.get(member_url)
-                    if member_data and (member_data.status_code == 200 or member_data.status_code == 201):
-                        print(member_data.json())
-                        user_url = paths_util.make_http(member['url'])
-                        print(user_url + member_data.json()['assignments'])
 
-                        try:
-                            response = requests.get(user_url)
-                            print(response.json()['user'])
-                            response = requests.post(user_url + member_data.json()['assignments'], data=data)
-                            if response.status_code == 200:
-                                print('Assignment sent to ' + str(member['user']))
-                        except Exception as ex:
-                            print('Member: ' + str(member['user']) + ' could not be reached')
-                            print(ex)
-                    else:
-                        print('Member URL could not be reached!')
-                except Exception as ex:
-                    print('Member ' + str(member['user']) + ' could not be reached')
-                    print(ex)
-            else:
-                print('Skipping mighty me!')
+            print('Sending assignment: ' + str(data) +  ' to group members')
+            for member in response.json()['objects']:
+                if not member['url'] == get_config()[util_own_server]:
+                    try:
+                        member_url = paths_util.make_http(member['url'])
+                        print('Sending assignment to: ' + str(member_url))
+                        member_data = requests.get(member_url)
+                        if member_data and (member_data.status_code == 200 or member_data.status_code == 201):
+                            user_url = paths_util.make_http(member['url'])
+                            print(user_url + member_data.json()['assignments'])
+
+                            try:
+                                response = requests.get(user_url)
+                                print(response.json()['user'])
+                                response = requests.post(user_url + member_data.json()['assignments'], data=data)
+                                if response.status_code == 200:
+                                    print('Assignment sent to ' + str(member['user']))
+                                    answers += 1
+                                    if answers_needed == answers:
+                                        print('Send all')
+                                        return
+                            except Exception as ex:
+                                print('Member: ' + str(member['user']) + ' could not be reached')
+                                print(ex)
+                        else:
+                            print('Member URL could not be reached!')
+                    except Exception as ex:
+                        print('Member ' + str(member['user']) + ' could not be reached')
+                        print(ex)
+                else:
+                    print('Skipping mighty me!')
+
 
