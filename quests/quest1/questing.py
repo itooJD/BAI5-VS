@@ -19,10 +19,6 @@ def solve_quests(quest, quest_no, auth_header):
     elif int_quest_no == 3 and get_config()[util_group] != '':
         deliver_token = visit_wounded(auth_header, quest_host, location_url)
         deliver(auth_header, deliver_token, quest_no, quest['tasks'])
-        if deliver_token:
-            deliver(auth_header, deliver_token, quest_no, quest['tasks'])
-        else:
-            print('Wrong token? Exiting Quest')
     else:
         print('Sorry, you do not have the required requirements to solve this. Back to the Main UI.')
 
@@ -81,7 +77,6 @@ def look_at_map(auth_header):
 def deliver(headers, deliver_token, quest_no, task_uris):
     print()
     print('Quest: Now let us deliver our token. Back to the blackboard!')
-    print(task_uris)
     for task_uri in task_uris:
         token = '{"' + task_uri + '":"' + deliver_token + '"}'
         data = '{"tokens":' + token + '}'
@@ -166,11 +161,9 @@ def visit_wounded(auth_header, quest_host, location_url):
             if step_result:
                 tokens.append(step_result)
         divide_line()
-        print(tokens)
         print(get_config()[util_recv_tokens])
         for tk in get_config()[util_recv_tokens]:
             tokens.append(tk)
-        print(tokens)
         input('Received all tokens?')
         tokens_string = '['
         for idx, token in enumerate(tokens):
