@@ -67,7 +67,7 @@ class HeroysMightyTasks(Resource):
                         'message': 'Swifty swooty as ever has Heroy done his job.'
                     })
 
-                    response.post('http://172.19.0.13:5000' + json_data['callback'], data=answer)
+                    requests.post('http://172.19.0.13:5000' + json_data['callback'], data=answer)
                     callback_address = paths_util.make_http(request.remote_addr + json_data['callback'])
                     print('That went well, answering to Callback! ' + str(callback_address))
                     try:
