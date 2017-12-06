@@ -135,7 +135,7 @@ def solve_assignment(json_data, sender_uri, user=None):
 
     print(sender_uri)
     print(json_data['callback'])
-    requests.post(paths_util.make_http(sender_uri + json_data['callback']), data=answer)
+    requests.post(paths_util.make_http(sender_uri + ':5000' + json_data['callback']), data=answer)
     callback_address = paths_util.make_http(sender_uri + json_data['callback'])
     print('That went well, answering to Callback! ' + str(callback_address))
     try:
