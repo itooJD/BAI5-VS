@@ -15,7 +15,7 @@ class HeroyPresident(Resource):
         election_data = {
             "algorithm": json_data['algorithm'],
             "payload": config[util_user],
-            "user": "user_uri",
+            "user": json_data['user'],
             "job": json_data['job'],
             "message": "hello you there?"
         }
