@@ -9,9 +9,10 @@ from quests.utils.paths_names import auth_token as token, util_req, util_own_ser
 def main():
     divide_line()
     change_config(util_req, [])
+    add_to(util_req,'election-algorithm')
     set_own_url()
     if get_config()['server'] != '':
-        research = input('Do you want to research for the blackboard host? [y] \n> ')
+        research = input('Do you want to re-search for the blackboard host? [y] \n> ')
         if research == 'y':
             set_server_url_via_udp()
     else:
