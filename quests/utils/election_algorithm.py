@@ -116,7 +116,7 @@ def solve_assignment(json_data, sender_uri):
             "message" : "Oh no, i am unconcious, take over please!"
         }
         input('Everyone ready?')
-        start_election(election_data=new_assignment)
+        election_algorithm(new_assignment)
 
     answer = json.dumps({
         'id': json_data['id'],
