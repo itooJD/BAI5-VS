@@ -58,7 +58,6 @@ def election_algorithm(election_data):
                 print('Could not finish our assignment!')
         else:
             election_algorithm(election_data)
-
     else:
         divide_line()
         print('What?! We were not elected? Change our name to "zzzz" immediatly!')
@@ -84,9 +83,7 @@ def solve_assignment(json_data, sender_uri):
     divide_line()
     print('Received assignment: \n' + str(json_data['message']) + '\n' + str(
         json_data['method']) + '\n' + str(json_data['resource']))
-    print()
-    print(str(json_data))
-    print()
+
     url = paths_util.make_http(json_data['resource'])
     if json_data['method'].lower() == 'get':
         response = requests.get(url, headers=get_config()[auth_token], data=json.dumps(json_data['data']))
