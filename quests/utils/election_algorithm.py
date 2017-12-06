@@ -52,7 +52,7 @@ def election_algorithm(election_data):
     if coordinator:
         divide_line()
         print('Heroy is president!')
-        if input('solve the assginment? ') == 'y':
+        if input('Solve the assginment?\n> ') == 'y':
             ok = solve_assignment(election_data['job'], election_data['user'])
             if not ok:
                 print('Could not finish our assignment!')
@@ -93,7 +93,7 @@ def solve_assignment(json_data, sender_uri):
         return False
 
     print('Response of method:')
-    print(response.json())
+    print(response.json()['message'])
     print(response.status_code)
     print()
     if response.status_code == 200:
