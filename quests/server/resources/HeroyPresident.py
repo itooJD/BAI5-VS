@@ -10,7 +10,6 @@ class HeroyPresident(Resource):
         json_data = request.get_json(force=True)
 
         config = get_config()
-        print(json_data)
 
         election_data = {
             "algorithm": json_data['algorithm'],
