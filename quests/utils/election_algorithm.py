@@ -86,9 +86,9 @@ def solve_assignment(json_data, sender_uri):
     print()
     url = paths_util.make_http(json_data['resource'])
     if json_data['method'].lower() == 'get':
-        response = requests.get(url, headers=get_config()[auth_token], data=json_data['data'])
+        response = requests.get(url, headers=get_config()[auth_token], data=json.dumps(json_data['data']))
     elif json_data['method'].lower() == 'post':
-        response = requests.post(url, headers=get_config()[auth_token], data=json_data['data'])
+        response = requests.post(url, headers=get_config()[auth_token], data=json.dumps(json_data['data']))
     else:
         return False
 
