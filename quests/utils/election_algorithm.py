@@ -111,10 +111,10 @@ def solve_assignment(json_data, sender_uri, user=None):
             "task": json_data['task'],
             "resource": json_data['resource'],
             "method": json_data['method'],
-            "data": str(json.dumps({
+            "data": {
                 "group": get_config()[util_group],
                 "token": response.json()['token']
-            })),
+            },
             "callback": json_data['callback'],
             "message" : "Oh no, i am unconcious, take over please!"
         }

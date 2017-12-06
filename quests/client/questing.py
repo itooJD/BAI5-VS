@@ -201,7 +201,6 @@ def visit_wounded(auth_header, quest_host, location_url):
 def visit_elves(auth_header, quest_host, location_url):
     divide_line()
     visit_resp = requests.get('http://' + quest_host + location_url, headers=auth_header)
-    print(visit_resp.json())
     print(visit_resp.json()['message'])
     divide_line()
     assignment_data = {
