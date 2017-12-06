@@ -90,6 +90,10 @@ def solve_assignment(json_data, sender_uri):
     else:
         return False
 
+    print()
+    print('Response of method:')
+    print(response.json())
+    print()
     if response.status_code == 200:
         print(response.json()['message'])
         print()

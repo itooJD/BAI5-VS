@@ -1,5 +1,3 @@
-import json
-
 import requests
 from quests.utils.election_algorithm import start_election
 from quests.client.taverna.groups import send_assignment_to_group
@@ -23,7 +21,10 @@ def solve_quests(quest, quest_no, auth_header):
         deliver_token = visit_wounded(auth_header, quest_host, location_url)
         deliver(auth_header, deliver_token, quest_no, quest['tasks'])
     elif int_quest_no == 4 and get_config()[util_group] != '':
-        visit_elves(auth_header, quest_host, location_url)
+        print('There should be at least 2 people with a running server in your group and one that can be connected during the quest and is higher in order by name')
+        print('String order: A < a, itoo < itoo2')
+        deliver_token = visit_elves(auth_header, quest_host, location_url)
+        deliver(auth_header, deliver_token, quest_no, quest['tasks'])
     else:
         print('Sorry, you do not have the required requirements to solve this. Back to the Main UI.')
 
@@ -166,7 +167,6 @@ def visit_wounded(auth_header, quest_host, location_url):
             if step_result:
                 tokens.append(step_result)
         divide_line()
-        print(get_config()[util_recv_tokens])
         for tk in get_config()[util_recv_tokens]:
             tokens.append(tk)
         input('Received all tokens?')
@@ -211,9 +211,11 @@ def visit_elves(auth_header, quest_host, location_url):
         "callback": get_config()['callback_url'],
         "message": 'Help! Save the elves! Put on the ring!'
     }
+    change_config(util_recv_tokens, [])
     start_election(job_data=assignment_data)
     divide_line()
-    ##input('Did you get back the election result?\n> ')
+    input('Did you get back the election result? Should have callbacked!\n> ')
+    return get_config()[util_recv_tokens]
     #data  = json.dumps({"group":get_config()[util_group]})
     #leader_resp = requests.post('http://' + quest_host + location_url, headers=auth_header, data=data)
     #print(leader_resp.status_code)
@@ -221,5 +223,4 @@ def visit_elves(auth_header, quest_host, location_url):
     #data = json.dumps({"group": get_config()[util_group], "token": leader_resp.json()['token']})
     #ok_resp =  requests.post('http://' + quest_host + location_url, headers=auth_header, data=data)
     #print(ok_resp.json())
-    input('Done?')
 
