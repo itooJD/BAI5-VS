@@ -18,6 +18,13 @@ def make_http(url):
     return http_url
 
 
+def port_check(url):
+    if url.endswith(':5000') or url.endswith(':5000/'):
+        return url
+    else:
+        return url + ':5000'
+
+
 def server_uri(uri):
     return get_config()['server'] + uri
 

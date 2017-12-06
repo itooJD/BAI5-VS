@@ -1,7 +1,7 @@
 import requests, json
 from multiprocessing.pool import ThreadPool
 from .paths_names import util_user, util_own_server
-from .paths_util import make_http
+from .paths_util import make_http, port_check
 from quests.client.taverna.groups import create_assignment
 from quests.client.utilities import divide_line
 from quests.utils import paths_util, get_config, change_config
@@ -135,7 +135,8 @@ def solve_assignment(json_data, sender_uri, user=None):
 
     print(sender_uri)
     print(json_data['callback'])
-    requests.post(paths_util.make_http(sender_uri + ':5000' + json_data['callback']), data=answer)
+
+    requests.post(paths_util.make_http(port_check(sender_uri) + json_data['callback']), data=answer)
     callback_address = paths_util.make_http(sender_uri + json_data['callback'])
     print('That went well, answering to Callback! ' + str(callback_address))
     try:
