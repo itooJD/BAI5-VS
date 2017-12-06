@@ -1,4 +1,5 @@
 from flask_restful import Resource
+from threading import Thread
 from flask import request, abort, jsonify
 from quests.utils import election_algorithm, get_config
 from quests.utils.paths_names import util_user
@@ -19,6 +20,6 @@ class HeroyPresident(Resource):
             "message": "hello you there?"
         }
         print(election_data)
-        election_algorithm(election_data)
-
+        thread = Thread(target=election_algorithm, args=(election_data,))
+        thread.start()
         return jsonify({"message": "OK"})
