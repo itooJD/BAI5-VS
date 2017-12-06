@@ -53,7 +53,7 @@ def election_algorithm(election_data):
         divide_line()
         print('Heroy is president!')
         if input('solve the assginment? ') == 'y':
-            ok = solve_assignment(election_data['job'], member['url'], user=election_data['user'])
+            ok = solve_assignment(election_data['job'], election_data['user'])
             if not ok:
                 print('Could not finish our assignment!')
         else:
@@ -78,7 +78,7 @@ def recv_ok(url, data):
         print(ex)
 
 
-def solve_assignment(json_data, sender_uri, user=None):
+def solve_assignment(json_data, sender_uri):
     change_config(util_assignments, json_data)
 
     divide_line()
@@ -118,8 +118,8 @@ def solve_assignment(json_data, sender_uri, user=None):
             print(response.json()['hint'])
             input('Everyone ready?')
             print('Starting new election')
-            if user:
-                start_election(job_data=new_assignment, user=user)
+            if sender_uri:
+                start_election(job_data=new_assignment, user=sender_uri)
             else:
                 start_election(job_data=new_assignment)
 
