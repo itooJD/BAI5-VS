@@ -209,7 +209,7 @@ def visit_elves(auth_header, quest_host, location_url):
         "task": '/blackboard/tasks/7',
         "resource": (quest_host + location_url),
         "method": 'POST',
-        "data": get_config()[util_group],
+        "data": {"group":get_config()[util_group]},
         "callback": get_config()['callback_url'],
         "message": 'Help! Save the elves! Put on the ring!'
     }
