@@ -26,9 +26,11 @@ def solve_quests(quest, quest_no, auth_header):
         print('There should be at least 2 people with a running server in your group and one that can be connected during the quest and is higher in order by name')
         print('String order: A < a, itoo < itoo2')
         deliver_token = visit_elves(auth_header, quest_host, location_url)
-        print(str(quest))
-        print(str(deliver_token))
-        deliver(auth_header, deliver_token, quest_no, quest['tasks'])
+        if type(deliver_token) == list:
+            for i in deliver_token:
+                deliver(auth_header, i, quest_no, quest['tasks'])
+        else:
+            deliver(auth_header, deliver_token, quest_no, quest['tasks'])
     else:
         print('Sorry, you do not have the required requirements to solve this. Back to the Main UI.')
 
