@@ -102,8 +102,6 @@ def solve_assignment(json_data, sender_uri, user=None):
     if response.status_code == 200:
         print(response.json()['message'])
         divide_line()
-        print('Starting new election')
-        new_assignment = json_data
         new_assignment = {
             "id": json_data['id'],
             "task": json_data['task'],
@@ -119,6 +117,7 @@ def solve_assignment(json_data, sender_uri, user=None):
         if response.json().get('hint'):
             print(response.json()['hint'])
             input('Everyone ready?')
+            print('Starting new election')
             if user:
                 start_election(job_data=new_assignment, user=user)
             else:
@@ -134,6 +133,8 @@ def solve_assignment(json_data, sender_uri, user=None):
         'message': 'Swifty swooty as ever has Heroy done his job.'
     })
 
+    print(sender_uri)
+    print(json_data['callback'])
     requests.post(paths_util.make_http(sender_uri + json_data['callback']), data=answer)
     callback_address = paths_util.make_http(sender_uri + json_data['callback'])
     print('That went well, answering to Callback! ' + str(callback_address))
