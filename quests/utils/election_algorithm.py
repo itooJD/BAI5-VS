@@ -101,8 +101,6 @@ def solve_assignment(json_data, sender_uri, user=None):
     print()
     if response.status_code == 200:
         print(response.json()['message'])
-        if response.json().get('hint'):
-            print(response.json()['hint'])
         divide_line()
         print('Starting new election')
         new_assignment = json_data
@@ -118,11 +116,13 @@ def solve_assignment(json_data, sender_uri, user=None):
             "callback": json_data['callback'],
             "message" : "Oh no, i am unconcious, take over please!"
         }
-        input('Everyone ready?')
-        if user:
-            start_election(job_data=new_assignment, user=user)
-        else:
-            start_election(job_data=new_assignment)
+        if response.json().get('hint'):
+            print(response.json()['hint'])
+            input('Everyone ready?')
+            if user:
+                start_election(job_data=new_assignment, user=user)
+            else:
+                start_election(job_data=new_assignment)
 
     answer = json.dumps({
         'id': json_data['id'],
