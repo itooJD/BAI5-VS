@@ -8,7 +8,7 @@ from quests.utils import paths_util, get_config, change_config
 from quests.utils.paths_names import auth_token, util_assignments, util_group
 
 
-def start_election(election_data=None, job_data=None):
+def start_election(election_data=None, job_data=None, user=(get_config()[util_own_server] + get_config()['hero_url'])):
     config = get_config()
     print('\nSo you want to be the President?')
     print('And who might you be? ', config[util_user], ' perhaps?')
@@ -23,7 +23,7 @@ def start_election(election_data=None, job_data=None):
         election_data = {
             "algorithm": 'bully',
             "payload": config['username'],
-            "user": config['hero_url'],
+            "user": user,
             "job": job_data,
             "message": "",
         }
@@ -37,6 +37,9 @@ def election_algorithm(election_data):
     pool = ThreadPool(processes=3)
     for member in response.json()['objects']:
         if member['user'] > ('/users/' + get_config()[util_user]):
+            print(member['user'])
+            print('/users/' + get_config()[util_user])
+            print(member['user'] > '/users/' + get_config()[util_user])
             if make_http(member['url']) != get_config()[util_own_server]:
                 try:
                     user = requests.get(make_http(member['url']))
@@ -50,7 +53,7 @@ def election_algorithm(election_data):
         divide_line()
         print('Heroy is president!')
         if input('solve the assginment? ') == 'y':
-            ok = solve_assignment(election_data['job'], member['url'])
+            ok = solve_assignment(election_data['job'], member['url'], user=election_data['user'])
             if not ok:
                 print('Could not finish our assignment!')
         else:
@@ -75,7 +78,7 @@ def recv_ok(url, data):
         print(ex)
 
 
-def solve_assignment(json_data, sender_uri):
+def solve_assignment(json_data, sender_uri, user=None):
     change_config(util_assignments, json_data)
 
     divide_line()
@@ -116,7 +119,10 @@ def solve_assignment(json_data, sender_uri):
             "message" : "Oh no, i am unconcious, take over please!"
         }
         input('Everyone ready?')
-        start_election(job_data=new_assignment)
+        if user:
+            start_election(job_data=new_assignment, user=user)
+        else:
+            start_election(job_data=new_assignment)
 
     answer = json.dumps({
         'id': json_data['id'],
