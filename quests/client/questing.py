@@ -27,8 +27,7 @@ def solve_quests(quest, quest_no, auth_header):
         print('String order: A < a, itoo < itoo2')
         deliver_token = visit_elves(auth_header, quest_host, location_url)
         if type(deliver_token) == list:
-            for i in deliver_token:
-                deliver(auth_header, i, quest_no, quest['tasks'])
+            deliver(auth_header, deliver_token[1], quest_no, quest['tasks'])
         else:
             deliver(auth_header, deliver_token, quest_no, quest['tasks'])
     else:
