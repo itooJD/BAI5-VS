@@ -84,9 +84,11 @@ def show_available_quests(auth_header):
 def show_all_quests(auth_header):
     response = requests.get(paths_util.quest_uri(), headers=auth_header)
     available_quests = []
+    quests = []
     for idx, quest in enumerate(response.json()['objects']):
         divide_line()
         available_quests.append(idx)
+        quests.append(quest)
         print_quest(quest)
     divide_line()
     print('Available quests: ' + str(available_quests))
@@ -95,7 +97,7 @@ def show_all_quests(auth_header):
         quest_no = input('Which quest do you want to tackle mighty Heroy? \n You can also go back to the main menu with [n] \n> ')
         if quest_no == 'n':
             return False
-    quest = available_quests[int(quest_no)]
+    quest = quests[int(quest_no)]
     return (int(quest_no) + 1), quest
 
 
