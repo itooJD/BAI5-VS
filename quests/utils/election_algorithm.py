@@ -15,15 +15,15 @@ def start_election(election_data=None, job_data=None):
 
 
     if not election_data:
-        algorithm = input('Let me ask you, how do you want to achieve this? [algorithm]')
+        #algorithm = input('Let me ask you, how do you want to achieve this? [algorithm]')
 
         if not job_data:
             job_data = create_assignment()
 
         election_data = {
-            "algorithm": algorithm,
+            "algorithm": 'bully',
             "payload": config['username'],
-            "user": "user",
+            "user": config['hero_url'],
             "job": job_data,
             "message": "",
         }
@@ -103,7 +103,7 @@ def solve_assignment(json_data, sender_uri):
         divide_line()
         print('Starting new election')
         new_assignment = json_data
-        new_assignment['job'] = {
+        new_assignment = {
             "id": json_data['id'],
             "task": json_data['task'],
             "resource": json_data['resource'],
@@ -116,7 +116,7 @@ def solve_assignment(json_data, sender_uri):
             "message" : "Oh no, i am unconcious, take over please!"
         }
         input('Everyone ready?')
-        election_algorithm(new_assignment)
+        start_election(job_data=new_assignment)
 
     answer = json.dumps({
         'id': json_data['id'],
