@@ -82,6 +82,8 @@ def solve_assignment(json_data, sender_uri):
     print('Received assignment: \n' + str(json_data['message']) + '\n' + str(
         json_data['method']) + '\n' + str(json_data['resource']))
     print()
+    print(str(json_data))
+    print()
     url = paths_util.make_http(json_data['resource'])
     if json_data['method'].lower() == 'get':
         response = requests.get(url, headers=get_config()[auth_token], data=json_data['data'])
