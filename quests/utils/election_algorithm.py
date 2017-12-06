@@ -94,7 +94,7 @@ def solve_assignment(json_data, sender_uri):
     print(response.json())
     print(response.status_code)
     print()
-    if response.status_code == 400:
+    if response.status_code == 200:
         print(response.json()['message'])
         if response.json().get('hint'):
             print(response.json()['hint'])
