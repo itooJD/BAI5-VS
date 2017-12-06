@@ -50,7 +50,7 @@ def election_algorithm(election_data):
         divide_line()
         print('Heroy is president!')
         if input('solve the assginment? ') == 'y':
-            ok = solve_assignment(election_data['job'], election_data['job']['callback'])
+            ok = solve_assignment(election_data['job'], member['url'])
             if not ok:
                 print('Could not finish our assignment!')
         else:
