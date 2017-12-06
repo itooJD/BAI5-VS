@@ -96,7 +96,8 @@ def solve_assignment(json_data, sender_uri):
     print()
     if response.status_code == 400:
         print(response.json()['message'])
-        print(response.json()['hint'])
+        if response.json().get('hint'):
+            print(response.json()['hint'])
         divide_line()
         print('Starting new election')
         new_assignment = json_data
