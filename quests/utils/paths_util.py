@@ -19,8 +19,10 @@ def make_http(url):
 
 
 def port_check(url):
-    if url.endswith(':5000') or url.endswith(':5000/'):
+    if url.endswith(':5000'):
         return url
+    elif url.endswith(':5000/'):
+        return url[0:-1]
     else:
         return url + ':5000'
 
