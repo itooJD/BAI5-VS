@@ -4,10 +4,8 @@ from flask_restful import Resource
 
 class HeroysMutex(Resource):
     states = ['released', 'wanting', 'held']
-
-    def __init__(self):
-        self.lamport_clock = 0
-        self.state = self.states[0]
+    lamport_clock = 0
+    state = states[0]
 
     def get(self):
         response = {
@@ -45,7 +43,7 @@ class HeroysMutex(Resource):
     def put(self):
         json_data = request.get_json(force=True)
         try:
-            message = 'update unsuccessful, {state:' + str(self.state) + ',clock:' + str(self.lamport_clock)
+            message = 'update unsuccessful, {state:' + str(self.state) + ',clock:' + str(self.lamport_clock) + '}'
             if bool(json_data) and len(json_data) == 2:
                 if json_data['message'] == 'state' and json_data['state'] in self.states:
                     self.state = json_data['state']
