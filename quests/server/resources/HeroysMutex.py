@@ -45,13 +45,14 @@ class HeroysMutex(Resource):
     def put(self):
         json_data = request.get_json(force=True)
         try:
-            message = 'update state unsuccessful, state is still ' + str(self.state)
+            message = 'update unsuccessful, {state:' + str(self.state) + ',clock:' + str(self.lamport_clock)
             if bool(json_data) and len(json_data) == 2:
                 if json_data['message'] == 'state' and json_data['state'] in self.states:
                     self.state = json_data['state']
                     message = 'successfully update state to ' + str(self.state)
                 if json_data['message'] == 'clock':
                     self.lamport_clock += 1
+                    message = 'sucessufully update clock to ' + str(self.lamport_clock)
             response = {'msg': message}
             return jsonify(response)
         except KeyError:
