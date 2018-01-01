@@ -14,9 +14,11 @@ class Heroy(Resource):
             "idle": True,
             "group": config['group'],
             "hirings": config['hero_url'],
-            "assignments": get_config()['assignment_url'],
-            "messages": get_config()['diary_url'],
-            "election": get_config()['election_url']
+            "assignments": config['assignment_url'],
+            "messages": config['diary_url'],
+            "election": config['election_url'],
+            "mutex": config['mutex_url'],
+            "mutexstate": config['mutex_url']
         }
         print(data)
         return jsonify(data)

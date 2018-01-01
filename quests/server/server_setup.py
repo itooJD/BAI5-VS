@@ -15,3 +15,4 @@ def add_api(paths, api):
     api.add_resource(HeroysMightyTasks, paths['assignment_url'])
     api.add_resource(HeroyPresident, paths['election_url'])
     api.add_resource(HeroysCallMeMaybeBack, paths['callback_url'])
+    api.add_resource(HeroysMutex, '/path') # must do
