@@ -22,19 +22,24 @@ class HeroysMutex(Resource):
         config = get_config()
         lamport_clock = config['lamport_clock']
         state = config['state']
+        addr = request.remote_addr
         try:
             if bool(json_data) and len(json_data) == 2:
                 if state == 'released':
                     message = 'reply-ok'
                 elif state == 'wanting':
                     if json_data['time'] < lamport_clock:
-                        while state == 'wanting':
-                            print('lulz')
-                    message = 'reply-ok'
+                        self.store_request()
+
+                        ####
+
+                        message = 'request'
+                        message = addr
+                    else:
+                        message = 'reply-ok'
                 elif state == 'held':
-                    while state == 'held':
-                        print('lulz')
-                    message = 'reply-ok'
+                    self.store_request()
+                    message = 'request'
                 response = {
                     'msg': message,
                     'time': lamport_clock
@@ -65,3 +70,6 @@ class HeroysMutex(Resource):
             return jsonify(response)
         except KeyError:
             return abort(400)
+
+    def store_request(self):
+        pass
