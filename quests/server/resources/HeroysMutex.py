@@ -1,38 +1,43 @@
+from cProfile import label
+
 from flask import jsonify, request, abort
 from flask_restful import Resource
+
+from quests.utils import get_config, change_config
 
 
 class HeroysMutex(Resource):
     states = ['released', 'wanting', 'held']
-    lamport_clock = 0
-    state = states[0]
 
     def get(self):
+        config = get_config()
         response = {
-            'state': self.state,
-            'time': self.lamport_clock
+            'state': config['state'],
+            'time': config['lamport_clock']
         }
         return jsonify(response)
 
     def post(self):
         json_data = request.get_json(force=True)
-        self.lamport_clock += 1
+        config = get_config()
+        lamport_clock = config['lamport_clock']
+        state = config['state']
         try:
             if bool(json_data) and len(json_data) == 2:
-                if self.state == 'released':
+                if state == 'released':
                     message = 'reply-ok'
-                elif self.state == 'wanting':
-                    if json_data['time'] < self.lamport_clock:
-                        while self.state == 'wanting':
+                elif state == 'wanting':
+                    if json_data['time'] < lamport_clock:
+                        while state == 'wanting':
                             print('lulz')
                     message = 'reply-ok'
-                elif self.state == 'held':
-                    while self.state == 'held':
+                elif state == 'held':
+                    while state == 'held':
                         print('lulz')
                     message = 'reply-ok'
                 response = {
                     'msg': message,
-                    'time': self.lamport_clock
+                    'time': lamport_clock
                 }
                 return jsonify(response)
             else:
@@ -42,15 +47,20 @@ class HeroysMutex(Resource):
 
     def put(self):
         json_data = request.get_json(force=True)
+        config = get_config()
+        lamport_clock = config['lamport_clock']
+        state = config['state']
         try:
-            message = 'update unsuccessful, {state:' + str(self.state) + ',clock:' + str(self.lamport_clock) + '}'
+            message = 'update unsuccessful, {state:' + str(state) + ',clock:' + str(lamport_clock) + '}'
             if bool(json_data) and len(json_data) == 2:
                 if json_data['message'] == 'state' and json_data['state'] in self.states:
-                    self.state = json_data['state']
-                    message = 'successfully update state to ' + str(self.state)
+                    state = json_data['state']
+                    change_config('state', state)
+                    message = 'successfully update state to ' + str(state)
                 if json_data['message'] == 'clock':
-                    self.lamport_clock += 1
-                    message = 'sucessufully update clock to ' + str(self.lamport_clock)
+                    lamport_clock += 1
+                    change_config('lamport_clock', lamport_clock)
+                    message = 'sucessufully update clock to ' + str(lamport_clock)
             response = {'msg': message}
             return jsonify(response)
         except KeyError:

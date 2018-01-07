@@ -32,4 +32,7 @@ quest_tokens: []
 requirements : []
 quests : []
 messages : []
+
+lamport_clock : 0
+state : 'released'
 ...
