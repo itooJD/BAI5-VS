@@ -22,7 +22,7 @@ class HeroysMutex(Resource):
         config = get_config()
         lamport_clock = config['lamport_clock']
         state = config['state']
-        addr = request.__getattribute__('connection')
+        addr = request.connection
         try:
             if bool(json_data) and len(json_data) == 2:
                 if state == 'released':
