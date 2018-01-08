@@ -20,7 +20,6 @@ class Heroy(Resource):
             "mutex": config['mutex_url'],
             "mutexstate": config['mutex_status_url']
         }
-        print(data)
         return jsonify(data)
 
     def post(self):

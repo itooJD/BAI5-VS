@@ -19,37 +19,43 @@ class HeroysMutex(Resource):
     def post(self):
         json_data = request.get_json(force=True)
         config = get_config()
-
-        # get config informations
-        lamport_clock = config['lamport_clock']
+        lamport_clock = config['lamport_clock'] + 1
         state = config['state']
         stored_requests = config['stored_requests']
         remote_addr = request.remote_addr
         try:
-            if bool(json_data) and len(json_data) == 2:
-                if state == 'released':
+            if json_data['msg'] == 'reply-ok' and len(json_data) == 2:
+                # delete from waiting_list
+                pass
+            elif json_data['msg'] == 'request' and len(json_data) == 2:
+                if state == 'released' or (state == 'wanting' and json_data['time'] >= lamport_clock):
                     message = 'reply-ok'
-                elif state == 'wanting':
-                    if json_data['time'] < lamport_clock:
-                        if remote_addr not in stored_requests:
-                            stored_requests.append(remote_addr)
-                            change_config('stored_requests', stored_requests)
-                        message = 'request'
-                    else:
-                        message = 'reply-ok'
+                else:
+                    if remote_addr not in stored_requests:
+                        stored_requests.append(remote_addr)
+                        change_config('stored_requests', stored_requests)
+                    message = 'request'
+                '''
+                elif state == 'wanting' and json_data['time'] < lamport_clock:
+                    if remote_addr not in stored_requests:
+                        stored_requests.append(remote_addr)
+                        change_config('stored_requests', stored_requests)
+                    message = 'request'
                 elif state == 'held':
                     if remote_addr not in stored_requests:
                         stored_requests.append(remote_addr)
                         change_config('stored_requests', stored_requests)
                     message = 'request'
+                '''
                 response = {
                     'msg': message,
                     'time': lamport_clock
                 }
+                change_config('lamport_clock', lamport_clock)
                 return jsonify(response)
             else:
                 return abort(400)
-        except KeyError:
+        except KeyError or TypeError:
             return abort(400)
 
     def put(self):
@@ -75,7 +81,7 @@ class HeroysMutex(Resource):
                     message = 'sucessufully update clock to ' + str(lamport_clock)
             response = {'msg': message}
             return jsonify(response)
-        except KeyError:
+        except KeyError or TypeError:
             return abort(400)
 
     def store_request(self):
