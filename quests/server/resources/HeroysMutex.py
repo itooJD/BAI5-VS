@@ -60,6 +60,9 @@ class HeroysMutex(Resource):
             message = 'update unsuccessful, {state:' + str(state) + ',clock:' + str(lamport_clock) + '}'
             if bool(json_data) and len(json_data) == 2:
                 if json_data['message'] == 'state' and json_data['state'] in self.states:
+                    if state != 'released' and json_data == 'released':
+                        self.answer_stored_requests(stored_requests)
+                        change_config('stored_reqeuests', list())
                     state = json_data['state']
                     change_config('state', state)
                     message = 'successfully update state to ' + str(state)
@@ -67,10 +70,6 @@ class HeroysMutex(Resource):
                     lamport_clock += 1
                     change_config('lamport_clock', lamport_clock)
                     message = 'sucessufully update clock to ' + str(lamport_clock)
-                if json_data['message'] == 'answer_stored_requests':
-                    self.answer_stored_requests(stored_requests)
-                    change_config('stored_reqeuests', list())
-                    message = 'successfully answered all stored requests'
             response = {'msg': message}
             return jsonify(response)
         except KeyError:
