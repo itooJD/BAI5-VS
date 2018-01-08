@@ -18,7 +18,7 @@ class Heroy(Resource):
             "messages": config['diary_url'],
             "election": config['election_url'],
             "mutex": config['mutex_url'],
-            "mutexstate": config['mutex_url']
+            "mutexstate": config['mutex_status_url']
         }
         print(data)
         return jsonify(data)
