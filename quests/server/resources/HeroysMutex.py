@@ -1,3 +1,4 @@
+import requests
 from flask import jsonify, request, abort
 from flask_restful import Resource
 
@@ -23,18 +24,21 @@ class HeroysMutex(Resource):
         lamport_clock = config['lamport_clock']
         state = config['state']
         stored_requests = config['stored_requests']
+        remote_addr = request.remote_addr
         try:
             if bool(json_data) and len(json_data) == 2:
                 if state == 'released':
                     message = 'reply-ok'
                 elif state == 'wanting':
                     if json_data['time'] < lamport_clock:
-                        stored_requests.append(request.remote_addr)
+                        if remote_addr not in stored_requests:
+                            stored_requests.append(remote_addr)
                         message = 'request'
                     else:
                         message = 'reply-ok'
                 elif state == 'held':
-                    stored_requests.append(request.remote_addr)
+                    if remote_addr not in stored_requests:
+                        stored_requests.append(remote_addr)
                     message = 'request'
                 response = {
                     'msg': message,
@@ -76,4 +80,7 @@ class HeroysMutex(Resource):
         pass
 
     def answer_stored_requests(self, stored_requests):
+        for request in stored_requests:
+            print('Answer Request: ' + request)
+            requests.post('http://' + request + ':5000/path', data='{"msg":"reply-ok","time":1}')
         pass
