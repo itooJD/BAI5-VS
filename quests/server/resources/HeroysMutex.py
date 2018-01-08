@@ -25,8 +25,12 @@ class HeroysMutex(Resource):
         remote_addr = request.remote_addr
         try:
             if json_data['msg'] == 'reply-ok' and len(json_data) == 2:
-                # delete from waiting_list
-                pass
+                waiting_answers = config['waiting_answers']
+                waiting_answers.remove(remote_addr)
+                response = {
+                    'msg': 'thanks',
+                    'time': lamport_clock
+                }
             elif json_data['msg'] == 'request' and len(json_data) == 2:
                 if state == 'released' or (state == 'wanting' and json_data['time'] >= lamport_clock):
                     message = 'reply-ok'
@@ -39,13 +43,14 @@ class HeroysMutex(Resource):
                     'msg': message,
                     'time': lamport_clock
                 }
-                if json_data['time'] > lamport_clock:
-                    lamport_clock = json_data['time']
-                lamport_clock += 1
-                change_config('lamport_clock', lamport_clock)
-                return jsonify(response)
             else:
                 return abort(400)
+
+            if json_data['time'] > lamport_clock:
+                lamport_clock = json_data['time']
+            lamport_clock += 1
+            change_config('lamport_clock', lamport_clock)
+            return jsonify(response)
         except KeyError or TypeError:
             return abort(400)
 
