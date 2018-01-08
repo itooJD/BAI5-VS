@@ -24,16 +24,15 @@ class Heroy(Resource):
 
     def post(self):
         json_data = request.get_json(force=True)
-        if not json_data['quest']:
-            abort(400)
-
-        take_quest = ''
-        while take_quest != 'y' and take_quest != 'n':
-            take_quest = input(
-                "Do you want to take part in the quest: {0} of the group {1}. Message: {2}. Answer with [y,n]".format(
-                    json_data['quest'], json_data['group'], json_data['message']))
-        if take_quest == "y":
-            quests.append((json_data['quest'], json_data['group'], json_data['message']))
-            return 201
-        else:
-            return jsonify({'message': 'Mighty heroy jenkins does not take your pity quest'}), 400
+        try:
+            take_quest = ''
+            while take_quest != 'y' and take_quest != 'n':
+                take_quest = input(
+                    "Do you want to take part in the quest: {0} of the group {1}. Message: {2}. Answer with [y,n]".format(
+                        json_data['quest'], json_data['group'], json_data['message']))
+                if take_quest == "y":
+                    return jsonify({'message': 'I\'m in the fun'})
+                else:
+                    return jsonify({'message': 'Mighty heroy jenkins does not take your pity quest'}), 418
+        except KeyError or TypeError:
+            return abort(400)
