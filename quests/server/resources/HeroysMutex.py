@@ -60,9 +60,8 @@ class HeroysMutex(Resource):
             message = 'update unsuccessful, {state:' + str(state) + ',clock:' + str(lamport_clock) + '}'
             if bool(json_data) and len(json_data) == 2:
                 if json_data['message'] == 'state' and json_data['state'] in self.states:
-                    print('ich bin in der if')
                     if state != 'released' and json_data['state'] == 'released':
-                        print('ich bin in der 2. if')
+                        print('stored requets: ' + stored_requests)
                         self.answer_stored_requests(stored_requests)
                         change_config('stored_reqeuests', list())
                     state = json_data['state']
@@ -81,6 +80,7 @@ class HeroysMutex(Resource):
         pass
 
     def answer_stored_requests(self, stored_requests):
+        print('ich bin in answer_stored_requests')
         for request in stored_requests:
             print('Answer Request: ' + request)
             requests.post('http://' + request + ':5000/path', data='{"msg":"reply-ok","time":1}')
