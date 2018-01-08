@@ -1,5 +1,4 @@
-from cProfile import label
-
+import requests
 from flask import jsonify, request, abort
 from flask_restful import Resource
 
@@ -22,34 +21,44 @@ class HeroysMutex(Resource):
         config = get_config()
         lamport_clock = config['lamport_clock']
         state = config['state']
-        addr = request.connection
+        stored_requests = config['stored_requests']
+        remote_addr = request.remote_addr
         try:
-            if bool(json_data) and len(json_data) == 2:
-                if state == 'released':
+            if json_data['msg'] == 'reply-ok' and len(json_data) == 2:
+                # delete from waiting_list
+                pass
+            elif json_data['msg'] == 'request' and len(json_data) == 2:
+                if state == 'released' or (state == 'wanting' and json_data['time'] >= lamport_clock):
                     message = 'reply-ok'
-                elif state == 'wanting':
-                    if json_data['time'] < lamport_clock:
-                        self.store_request()
-
-                        ####
-
-                        message = 'request'
-                        message = addr
-                    else:
-                        message = 'reply-ok'
-                elif state == 'held':
-                    self.store_request()
+                else:
+                    if remote_addr not in stored_requests:
+                        stored_requests.append(remote_addr)
+                        change_config('stored_requests', stored_requests)
                     message = 'request'
                 response = {
                     'msg': message,
                     'time': lamport_clock
                 }
+                if json_data['time'] > lamport_clock:
+                    lamport_clock = json_data['time']
+                lamport_clock += 1
+                change_config('lamport_clock', lamport_clock)
                 return jsonify(response)
             else:
                 return abort(400)
-        except KeyError:
+        except KeyError or TypeError:
             return abort(400)
 
+    # change status
+    # {
+    #   "message":"state",
+    #   "state":"released" oder....
+    # }
+    #
+    # update clock
+    # {
+    #   "message":"clock"
+    # }
     def put(self):
         json_data = request.get_json(force=True)
         config = get_config()
@@ -57,19 +66,35 @@ class HeroysMutex(Resource):
         state = config['state']
         try:
             message = 'update unsuccessful, {state:' + str(state) + ',clock:' + str(lamport_clock) + '}'
-            if bool(json_data) and len(json_data) == 2:
-                if json_data['message'] == 'state' and json_data['state'] in self.states:
-                    state = json_data['state']
-                    change_config('state', state)
-                    message = 'successfully update state to ' + str(state)
-                if json_data['message'] == 'clock':
-                    lamport_clock += 1
-                    change_config('lamport_clock', lamport_clock)
-                    message = 'sucessufully update clock to ' + str(lamport_clock)
+            if json_data['message'] == 'state' and json_data['state'] in self.states and len(json_data) == 2:
+                if json_data['state'] == 'released':
+                    if state != 'released':
+                        self.answer_stored_requests()
+                    change_config('stored_reqeuests', list())
+                state = json_data['state']
+                change_config('state', state)
+                message = 'successfully update state to ' + str(state)
+            if json_data['message'] == 'clock' and len(json_data) == 1:
+                lamport_clock += 1
+                change_config('lamport_clock', lamport_clock)
+                message = 'sucessufully update clock to ' + str(lamport_clock)
             response = {'msg': message}
             return jsonify(response)
-        except KeyError:
+        except KeyError or TypeError:
             return abort(400)
 
-    def store_request(self):
-        pass
+    def answer_stored_requests(self):
+        config = get_config()
+        lamport_clock = config['lamport_clock']
+        stored_requests = config['stored_requests']
+        # in stored_request are only the ip-addresses
+        # get adventurer list
+        for request in stored_requests:
+            data = {
+                "msg": "reply-ok",
+                "time": lamport_clock
+            }
+            # get full URL of request from adventurer list
+            # send POST to mutex with data
+            lamport_clock += 1
+        change_config('lamport_clock', lamport_clock)

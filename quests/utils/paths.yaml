@@ -35,4 +35,6 @@ messages : []
 
 lamport_clock : 0
 state : 'released'
+stored_requests : []
+waiting_answers : []
 ...
