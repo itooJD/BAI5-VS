@@ -61,7 +61,7 @@ class HeroysMutex(Resource):
             if bool(json_data) and len(json_data) == 2:
                 if json_data['message'] == 'state' and json_data['state'] in self.states:
                     if state != 'released' and json_data['state'] == 'released':
-                        print('stored requets: ' + stored_requests)
+                        print('stored requets: ' + str(stored_requests))
                         self.answer_stored_requests(stored_requests)
                         change_config('stored_reqeuests', list())
                     state = json_data['state']
