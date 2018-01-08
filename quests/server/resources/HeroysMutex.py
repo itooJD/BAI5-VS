@@ -33,12 +33,14 @@ class HeroysMutex(Resource):
                     if json_data['time'] < lamport_clock:
                         if remote_addr not in stored_requests:
                             stored_requests.append(remote_addr)
+                            change_config('stored_requests', stored_requests)
                         message = 'request'
                     else:
                         message = 'reply-ok'
                 elif state == 'held':
                     if remote_addr not in stored_requests:
                         stored_requests.append(remote_addr)
+                        change_config('stored_requests', stored_requests)
                     message = 'request'
                 response = {
                     'msg': message,
