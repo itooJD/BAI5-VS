@@ -149,7 +149,7 @@ def get_all_adventureres():
     response = requests.get(paths_util.adventurers_uri(), headers=get_config()[auth_token])
     adventurers = []
     for idx, adventurer in enumerate(response.json()['objects']):
-        if adventurer.get('url'):
-            adventurers.append(adventurer)
+        if adventurer.get('url') and adventurer.get('user'):
+            adventurers.append(adventurer['url'] + adventurer['user'])
     divide_line()
     return adventurers
