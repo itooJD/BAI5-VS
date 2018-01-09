@@ -12,8 +12,6 @@ def mutex_ui(_):
     return mutex_filter(input('\nWhat do you want to do?\n> '))
 
 def mutex_filter(choice):
-    print('OMG')
-    print(choice)
     choice_filter = {
         '1': request_mutex
     }
@@ -23,9 +21,7 @@ def mutex_filter(choice):
 
 
 def request_mutex():
-    print('OK')
     config = get_config()
-    '''
     if config['state'] == 'wanting' or config['state'] == 'held':
         print('Already in a state of "wanting" or "held"')
     else:
@@ -46,4 +42,3 @@ def request_mutex():
             print('All requests were sent, please work on the server')
         except Exception as e:
             print(e)
-    '''
