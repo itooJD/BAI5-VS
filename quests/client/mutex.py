@@ -13,12 +13,13 @@ def mutex_ui(_):
 
 def mutex_filter(choice):
     print('OMG')
+    print(choice)
     choice_filter = {
         '1': request_mutex
     }
     if not choice_filter.get(choice):
         logout('')
-    choice_filter.get(choice)
+    choice_filter.get(choice)()
 
 
 def request_mutex():
