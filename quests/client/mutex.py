@@ -74,6 +74,7 @@ def request_mutex():
                 print('Did not receive all answers :C')
             tries += 1
 
+        change_config('waiting_answers', [])
         print('Entering the critical area')
         change_config('state', 'held')
         time.sleep(10)
