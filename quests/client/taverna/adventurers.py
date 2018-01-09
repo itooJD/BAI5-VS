@@ -152,3 +152,4 @@ def get_all_adventureres():
         if adventurer.get('url'):
             adventurers.append(adventurer)
     divide_line()
+    return adventurers

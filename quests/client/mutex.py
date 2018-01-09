@@ -41,4 +41,4 @@ def request_mutex():
                 requests.post(adventurer_mutex_endpoint,data=data_json)
             print('All requests were sent, please work on the server')
         except Exception as e:
-            print(e)
+            print('Something is wrong! Just wrong: \n' + e)
