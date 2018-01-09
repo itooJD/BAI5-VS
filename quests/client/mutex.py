@@ -21,6 +21,7 @@ def mutex_filter(choice):
 
 
 def request_mutex():
+    print('OK')
     config = get_config()
     if config['state'] == 'wanting' or config['state'] == 'held':
         print('Already in a state of "wanting" or "held"')
