@@ -18,35 +18,34 @@ class HeroysMutex(Resource):
     def post(self):
         print('Received mutex request')
         json_data = request.get_json(force=True)
-        print('JsonData')
         config = get_config()
         state = config['state']
         lamport_clock = config['lamport_clock']
         stored_requests = config['stored_requests']
         waiting_answers = config['waiting_answers']
-        print('Stored')
         try:
             if json_data['msg'].lower() == 'reply-ok' and len(json_data) == 4:
-                print('Reply-OK')
+                print('Received mutex reply-ok')
                 if json_data['user'] in waiting_answers:
                     waiting_answers.remove(json_data['user'])
                 change_config('waiting_answers', waiting_answers)
                 return 200
             elif json_data['msg'].lower() == 'request' and len(json_data) == 4:
                 print('Received mutex request')
-                if state == 'released' or (state == 'wanting' and json_data['lamport_clock'] >= lamport_clock):
+                if state == 'released' or (state == 'wanting' and json_data['time'] >= lamport_clock):
                     message = 'reply-ok'
                 else:
                     stored_requests.append(json_data['reply'])
                     message = 'request'
             else:
-                print(str(json_data))
                 return abort(400)
 
+            print('Lampock')
             if json_data['time'] > lamport_clock:
                 lamport_clock = json_data['time']
             lamport_clock += 1
 
+            print('Response build')
             response = {
                 'msg': message,
                 'time': lamport_clock,

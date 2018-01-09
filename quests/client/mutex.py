@@ -1,4 +1,5 @@
 import requests
+import time
 from flask import json
 
 from quests.client.utilities import divide_line, logout
@@ -47,9 +48,11 @@ def request_mutex():
                         "user": config['own_address'] + config['hero_url']
                     })
                     try:
-                        requests.post(make_http(adventurer['url'] + adventurer_mutex_endpoint), data=data_json, timeout=5)
+                        response = requests.post(make_http(adventurer['url'] + adventurer_mutex_endpoint), data=data_json, timeout=5)
                         print('Posted mutex request to ' + str(adventurer['url'] + adventurer_mutex_endpoint))
-                        add_to('waiting_answers', adventurer['user'])
+                        change_config('lamport_clock', config['lamport_clock'] + 1)
+                        if not response.json()['msg'] == 'reply-ok':
+                            add_to('waiting_answers', adventurer['user'])
                     except Exception as e:
                         print('Something is wrong! Just wrong: \n' + str(e))
                 else:
@@ -57,4 +60,18 @@ def request_mutex():
             except Exception as e:
                 print('Adventurer ' + str(idx) + ' with url ' + str(adventurer['url']) + ' could not be reached')
                 print('But our messenger told us: ' + str(e))
-        print('All requests were sent, please work on the server')
+
+        tries = 0
+        trymax = len(config['waiting_answers'])
+        while len(config['waiting_answers']) != 0 and tries < trymax:
+            time.sleep(2)
+            tries += 1
+
+        print('Entering the critical area')
+        change_config('state', 'held')
+        time.sleep(10)
+        try:
+            requests.put(config['own_address'], data=json.dumps({"message":"release the kraken"}))
+        except Exception as e:
+            print('Put the kraken error: ' + str(e))
+        print('Left the critical area')
