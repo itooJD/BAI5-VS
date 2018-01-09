@@ -36,6 +36,7 @@ def request_mutex():
         for idx, adventurer in enumerate(adventureres):
             try:
                 print(adventurer['capabilities'])
+                print(type(adventurer['capabilities']))
                 if 'mutex' in adventurer['capabilities']:
                     response = requests.get(make_http(adventurer['url']), timeout=5)
                     adventurer_mutex_endpoint = response.json()['mutex']
