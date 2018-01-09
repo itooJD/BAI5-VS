@@ -232,3 +232,12 @@ def visit_elves(auth_header, quest_host, location_url):
     print(ok_resp.json())
     '''
 
+def visit_northern_wilds(auth_header, quest_host, location_url):
+    divide_line()
+    print('We arrived at {0}{1}. Lets see what where we can help!'.format(quest_host, location_url))
+    visit_resp = requests.get('http://' + quest_host + location_url, headers=auth_header)
+    print(visit_resp.json())
+    print()
+    print('Message: ' + str(visit_resp.json()['message']))
+    if visit_resp.json().get('next'):
+        visit_northern_wilds(auth_header, quest_host, visit_resp.json().get('next'))
