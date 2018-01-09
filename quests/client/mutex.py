@@ -68,11 +68,11 @@ def request_mutex():
         divide_line()
         tries = 0
         trymax = len(get_config()['waiting_answers'])
-        while len(get_config()['waiting_answers']) != 0 and tries < trymax:
+        while len(get_config()['waiting_answers']) != 0 and tries <= trymax:
             print('Waiting for ' + str(len(get_config()['waiting_answers'])) + ' answers')
             time.sleep(1)
             if tries == trymax:
-                print('Did not receive all answers :C')
+                print('Did not receive all answers :C. Still entering critial_section')
             tries += 1
 
         change_config('lampock_clock', 0)
