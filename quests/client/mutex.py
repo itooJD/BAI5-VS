@@ -25,6 +25,7 @@ def request_mutex():
     if config['state'] == 'wanting' or config['state'] == 'held':
         print('Already in a state of "wanting" or "held"')
     else:
+        print('Sending requests to all adventureres')
         change_config('state','wanting')
         adventureres = get_all_adventureres()
         try:
