@@ -10,6 +10,7 @@ def setup_flask():
 
 
 def add_api(paths, api):
+    pass
     #api.add_resource(Heroy, paths['hero_url'])
     #api.add_resource(HeroysDiary, paths['diary_url'])
     #api.add_resource(HeroysMightyTasks, paths['assignment_url'])
