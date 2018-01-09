@@ -57,8 +57,8 @@ def rm_from(token, data):
 
 def get_server_url():
     s = socket(AF_INET, SOCK_DGRAM)
+    s.settimeout(10)
     s.bind(('', 24000))
-    s.timeout = 10
     udp_received = s.recvfrom(1024)
     if udp_received:
         port_pre = udp_received[0]
