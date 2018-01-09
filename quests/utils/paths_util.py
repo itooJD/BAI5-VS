@@ -7,7 +7,7 @@ def http(uri):
 
 def make_http(url):
     if not url.startswith('http://'):
-        new_url = 'http://' + url
+        new_url = http(url)
     else:
         new_url = url
 
@@ -25,7 +25,6 @@ def port_check(url):
         return url[0:-1]
     else:
         return url + ':5000'
-
 
 def server_uri(uri):
     return get_config()['server'] + uri

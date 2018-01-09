@@ -17,6 +17,7 @@ class HeroysMutex(Resource):
         return jsonify(response)
 
     def post(self):
+        print('Received mutex request')
         json_data = request.get_json(force=True)
         config = get_config()
         lamport_clock = config['lamport_clock']
@@ -25,11 +26,17 @@ class HeroysMutex(Resource):
         try:
             if json_data['msg'].lower() == 'reply-ok' and len(json_data) == 4:
                 waiting_answers = config['waiting_answers']
+                waiting_answers.remove(remote_addr)
+                response = {
+                    'msg': 'thanks',
+                    'time': lamport_clock
+                }
+            elif json_data['msg'] == 'request' and len(json_data) == 2:
+                waiting_answers = config['waiting_answers']
                 if json_data['user'] in waiting_answers:
                     waiting_answers.remove(json_data['user'])
-                message = 'reply-ok'
-            elif json_data['msg'] == 'request' and len(json_data) == 4:
-                if state == 'released' or (state == 'wanting' and json_data['time'] >= lamport_clock):
+                print('Received mutex request')
+                if state == 'released' or (state == 'wanting' and json_data['lamport_clock'] >= lamport_clock):
                     message = 'reply-ok'
                 else:
                     stored_requests.append(json_data['reply'])
@@ -51,7 +58,8 @@ class HeroysMutex(Resource):
             change_config('stored_requests', stored_requests)
             change_config('lamport_clock', lamport_clock)
             return jsonify(response)
-        except KeyError or TypeError:
+        except KeyError or TypeError as e:
+            print('Error working on Mutex post: ' + str(e))
             return abort(400)
 
     # change status
@@ -69,7 +77,15 @@ class HeroysMutex(Resource):
         config = get_config()
         lamport_clock = config['lamport_clock']
         try:
-            message = 'Update unsuccessful, {clock:' + str(lamport_clock) + '}'
+            message = 'update unsuccessful, {state:' + str(state) + ',clock:' + str(lamport_clock) + '}'
+            if json_data['message'] == 'state' and json_data['state'] in self.states and len(json_data) == 2:
+                if json_data['state'] == 'released':
+                    if state != 'released':
+                        self.answer_stored_requests()
+                    change_config('stored_reqeuests', list())
+                state = json_data['state']
+                change_config('state', state)
+                message = 'successfully update state to ' + str(state)
             if json_data['message'] == 'clock' and len(json_data) == 1:
                 lamport_clock += 1
                 change_config('lamport_clock', lamport_clock)
