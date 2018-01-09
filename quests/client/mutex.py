@@ -51,8 +51,12 @@ def request_mutex():
                         response = requests.post(make_http(adventurer['url'] + adventurer_mutex_endpoint), data=data_json, timeout=5)
                         print('Posted mutex request to ' + str(adventurer['url'] + adventurer_mutex_endpoint))
                         change_config('lamport_clock', config['lamport_clock'] + 1)
-                        if not response.json()['msg'] == 'reply-ok':
+                        print(str(response.json()))
+                        if not response.json().get('msg'):
                             add_to('waiting_answers', adventurer['user'])
+                        else:
+                            if not response.json().get('msg')== 'reply-ok':
+                                add_to('waiting_answers', adventurer['user'])
                     except Exception as e:
                         print('Something is wrong! Just wrong: \n' + str(e))
                 else:
@@ -64,6 +68,7 @@ def request_mutex():
         tries = 0
         trymax = len(config['waiting_answers'])
         while len(config['waiting_answers']) != 0 and tries < trymax:
+            print('Waiting for ' + str(len(config['waiting_answers'])) + ' answers')
             time.sleep(2)
             if tries == trymax:
                 print('Did not receive all answers :C')
@@ -73,7 +78,7 @@ def request_mutex():
         change_config('state', 'held')
         time.sleep(10)
         try:
-            requests.put(config['own_address'], data=json.dumps({"message":"release the kraken"}))
+            requests.put(make_http(config['own_address'] + config['hero_url']), data=json.dumps({"message":"release the kraken"}))
         except Exception as e:
             print('Put the kraken error: ' + str(e))
         print('Left the critical area')
