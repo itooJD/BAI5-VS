@@ -74,15 +74,16 @@ def request_mutex():
             if tries == trymax:
                 print('Did not receive all answers :C. Still entering critial_section')
             tries += 1
-
+        divide_line()
         change_config('lampock_clock', 0)
         change_config('waiting_answers', [])
         print('Entering the critical area')
         change_config('state', 'held')
-        time.sleep(10)
+        time.sleep(3)
         try:
             requests.put(make_http(config['own_address'] + config['mutex_url']), data=json.dumps({"message":"release the kraken"}))
         except Exception as e:
             print('Put the kraken error: ' + str(e))
-        print('Leaving the critical area')
+        print('Leaving the critical section')
+        change_config('state', 'released')
         divide_line()
