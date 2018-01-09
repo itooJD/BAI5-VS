@@ -32,6 +32,9 @@ class HeroysMutex(Resource):
                     'time': lamport_clock
                 }
             elif json_data['msg'] == 'request' and len(json_data) == 2:
+                waiting_answers = config['waiting_answers']
+                if json_data['user'] in waiting_answers:
+                    waiting_answers.remove(json_data['user'])
                 print('Received mutex request')
                 if state == 'released' or (state == 'wanting' and json_data['lamport_clock'] >= lamport_clock):
                     message = 'reply-ok'
