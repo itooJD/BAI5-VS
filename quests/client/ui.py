@@ -1,4 +1,4 @@
-from quests.client import mutex
+from quests.client.mutex import mutex_ui
 from quests.client.blackboard import show_users, choose_quest
 from quests.client.taverna.taverna import taverna
 from quests.client.questing import look_at_map
@@ -26,7 +26,7 @@ def main_filter(choice, auth_header):
         '2': taverna,
         '3': show_users,
         '4': look_at_map,
-        '5': mutex,
+        '5': mutex_ui,
         '6': logout,
         '7': whoami
     }
