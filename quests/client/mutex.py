@@ -43,16 +43,20 @@ def request_mutex():
                     adventurer_mutex_endpoint = response.json()['mutex']
                     data_json = json.dumps({
                         "msg": "request",
-                        "time": config['lamport_clock'],
+                        "time": get_config()['lamport_clock'],
                         "reply": config['own_address'] + config['mutex_url'],
                         "user": config['own_address'] + config['hero_url']
                     })
                     try:
                         response = requests.post(make_http(adventurer['url'] + adventurer_mutex_endpoint), data=data_json, timeout=5)
                         print('Posted mutex request to ' + str(adventurer['url'] + adventurer_mutex_endpoint))
-                        change_config('lamport_clock', config['lamport_clock'] + 1)
-                        if not response.json()['msg'] == 'reply-ok':
+                        change_config('lamport_clock', get_config()['lamport_clock'] + 1)
+                        print(str(response.json()))
+                        if not response.json().get('msg'):
                             add_to('waiting_answers', adventurer['user'])
+                        else:
+                            if not response.json().get('msg')== 'reply-ok':
+                                add_to('waiting_answers', adventurer['user'])
                     except Exception as e:
                         print('Something is wrong! Just wrong: \n' + str(e))
                 else:
@@ -61,17 +65,25 @@ def request_mutex():
                 print('Adventurer ' + str(idx) + ' with url ' + str(adventurer['url']) + ' could not be reached')
                 print('But our messenger told us: ' + str(e))
 
+        divide_line()
         tries = 0
-        trymax = len(config['waiting_answers'])
-        while len(config['waiting_answers']) != 0 and tries < trymax:
-            time.sleep(2)
+        trymax = len(get_config()['waiting_answers'])
+        while len(get_config()['waiting_answers']) != 0 and tries <= trymax:
+            print('Waiting for ' + str(len(get_config()['waiting_answers'])) + ' answers')
+            time.sleep(1)
+            if tries == trymax:
+                print('Did not receive all answers :C. Still entering critial_section')
             tries += 1
-
+        divide_line()
+        change_config('lampock_clock', 0)
+        change_config('waiting_answers', [])
         print('Entering the critical area')
         change_config('state', 'held')
-        time.sleep(10)
+        time.sleep(3)
         try:
-            requests.put(config['own_address'], data=json.dumps({"message":"release the kraken"}))
+            requests.put(make_http(config['own_address'] + config['mutex_url']), data=json.dumps({"message":"release the kraken"}))
         except Exception as e:
             print('Put the kraken error: ' + str(e))
-        print('Left the critical area')
+        print('Leaving the critical section')
+        change_config('state', 'released')
+        divide_line()

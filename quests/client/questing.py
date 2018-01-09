@@ -31,7 +31,7 @@ def solve_quests(quest, quest_no, auth_header):
         else:
             deliver(auth_header, deliver_token, quest_no, quest['tasks'])
     elif int_quest_no == 5:
-        deliver_token = visit_wounded(auth_header, quest_host, location_url)
+        deliver_token = visit_northern_wilds(auth_header, quest_host, location_url)
     else:
         print('Sorry, you do not have the required requirements to solve this. Back to the Main UI.')
 
@@ -232,6 +232,7 @@ def visit_elves(auth_header, quest_host, location_url):
     print(ok_resp.json())
     '''
 
+
 def visit_northern_wilds(auth_header, quest_host, location_url):
     divide_line()
     print('We arrived at {0}{1}. Lets see what where we can help!'.format(quest_host, location_url))
@@ -241,3 +242,5 @@ def visit_northern_wilds(auth_header, quest_host, location_url):
     print('Message: ' + str(visit_resp.json()['message']))
     if visit_resp.json().get('next'):
         visit_northern_wilds(auth_header, quest_host, visit_resp.json().get('next'))
+    if visit_resp.json().get('critical_section'):
+        print('Such wow, critical section')
