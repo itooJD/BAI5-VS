@@ -4,7 +4,7 @@ import requests
 from quests.client.taverna.user_interaction import user_interaction_ui
 from quests.client.utilities import divide_line
 from quests.utils import paths_util, get_config
-from quests.utils.paths_names import util_group
+from quests.utils.paths_names import util_group, auth_token
 
 
 def adventurer_ui(auth_header):
@@ -143,3 +143,12 @@ def hire_adventurer(auth_header, name=None, adventurer=None):
 def search_for_adventurer(auth_header):
     name = input('So.. Whom then? \n> ')
     search_ui(auth_header, name)
+
+
+def get_all_adventureres():
+    response = requests.get(paths_util.adventurers_uri(), headers=get_config()[auth_token])
+    adventurers = []
+    for idx, adventurer in enumerate(response.json()['objects']):
+        if adventurer.get('url'):
+            adventurers.append(adventurer)
+    divide_line()

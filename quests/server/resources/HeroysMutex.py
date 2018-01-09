@@ -24,7 +24,7 @@ class HeroysMutex(Resource):
         stored_requests = config['stored_requests']
         remote_addr = request.remote_addr
         try:
-            if json_data['msg'] == 'reply-ok' and len(json_data) == 2:
+            if json_data['msg'].lower() == 'reply-ok' and len(json_data) == 2:
                 waiting_answers = config['waiting_answers']
                 waiting_answers.remove(remote_addr)
                 response = {
@@ -70,12 +70,12 @@ class HeroysMutex(Resource):
         lamport_clock = config['lamport_clock']
         state = config['state']
         try:
-            message = 'update unsuccessful, {state:' + str(state) + ',clock:' + str(lamport_clock) + '}'
+            message = 'Update unsuccessful, {state:' + str(state) + ',clock:' + str(lamport_clock) + '}'
             if json_data['message'] == 'state' and json_data['state'] in self.states and len(json_data) == 2:
                 if json_data['state'] == 'released':
                     if state != 'released':
                         self.answer_stored_requests()
-                    change_config('stored_reqeuests', list())
+                    change_config('stored_requests', list())
                 state = json_data['state']
                 change_config('state', state)
                 message = 'successfully update state to ' + str(state)

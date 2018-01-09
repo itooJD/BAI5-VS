@@ -13,7 +13,8 @@ def main_ui(auth_header):
     print('2: Taverna')
     print('3: Users')
     print('4: Map')
-    print('5: Logout')
+    print('5: Mutex')
+    print('6: Logout')
     print('else to exit')
     return main_filter(input('\nWhere do you want to go \n> '), auth_header)
 
@@ -24,8 +25,9 @@ def main_filter(choice, auth_header):
         '2': taverna,
         '3': show_users,
         '4': look_at_map,
-        '5': logout,
-        '6': whoami
+        '5': mutex,
+        '6': logout,
+        '7': whoami
     }
     if not choice_filter.get(choice):
         logout('')
