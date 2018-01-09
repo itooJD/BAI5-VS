@@ -35,12 +35,14 @@ class HeroysMutex(Resource):
                 if state == 'released' or (state == 'wanting' and json_data['time'] >= lamport_clock):
                     message = 'reply-ok'
                 else:
-                    stored_requests.append(json_data['reply'])
+                    print(json_data['reply'])
+                    if json_data['reply'] not in stored_requests:
+                        stored_requests.append(json_data['reply'])
                     message = 'request'
             else:
                 return abort(400)
 
-            print('Lampock')
+            print('Lamport')
             if json_data['time'] > lamport_clock:
                 lamport_clock = json_data['time']
             lamport_clock += 1
@@ -49,12 +51,13 @@ class HeroysMutex(Resource):
             response = {
                 'msg': message,
                 'time': lamport_clock,
-                'user': 'http://' + config['own_address'] + ':5000/',
-                'reply': 'http://' + config['own_address'] + ':5000' + config['mutex_url']
+                'user': config['own_address'],
+                'reply': config['own_address'] + config['mutex_url']
             }
 
             change_config('stored_requests', stored_requests)
             change_config('lamport_clock', lamport_clock)
+            print(str(response))
             return jsonify(response)
         except KeyError or TypeError as e:
             print('Error working on Mutex post: ' + str(e))
@@ -71,16 +74,27 @@ class HeroysMutex(Resource):
                     response = json.dumps({
                         'msg': 'reply-ok',
                         'time': lamport_clock,
-                        'user': 'http://' + config['own_address'] + ':5000/',
-                        'reply': 'http://' + config['own_address'] + ':5000' + config['mutex_url']
+                        'user': config['own_address'],
+                        'reply': config['own_address'] + config['mutex_url']
                     })
                     try:
-                        requests.post(single_request, data=response, timeout=0.1)
-                    except Exception:
-                        pass
+                        print(single_request)
+                        response_req = requests.post(single_request, data=response)
+                        print(response_req)
+                    except Exception as e:
+                        print(str(e))
                     lamport_clock += 1
                 change_config('lamport_clock', lamport_clock)
-                change_config('stored_requests', stored_requests)
+                change_config('stored_requests', list())
+                return 200
+            if json_data['message'] == 'wanting' and len(json_data) == 1:
+                change_config('state', 'wanting')
+                return 200
+            if json_data['message'] == 'released' and len(json_data) == 1:
+                change_config('state', 'released')
+                return 200
+            if json_data['message'] == 'clock' and len(json_data) == 1:
+                change_config('lamport_clock', get_config()['lamport_clock'] + 5)
                 return 200
             return abort(400)
         except KeyError or TypeError as e:
