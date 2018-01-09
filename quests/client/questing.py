@@ -242,3 +242,5 @@ def visit_northern_wilds(auth_header, quest_host, location_url):
     print('Message: ' + str(visit_resp.json()['message']))
     if visit_resp.json().get('next'):
         visit_northern_wilds(auth_header, quest_host, visit_resp.json().get('next'))
+    if visit_resp.json().get('critical_section'):
+        print('Such wow, critical section')
