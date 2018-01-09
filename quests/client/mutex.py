@@ -12,6 +12,7 @@ def mutex_ui(_):
     return mutex_filter(input('\nWhat do you want to do?\n> '))
 
 def mutex_filter(choice):
+    print('OMG')
     choice_filter = {
         '1': request_mutex
     }
