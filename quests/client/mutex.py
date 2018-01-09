@@ -43,14 +43,14 @@ def request_mutex():
                     adventurer_mutex_endpoint = response.json()['mutex']
                     data_json = json.dumps({
                         "msg": "request",
-                        "time": config['lamport_clock'],
+                        "time": get_config()['lamport_clock'],
                         "reply": config['own_address'] + config['mutex_url'],
                         "user": config['own_address'] + config['hero_url']
                     })
                     try:
                         response = requests.post(make_http(adventurer['url'] + adventurer_mutex_endpoint), data=data_json, timeout=5)
                         print('Posted mutex request to ' + str(adventurer['url'] + adventurer_mutex_endpoint))
-                        change_config('lamport_clock', config['lamport_clock'] + 1)
+                        change_config('lamport_clock', get_config()['lamport_clock'] + 1)
                         print(str(response.json()))
                         if not response.json().get('msg'):
                             add_to('waiting_answers', adventurer['user'])
@@ -66,8 +66,8 @@ def request_mutex():
                 print('But our messenger told us: ' + str(e))
 
         tries = 0
-        trymax = len(config['waiting_answers'])
-        while len(config['waiting_answers']) != 0 and tries < trymax:
+        trymax = len(get_config()['waiting_answers'])
+        while len(get_config()['waiting_answers']) != 0 and tries < trymax:
             print('Waiting for ' + str(len(config['waiting_answers'])) + ' answers')
             time.sleep(2)
             if tries == trymax:
