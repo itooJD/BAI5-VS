@@ -19,6 +19,7 @@ class HeroysMutex(Resource):
     def post(self):
         print('Received mutex request')
         json_data = request.get_json(force=True)
+        print(json_data)
         config = get_config()
         state = config['state']
         lamport_clock = config['lamport_clock']
