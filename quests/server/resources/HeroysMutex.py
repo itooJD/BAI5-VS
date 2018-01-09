@@ -16,7 +16,7 @@ class HeroysMutex(Resource):
         return jsonify(response)
 
     def post(self):
-        print('Received mutex request')
+        print('Received mutex stuff')
         json_data = request.get_json(force=True)
         config = get_config()
         state = config['state']
