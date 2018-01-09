@@ -65,6 +65,8 @@ def request_mutex():
         trymax = len(config['waiting_answers'])
         while len(config['waiting_answers']) != 0 and tries < trymax:
             time.sleep(2)
+            if tries == trymax:
+                print('Did not receive all answers :C')
             tries += 1
 
         print('Entering the critical area')
