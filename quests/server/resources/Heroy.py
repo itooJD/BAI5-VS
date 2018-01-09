@@ -27,20 +27,22 @@ class Heroy(Resource):
         config = get_config()
         group = config['group']
         try:
-            message = 'Mighty heroy jenkins does not take your pity quest'
+            message = 'Mighty Heroy Jenkins does not take your pity quest'
             status_code = 418
             take_quest = ''
-            while take_quest != 'y' and take_quest != 'n' and group == '':
+            while take_quest != 'y' and take_quest != 'n':
                 take_quest = input(
-                    "Do you want to take part in the quest: {0} of the group {1}. Message: {2}. Answer with [y,n]".format(
+                    "Do you want to take part in the quest: {0} of the group {1}? Message: {2}. If you do, you will "
+                    "leave your current group and join theirs Answer with [y,n]".format(
                         json_data['quest'], json_data['group'], json_data['message']))
                 if take_quest == 'n':
                     break
                 elif take_quest == "y":
-                    group = json_data['group']
                     message = 'I\'m in the fun'
                     status_code = 200
-                    change_config('group', group)
+                    print(json_data['group'])
+                    #post_join_group(group_id)
+                    change_config('group', json_data['group'])
                     break
             return jsonify({'message': message}), status_code
         except KeyError or TypeError:

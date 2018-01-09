@@ -1,7 +1,7 @@
 import requests, json
 from quests.utils import paths_util, get_config, change_config, add_to, rm_from
 from quests.client.utilities import divide_line
-from quests.utils.paths_names import util_group, util_user, util_req, util_own_server
+from quests.utils.paths_names import util_group, util_user, util_req, util_own_server, auth_token
 
 
 def group_ui(auth_header, groups):
@@ -51,25 +51,29 @@ def join_group(auth_header, groups):
     if group_id in groups:
         group_existant = True
     if group_existant:
-        response = requests.post(paths_util.group_url_id(group_id) + get_config()['member_url'], headers=auth_header)
-        print(response.json()['message'] + ' ' + str(group_id))
-        if response.status_code == 200 or response.status_code == 201:
-            print('Joined Group!')
-            group_get = requests.get(paths_util.group_url_id(group_id), headers=auth_header)
-            if group_get.status_code == 200 or group_get.status_code == 201:
-                group_url = group_get.json()['object']['_links']['self']
-                change_config(util_group, paths_util.server_uri(group_url))
-                add_to(util_req, util_group)
-                adventurer_data = '{"heroclass":"Fantastic Space Ninja","capabilities":"' + str(
-                    get_config()[util_req]) + '","url":' + get_config()[util_own_server] + '}'
-                requests.put(paths_util.adventurer_uri_name(get_config()['username']), headers=auth_header,
-                             data=adventurer_data)
-            else:
-                print('Could not find the group. Where did they hide?!')
-        else:
-            print('Seems they dont want you in this group. Could not join.')
+        post_join_group(group_id)
     else:
         print('The group with this id does not exist')
+
+
+def post_join_group(group_id):
+    response = requests.post(paths_util.group_url_id(group_id) + get_config()['member_url'], headers=get_config()[auth_token])
+    print(response.json()['message'] + ' ' + str(group_id))
+    if response.status_code == 200 or response.status_code == 201:
+        print('Joined Group!')
+        group_get = requests.get(paths_util.group_url_id(group_id), headers=get_config()[auth_token])
+        if group_get.status_code == 200 or group_get.status_code == 201:
+            group_url = group_get.json()['object']['_links']['self']
+            change_config(util_group, paths_util.server_uri(group_url))
+            add_to(util_req, util_group)
+            adventurer_data = '{"heroclass":"Fantastic Space Ninja","capabilities":"' + str(
+                get_config()[util_req]) + '","url":' + get_config()[util_own_server] + '}'
+            requests.put(paths_util.adventurer_uri_name(get_config()['username']), headers=get_config()[auth_token],
+                         data=adventurer_data)
+        else:
+            print('Could not find the group. Where did they hide?!')
+    else:
+        print('Seems they dont want you in this group. Could not join.')
 
 
 def delete_your_group(auth_header, groups):
