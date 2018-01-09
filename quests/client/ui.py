@@ -1,3 +1,4 @@
+from quests.client import mutex
 from quests.client.blackboard import show_users, choose_quest
 from quests.client.taverna.taverna import taverna
 from quests.client.questing import look_at_map
