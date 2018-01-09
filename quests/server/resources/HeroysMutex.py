@@ -26,12 +26,12 @@ class HeroysMutex(Resource):
         try:
             if json_data['msg'].lower() == 'reply-ok' and len(json_data) == 4:
                 waiting_answers = config['waiting_answers']
-                waiting_answers.remove(remote_addr)
+                waiting_answers.remove(request.remote_addr)
                 response = {
                     'msg': 'thanks',
                     'time': lamport_clock
                 }
-            elif json_data['msg'] == 'request' and len(json_data) == 2:
+            elif json_data['msg'] == 'request' and len(json_data) == 4:
                 waiting_answers = config['waiting_answers']
                 if json_data['user'] in waiting_answers:
                     waiting_answers.remove(json_data['user'])
