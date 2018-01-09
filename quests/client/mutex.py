@@ -3,7 +3,7 @@ from quests.client.utilities import divide_line, logout
 from quests.utils import get_config, change_config
 from quests.client.taverna.adventurers import get_all_adventureres
 
-def mutex_ui():
+def mutex_ui(_):
     divide_line()
     print('Welcome to the Mutex UI.')
     print()
