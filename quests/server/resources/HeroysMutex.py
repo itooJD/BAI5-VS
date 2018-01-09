@@ -40,7 +40,7 @@ class HeroysMutex(Resource):
             else:
                 return abort(400)
 
-            print('Lampock')
+            print('Lamport')
             if json_data['time'] > lamport_clock:
                 lamport_clock = json_data['time']
             lamport_clock += 1
@@ -49,12 +49,13 @@ class HeroysMutex(Resource):
             response = {
                 'msg': message,
                 'time': lamport_clock,
-                'user': 'http://' + config['own_address'] + ':5000/',
-                'reply': 'http://' + config['own_address'] + ':5000' + config['mutex_url']
+                'user': config['own_address'],
+                'reply': config['own_address'] + config['mutex_url']
             }
 
             change_config('stored_requests', stored_requests)
             change_config('lamport_clock', lamport_clock)
+            print(str(response))
             return jsonify(response)
         except KeyError or TypeError as e:
             print('Error working on Mutex post: ' + str(e))
@@ -71,8 +72,8 @@ class HeroysMutex(Resource):
                     response = json.dumps({
                         'msg': 'reply-ok',
                         'time': lamport_clock,
-                        'user': 'http://' + config['own_address'] + ':5000/',
-                        'reply': 'http://' + config['own_address'] + ':5000' + config['mutex_url']
+                        'user': config['own_address'],
+                        'reply': config['own_address'] + config['mutex_url']
                     })
                     try:
                         requests.post(single_request, data=response, timeout=0.1)
@@ -82,6 +83,12 @@ class HeroysMutex(Resource):
                 change_config('lamport_clock', lamport_clock)
                 change_config('stored_requests', stored_requests)
                 return 200
+            if json_data['message'] == 'wanting' and len(json_data) == 1:
+                change_config('state', 'wanting')
+            if json_data['message'] == 'released' and len(json_data) == 1:
+                change_config('state', 'released')
+            if json_data['message'] == 'clock' and len(json_data) == 1:
+                change_config('lamport_clock', get_config()['lamport_clock'] + 5)
             return abort(400)
         except KeyError or TypeError as e:
             print('Error: ' + str(e))
