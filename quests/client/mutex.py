@@ -50,6 +50,8 @@ def request_mutex():
                         print('Posted mutex request to ' + str(adventurer_mutex_endpoint))
                     except Exception as e:
                         print('Something is wrong! Just wrong: \n' + str(e))
+                else:
+                    print('Adventurer ' + str(idx) + ' is not worthy')
             except Exception as e:
                 print('Adventurer ' + str(idx) + ' with url ' + str(adventurer['url']) + ' could not be reached')
         print('All requests were sent, please work on the server')
