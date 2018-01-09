@@ -27,7 +27,11 @@ class HeroysMutex(Resource):
             if json_data['msg'].lower() == 'reply-ok' and len(json_data) == 4:
                 print('Received mutex reply-ok')
                 if json_data['user'] in waiting_answers:
+                    print('#' * 20)
+                    print('vor dem Remove: ' + len(waiting_answers))
                     waiting_answers.remove(json_data['user'])
+                    print('nach dem Remove: ' + len(waiting_answers))
+                    print('#' * 20)
                 change_config('waiting_answers', waiting_answers)
                 return 200
             elif json_data['msg'].lower() == 'request' and len(json_data) == 4:
