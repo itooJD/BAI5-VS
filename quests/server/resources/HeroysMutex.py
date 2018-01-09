@@ -24,7 +24,7 @@ class HeroysMutex(Resource):
         stored_requests = config['stored_requests']
         remote_addr = request.remote_addr
         try:
-            if json_data['msg'].lower() == 'reply-ok' and len(json_data) == 2:
+            if json_data['msg'] == 'reply-ok' and len(json_data) == 2:
                 waiting_answers = config['waiting_answers']
                 waiting_answers.remove(remote_addr)
                 response = {
@@ -32,7 +32,8 @@ class HeroysMutex(Resource):
                     'time': lamport_clock
                 }
             elif json_data['msg'] == 'request' and len(json_data) == 2:
-                if state == 'released' or (state == 'wanting' and json_data['time'] >= lamport_clock):
+                print('Received mutex request')
+                if state == 'released' or (state == 'wanting' and json_data['lamport_clock'] >= lamport_clock):
                     message = 'reply-ok'
                 else:
                     if remote_addr not in stored_requests:

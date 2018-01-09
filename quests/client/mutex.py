@@ -46,7 +46,8 @@ def request_mutex():
                     }
                     try:
                         requests.post(make_http(adventurer['url'] + adventurer_mutex_endpoint), data=data_json, timeout=5)
-                        print('Posted mutex request to ' + str(adventurer_mutex_endpoint))
+                        print('Posted mutex request to ' + str(adventurer['url'] + adventurer_mutex_endpoint))
+                        change_config('waiting_answers', config['waiting_answers'].append(adventurer['url']))
                     except Exception as e:
                         print('Something is wrong! Just wrong: \n' + str(e))
                 else:
