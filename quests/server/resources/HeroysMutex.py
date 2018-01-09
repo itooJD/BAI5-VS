@@ -1,3 +1,4 @@
+'''
 import requests
 from flask import jsonify, request, abort
 from flask_restful import Resource
@@ -103,3 +104,4 @@ class HeroysMutex(Resource):
             # send POST to mutex with data
             lamport_clock += 1
         change_config('lamport_clock', lamport_clock)
+'''
