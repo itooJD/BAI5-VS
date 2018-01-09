@@ -81,6 +81,7 @@ class HeroysMutex(Resource):
                     lamport_clock += 1
                 change_config('lamport_clock', lamport_clock)
                 change_config('stored_requests', stored_requests)
+                return 200
             return abort(400)
         except KeyError or TypeError as e:
             print('Error: ' + str(e))
