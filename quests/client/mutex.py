@@ -65,21 +65,24 @@ def request_mutex():
                 print('Adventurer ' + str(idx) + ' with url ' + str(adventurer['url']) + ' could not be reached')
                 print('But our messenger told us: ' + str(e))
 
+        divide_line()
         tries = 0
         trymax = len(get_config()['waiting_answers'])
         while len(get_config()['waiting_answers']) != 0 and tries < trymax:
-            print('Waiting for ' + str(len(config['waiting_answers'])) + ' answers')
-            time.sleep(2)
+            print('Waiting for ' + str(len(get_config()['waiting_answers'])) + ' answers')
+            time.sleep(1)
             if tries == trymax:
                 print('Did not receive all answers :C')
             tries += 1
 
+        change_config('lampock_clock', 0)
         change_config('waiting_answers', [])
         print('Entering the critical area')
         change_config('state', 'held')
         time.sleep(10)
         try:
-            requests.put(make_http(config['own_address'] + config['hero_url']), data=json.dumps({"message":"release the kraken"}))
+            requests.put(make_http(config['own_address'] + config['mutex_url']), data=json.dumps({"message":"release the kraken"}))
         except Exception as e:
             print('Put the kraken error: ' + str(e))
-        print('Left the critical area')
+        print('Leaving the critical area')
+        divide_line()
