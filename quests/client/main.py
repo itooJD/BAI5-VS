@@ -10,6 +10,7 @@ def main():
     divide_line()
     change_config(util_req, [])
     add_to(util_req,'election-algorithm')
+    add_to(util_req, 'mutex')
     set_own_url()
     if get_config()['server'] != '':
         research = input('Do you want to re-search for the blackboard host? [y] \n> ')

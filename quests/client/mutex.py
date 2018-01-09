@@ -33,20 +33,24 @@ def request_mutex():
         print('Sending requests to all adventureres')
         change_config('state','wanting')
         adventureres = get_all_adventureres()
-        for idx, adventurer_url in enumerate(adventureres):
+        for idx, adventurer in enumerate(adventureres):
             try:
-                response = requests.get(make_http(adventurer_url), timeout=3)
-                adventurer_mutex_endpoint = response.json()['mutex']
-                data_json = {
-                    "msg": "request",
-                    "time": config['lamport_clock'],
-                    "reply": config['mutex_url'],
-                    "user": config['hero_url']
-                }
-                try:
-                    requests.post(make_http(adventurer_mutex_endpoint), data=data_json, timeout=3)
-                except Exception as e:
-                    print('Something is wrong! Just wrong: \n' + str(e))
+                print(adventurer['url'])
+                response = requests.get(make_http(adventurer['url']), timeout=5)
+                print(response.json())
+                if 'mutex' in list(response.json()['requirements']):
+                    adventurer_mutex_endpoint = response.json()['mutex']
+                    data_json = {
+                        "msg": "request",
+                        "time": config['lamport_clock'],
+                        "reply": config['own_address'] + config['mutex_url'],
+                        "user": config['own_address'] + config['hero_url']
+                    }
+                    try:
+                        requests.post(make_http(adventurer_mutex_endpoint), data=data_json, timeout=5)
+                        print('Posted mutex request to ' + str(adventurer_mutex_endpoint))
+                    except Exception as e:
+                        print('Something is wrong! Just wrong: \n' + str(e))
             except Exception as e:
-                print('Adventurer ' + str(idx) + ' with url ' + str(adventurer_url) + ' could not be reached')
+                print('Adventurer ' + str(idx) + ' with url ' + str(adventurer['url']) + ' could not be reached')
         print('All requests were sent, please work on the server')

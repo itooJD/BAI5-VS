@@ -148,8 +148,7 @@ def search_for_adventurer(auth_header):
 def get_all_adventureres():
     response = requests.get(paths_util.adventurers_uri(), headers=get_config()[auth_token])
     adventurers = []
-    for idx, adventurer in enumerate(response.json()['objects']):
-        if adventurer.get('url') and adventurer.get('user'):
-            adventurers.append((str(adventurer['url']) + str(adventurer['user'])))
+    for adventurer in response.json()['objects']:
+            adventurers.append(adventurer)
     divide_line()
     return adventurers
