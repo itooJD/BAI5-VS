@@ -1,4 +1,6 @@
 import requests
+from flask import json
+
 from quests.client.utilities import divide_line, logout
 from quests.utils import get_config, change_config, add_to
 from quests.client.taverna.adventurers import get_all_adventureres
@@ -38,12 +40,12 @@ def request_mutex():
                 if 'mutex' in adventurer['capabilities']:
                     response = requests.get(make_http(adventurer['url']), timeout=5)
                     adventurer_mutex_endpoint = response.json()['mutex']
-                    data_json = {
+                    data_json = json.dumps({
                         "msg": "request",
                         "time": config['lamport_clock'],
                         "reply": config['own_address'] + config['mutex_url'],
                         "user": config['own_address'] + config['hero_url']
-                    }
+                    })
                     try:
                         requests.post(make_http(adventurer['url'] + adventurer_mutex_endpoint), data=data_json, timeout=5)
                         print('Posted mutex request to ' + str(adventurer['url'] + adventurer_mutex_endpoint))
