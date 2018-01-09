@@ -60,3 +60,29 @@ class HeroysMutex(Resource):
         except KeyError or TypeError as e:
             print('Error working on Mutex post: ' + str(e))
             return abort(400)
+
+    def put(self):
+        json_data = request.get_json(force=True)
+        try:
+            if json_data['message'] == 'release the kraken' and len(json_data) == 1:
+                config = get_config()
+                lamport_clock = config['lamport_clock']
+                stored_requests = config['stored_requests']
+                for single_request in stored_requests:
+                    response = json.dumps({
+                        'msg': 'reply-ok',
+                        'time': lamport_clock,
+                        'user': 'http://' + config['own_address'] + ':5000/',
+                        'reply': 'http://' + config['own_address'] + ':5000' + config['mutex_url']
+                    })
+                    try:
+                        requests.post(single_request, data=response, timeout=0.1)
+                    except Exception:
+                        pass
+                    lamport_clock += 1
+                change_config('lamport_clock', lamport_clock)
+                change_config('stored_requests', stored_requests)
+            return abort(400)
+        except KeyError or TypeError as e:
+            print('Error: ' + str(e))
+            return abort(400)
