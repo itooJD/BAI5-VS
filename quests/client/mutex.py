@@ -35,7 +35,7 @@ def request_mutex():
         adventureres = get_all_adventureres()
         for idx, adventurer in enumerate(adventureres):
             try:
-                if 'mutex' in list(adventurer['capabilities']):
+                if 'mutex' in adventurer['capabilities']:
                     response = requests.get(make_http(adventurer['url']), timeout=5)
                     adventurer_mutex_endpoint = response.json()['mutex']
                     data_json = {
@@ -50,7 +50,8 @@ def request_mutex():
                     except Exception as e:
                         print('Something is wrong! Just wrong: \n' + str(e))
                 else:
-                    print('Adventurer ' + str(idx) + ' is not worthy')
+                    print('Adventurer ' + str(idx) + ' is not worthy!')
             except Exception as e:
                 print('Adventurer ' + str(idx) + ' with url ' + str(adventurer['url']) + ' could not be reached')
+                print('But our messenger told us: ' + str(e))
         print('All requests were sent, please work on the server')
