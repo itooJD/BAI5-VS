@@ -31,7 +31,7 @@ class HeroysMutex(Resource):
                 message = 'reply-ok'
             elif json_data['msg'].lower() == 'request' and len(json_data) == 4:
                 print('Received mutex request')
-                if state == 'released' or (state == 'wanting' and json_data['lamport_clock'] >= lamport_clock):
+                if state == 'released' or (state == 'wanting' and json_data['time'] >= lamport_clock):
                     message = 'reply-ok'
                 else:
                     stored_requests.append(json_data['reply'])
