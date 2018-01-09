@@ -55,7 +55,8 @@ class HeroysMutex(Resource):
             lamport_clock += 1
             change_config('lamport_clock', lamport_clock)
             return jsonify(response)
-        except KeyError or TypeError:
+        except KeyError or TypeError as e:
+            print('Error working on Mutex post: ' + str(e))
             return abort(400)
 
     # change status
