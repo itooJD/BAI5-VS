@@ -150,6 +150,6 @@ def get_all_adventureres():
     adventurers = []
     for idx, adventurer in enumerate(response.json()['objects']):
         if adventurer.get('url') and adventurer.get('user'):
-            adventurers.append(adventurer['url'] + adventurer['user'])
+            adventurers.append((str(adventurer['url']) + str(adventurer['user'])))
     divide_line()
     return adventurers

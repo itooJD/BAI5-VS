@@ -33,9 +33,9 @@ def request_mutex():
         print('Sending requests to all adventureres')
         change_config('state','wanting')
         adventureres = get_all_adventureres()
-        for adventurer in adventureres:
+        for adventurer_url in adventureres:
             try:
-                response = requests.get(make_http(adventurer['url']), timeout=3)
+                response = requests.get(make_http(adventurer_url), timeout=3)
                 adventurer_mutex_endpoint = response.json()['mutex']
                 data_json = {
                     "msg": "request",
@@ -48,5 +48,5 @@ def request_mutex():
                 except Exception as e:
                     print('Something is wrong! Just wrong: \n' + str(e))
             except Exception as e:
-                print('Adventurer with url ' + str(adventurer['url']) + ' could not be reached')
+                print('Adventurer with url ' + str(adventurer_url) + ' could not be reached')
         print('All requests were sent, please work on the server')
