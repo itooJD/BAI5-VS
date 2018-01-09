@@ -36,7 +36,8 @@ class HeroysMutex(Resource):
                     message = 'reply-ok'
                 else:
                     print(json_data['reply'])
-                    stored_requests.append(json_data['reply'])
+                    if json_data['reply'] not in stored_requests:
+                        stored_requests.append(json_data['reply'])
                     message = 'request'
             else:
                 return abort(400)
@@ -84,7 +85,7 @@ class HeroysMutex(Resource):
                         print(str(e))
                     lamport_clock += 1
                 change_config('lamport_clock', lamport_clock)
-                change_config('stored_requests', stored_requests)
+                change_config('stored_requests', list())
                 return 200
             if json_data['message'] == 'wanting' and len(json_data) == 1:
                 change_config('state', 'wanting')
