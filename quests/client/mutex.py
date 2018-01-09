@@ -9,7 +9,7 @@ def mutex_ui(_):
     print()
     print('1: Request Mutex')
     print('else to exit')
-    return mutex_filter(input('\nWhere do you want to go \n> '))
+    return mutex_filter(input('\nWhat do you want to do?\n> '))
 
 def mutex_filter(choice):
     choice_filter = {
@@ -27,14 +27,17 @@ def request_mutex():
     else:
         change_config('state','wanting')
         adventureres = get_all_adventureres()
-        for adventurer in adventureres:
-            response = requests.get(adventurer['url'])
-            adventurer_mutex_endpoint = response.json()['mutex']
-            data_json = {
-                "msg": "request",
-                "time": config['lamport_clock'],
-                "reply": config['mutex_url'],
-                "user": config['hero_url']
-            }
-            requests.post(adventurer_mutex_endpoint,data=data_json)
-        print('All requests were sent, please work on the server')
+        try:
+            for adventurer in adventureres:
+                response = requests.get(adventurer['url'])
+                adventurer_mutex_endpoint = response.json()['mutex']
+                data_json = {
+                    "msg": "request",
+                    "time": config['lamport_clock'],
+                    "reply": config['mutex_url'],
+                    "user": config['hero_url']
+                }
+                requests.post(adventurer_mutex_endpoint,data=data_json)
+            print('All requests were sent, please work on the server')
+        except Exception as e:
+            print(e)
