@@ -28,7 +28,8 @@ def request_mutex():
         released =input('Change to released? [y]\n> ')
         if released == 'y':
             change_config('state', 'released')
-    else:
+
+    if config['state'] != 'wanting' or config['state'] != 'held':
         print('Sending requests to all adventureres')
         change_config('state','wanting')
         adventureres = get_all_adventureres()
