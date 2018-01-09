@@ -1,5 +1,5 @@
 import requests
-from flask import jsonify, request, abort
+from flask import jsonify, request, abort, json
 from flask_restful import Resource
 from quests.utils import get_config, change_config, add_to
 
@@ -30,7 +30,8 @@ class HeroysMutex(Resource):
                 print('Reply-OK')
                 if json_data['user'] in waiting_answers:
                     waiting_answers.remove(json_data['user'])
-                message = 'reply-ok'
+                change_config('waiting_answers', waiting_answers)
+                return 200
             elif json_data['msg'].lower() == 'request' and len(json_data) == 4:
                 print('Received mutex request')
                 if state == 'released' or (state == 'wanting' and json_data['lamport_clock'] >= lamport_clock):
@@ -52,7 +53,7 @@ class HeroysMutex(Resource):
                 'user': 'http://' + config['own_address'] + ':5000/',
                 'reply': 'http://' + config['own_address'] + ':5000' + config['mutex_url']
             }
-            change_config('waiting_answers', waiting_answers)
+
             change_config('stored_requests', stored_requests)
             change_config('lamport_clock', lamport_clock)
             return jsonify(response)
