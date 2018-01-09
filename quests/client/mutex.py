@@ -2,6 +2,7 @@ import requests
 from quests.client.utilities import divide_line, logout
 from quests.utils import get_config, change_config
 from quests.client.taverna.adventurers import get_all_adventureres
+from quests.utils.paths_util import make_http
 
 def mutex_ui(_):
     divide_line()
@@ -24,14 +25,16 @@ def request_mutex():
     config = get_config()
     if config['state'] == 'wanting' or config['state'] == 'held':
         print('Already in a state of "wanting" or "held"')
-        change_config('state', 'released')
+        released =input('Change to released? [y]\n> ')
+        if released == 'y':
+            change_config('state', 'released')
     else:
         print('Sending requests to all adventureres')
         change_config('state','wanting')
         adventureres = get_all_adventureres()
         for adventurer in adventureres:
             try:
-                response = requests.get(adventurer['url'])
+                response = requests.get(make_http(adventurer['url']), timeout=3)
                 adventurer_mutex_endpoint = response.json()['mutex']
                 data_json = {
                     "msg": "request",
@@ -40,7 +43,7 @@ def request_mutex():
                     "user": config['hero_url']
                 }
                 try:
-                    requests.post(adventurer_mutex_endpoint, data=data_json)
+                    requests.post(make_http(adventurer_mutex_endpoint), data=data_json, timeout=3)
                 except Exception as e:
                     print('Something is wrong! Just wrong: \n' + str(e))
             except Exception as e:

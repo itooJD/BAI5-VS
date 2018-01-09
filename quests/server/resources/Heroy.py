@@ -8,6 +8,7 @@ class Heroy(Resource):
         self.idle = False
 
     def get(self):
+        print('From: ' + str(request.remote_addr))
         config = get_config()
         data = {
             "user": config['hero_url'],
