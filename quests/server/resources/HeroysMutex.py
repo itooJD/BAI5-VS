@@ -79,8 +79,8 @@ class HeroysMutex(Resource):
                     try:
                         print(single_request)
                         requests.post(single_request, data=response)
-                    except Exception:
-                        pass
+                    except Exception as e:
+                        print(str(e))
                     lamport_clock += 1
                 change_config('lamport_clock', lamport_clock)
                 change_config('stored_requests', stored_requests)
