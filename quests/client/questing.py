@@ -30,6 +30,8 @@ def solve_quests(quest, quest_no, auth_header):
             deliver(auth_header, deliver_token[1], quest_no, quest['tasks'])
         else:
             deliver(auth_header, deliver_token, quest_no, quest['tasks'])
+    elif int_quest_no == 5:
+        deliver_token = visit_wounded(auth_header, quest_host, location_url)
     else:
         print('Sorry, you do not have the required requirements to solve this. Back to the Main UI.')
 
