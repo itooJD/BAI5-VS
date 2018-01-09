@@ -35,6 +35,7 @@ class HeroysMutex(Resource):
                 if state == 'released' or (state == 'wanting' and json_data['time'] >= lamport_clock):
                     message = 'reply-ok'
                 else:
+                    print(json_data['reply'])
                     stored_requests.append(json_data['reply'])
                     message = 'request'
             else:
@@ -76,7 +77,8 @@ class HeroysMutex(Resource):
                         'reply': config['own_address'] + config['mutex_url']
                     })
                     try:
-                        requests.post(single_request, data=response, timeout=0.1)
+                        print(single_request)
+                        requests.post(single_request, data=response)
                     except Exception:
                         pass
                     lamport_clock += 1
@@ -85,10 +87,13 @@ class HeroysMutex(Resource):
                 return 200
             if json_data['message'] == 'wanting' and len(json_data) == 1:
                 change_config('state', 'wanting')
+                return 200
             if json_data['message'] == 'released' and len(json_data) == 1:
                 change_config('state', 'released')
+                return 200
             if json_data['message'] == 'clock' and len(json_data) == 1:
                 change_config('lamport_clock', get_config()['lamport_clock'] + 5)
+                return 200
             return abort(400)
         except KeyError or TypeError as e:
             print('Error: ' + str(e))
