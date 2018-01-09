@@ -78,7 +78,8 @@ class HeroysMutex(Resource):
                     })
                     try:
                         print(single_request)
-                        requests.post(single_request, data=response)
+                        response_req = requests.post(single_request, data=response)
+                        print(response_req)
                     except Exception as e:
                         print(str(e))
                     lamport_clock += 1
