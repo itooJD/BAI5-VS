@@ -59,16 +59,16 @@ def get_server_url():
     s = socket(AF_INET, SOCK_DGRAM)
     s.settimeout(10)
     s.bind(('', 24000))
-    udp_received = s.recvfrom(1024)
-    if udp_received:
-        port_pre = udp_received[0]
-        address_pre = udp_received[1]
-        port = ast.literal_eval(port_pre.decode('utf-8'))['blackboard_port']
-        address = address_pre[0]
-        print('Config: Received {0} as address and {1} as port'.format(address, port))
-        return address, port
-    else:
+    try:
+        udp_received = s.recvfrom(1024)
+    except Exception as e:
         return '172.19.0.7', '5000'
+    port_pre = udp_received[0]
+    address_pre = udp_received[1]
+    port = ast.literal_eval(port_pre.decode('utf-8'))['blackboard_port']
+    address = address_pre[0]
+    print('Config: Received {0} as address and {1} as port'.format(address, port))
+    return address, port
 
 
 def set_own_url():
